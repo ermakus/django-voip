@@ -1,0 +1,39 @@
+* {
+	margin:0;
+	padding:0;
+	vertical-align:baseline;
+	outline:none;
+	}
+    *:focus {outline:none;}
+
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary {display:block;}
+
+ul {list-style:none;}
+/*table {border-collapse:collapse;}*/
+label {cursor:pointer;}
+fieldset {border:solid 0 transparent;}
+img {border:none;}
+
+.offscreen {
+	z-index:99;
+	position:absolute;
+	top:-9000px;
+	left:-9000px;
+	}	
+	
+/* auto clear */
+.clear:after {
+	content:".";
+	display:block;
+	clear:both;
+	visibility:hidden;
+	height:0;
+	font-size:0;
+	}
+    /* for IE */
+    .clear {display:inline-block;}
+    * html .clear {height:1px;}
+    .clear {display:block;}
+    /* END:for IE */
+/* END:auto clear  */

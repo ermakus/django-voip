@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Редактирование профиля</h1>
+<form action="." method="post">
+{% csrf_token %}
+    <table>
+    {{ edit_form }}
+    </table>
+    <input type="submit" name="save" value="Cохранить" />
+</form>
+{% endblock %}

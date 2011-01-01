@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block extra_head %}
+  <!-- Simple OpenID Selector -->
+  <link rel="stylesheet" href="{{ MEDIA_URL }}css/login_page.css" />
+  <!-- JQuery UI -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js" type="text/javascript"></script> 
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block initscript %}
+{% include "socialauth/login_page.js" %}
+openid.init('openid_identifier');
+{% endblock %}
+{% block content %}
+<form target="_top" class="login_form" method="post" id="openid_form">
+<h1>{% trans "Login through social network" %}</h1>
+ <input type="hidden" name="action" value="verify" />
+  <input type="hidden" name="next" value="{{ next }}" />
+  {% csrf_token %}
+	 <div id="openid_input_area">
+		<p>{% trans 'Enter your username and password' %}</p>
+		<input id="id_username" name="username" type="text"/>
+		<input id="id_password" name="password" type="password"/>
+		<input class="btn" id="openid_submit" type="submit" value="{% trans "Sign-In" %}"/>
+	 </div>
+{% if error %}
+<b class="error">Invalid login or user name</b>
+{% endif %}
+<div id="openid_btns">
+</div>
+<p>Have no account at all? <a href="{% url registration_register %}{{ request.urlstate }}">{% trans "Register at " %}<span style="color: #F68618;">CloudPub</span></a></p>
+</form>
+{% endblock %}

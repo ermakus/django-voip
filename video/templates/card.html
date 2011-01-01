@@ -1,0 +1,11 @@
+<a href="/video/movie/{{ movie.pk }}{{ request.urlstate }}">
+                <h2 class="card-title">{{ movie.title }}</h2>
+               {% if movie.image %}
+  		<img class="card-img" src="{{ movie.image }}" alt="{{ movie.title }}">
+                {% else %}
+	        <div class="card-img">No image</div>
+                {% endif %}
+                <div class="card-rating">Рейтинг: {{ movie.rating }}</div>
+                <div class="card-views">Просмотров: {{ movie.views }}</div>
+                <div class="card-desc">{{ movie.description }}</div>
+</a>

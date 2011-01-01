@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load filters %}
+{% block content %}
+   <!-- Movie card html -->
+
+   <div style="z-index: -9999; margin: 0 auto; width: 100%; height: 400px;">  
+        <object id="player" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" name="player" width="100%" height="100%">
+                <param name="movie" value="{{ MEDIA_URL }}player/player.swf" />
+                <param name="allowfullscreen" value="true" />
+                <param name="allowscriptaccess" value="always" />
+                <param name="flashvars" value="streamer=rtmp://10.2.44.86:1935/vod&file={{ movie.pk }}.flv&type=rtmp&autostart=false" />
+                <embed 
+                        type="application/x-shockwave-flash"
+                        id="player2"
+                        name="player2"
+                        src="{{ MEDIA_URL }}player/player.swf" 
+                        allowscriptaccess="always" 
+                        width="100%" 
+                        height="100%" 
+                        allowfullscreen="true"
+                        flashvars="streamer=rtmp://10.2.44.86:1935/vod&file=trailers/{{ movie.pk }}.flv&type=rtmp&autostart=false&image={{ MEDIA_URL }}covers/{{ movie.pk }}.jpg"
+                />
+        </object>
+     </div>
+
+<table>
+ <tr>
+  <td width="20%">
+      <div style="padding: 10px;">
+       <h4>{{ movie.title }}</h4>
+       {{ movie.year }} год.<br>
+       Рейтинг: <b>{{ movie.rating }}</b>
+       <h4>
+       {% ifequal purchased "No" %}<a class="act" href="/video/buy/{{ movie.pk }}">Купить ({{ movie.price|currency }})</a>{% endifequal %}
+       {% ifequal purchased "Yes" %}<a href="{{ movie.trailer }}">Скачать</a></h4>{% endifequal %}
+       </h4>
+       </div>
+   </td>
+   <td><div>{{ movie.description }}</td>
+ </tr>
+</table>
+     
+{% endblock %}

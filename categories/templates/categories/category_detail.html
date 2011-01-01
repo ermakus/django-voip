@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block sidebar %}
+<ul id="menu4">
+{% if category.parent %}<li><a href="{{ category.parent.get_absolute_url }}{{ request.urlstate }}">{% trans "Back to " %}{{ category.get_title }}</a></li>{% endif %}
+{% for child in category.children.all %}
+<li><a href="{{ child.get_absolute_url }}{{ request.urlstate }}">{{ child.get_title }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+{% block content %}
+<h1 class="title">{{ category.get_title }}</h1>
+<p class="description">{{ category.description }}</p>
+
+<ul class="list">
+      {% for movie in movies.object_list %}
+          <li>{% include "card.html" %}</li>
+      {% endfor %}
+</ul>
+
+{% if search %}
+    <h1>Результаты поиска для: {{ search }}</h1>
+{% endif %}
+
+<div class="pages">
+        {% if movies.has_previous %}
+            <a href="{{ category.get_absolute_url }}?sort={{ request.sort }}&page={{ movies.previous_page_number }}">&lt;&lt;</a>
+        {% endif %}
+
+        <span class="current">
+            {% trans "Page" %}&nbsp;{{ movies.number }}&nbsp;{% trans "from" %} {{ movies.paginator.num_pages }}
+        </span>
+
+        {% if movies.has_next %}
+            <a href="{{ category.get_absolute_url }}?sort={{ request.sort }}&page={{ movies.next_page_number }}">&gt;&gt;</a>
+        {% endif %}
+</div>
+
+
+{% endblock %}

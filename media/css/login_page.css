@@ -1,0 +1,79 @@
+.login_form {
+	width: 440px;
+	margin: 0 auto;
+        display: block;
+	text-align: center;
+}
+
+.login_form h1 {
+        margin: 5px;
+}
+
+#openid_input_area {
+	clear: both;
+	padding: 0px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 440px;
+}
+
+#openid_input_area p {
+}
+
+#openid_input_area input {
+}
+
+#openid_btns, #openid_btns br {
+	clear: both;
+}
+
+.openid_large_btn {
+	border: 3px solid #FFFFFF;
+	background-color: white;
+	display: block;
+	width: 90px;
+	height: 60px;
+	margin: 3px;
+	padding: 3px;
+	float: left;
+}
+
+.openid_highlight {
+	border: 3px solid #F68618;
+}
+
+.openid_small_btn {
+	width: 24px;
+	height: 24px;
+	margin: 3px;
+	float: left;
+}	
+
+.cloudpub {
+	background: #FFF url(../img/social/cloudpub.png) no-repeat center center;
+}
+.facebook {
+	background: #FFF url(../img/social/facebook.gif) no-repeat center center;
+}
+.linkedin {
+	background: #FFF url(../img/social/linkedin.jpg) no-repeat center center;
+}
+.yahoo {
+	background: #FFF url(../img/social/yahoo.gif) no-repeat center center;
+}
+.google {
+	background: #FFF url(../img/social/google.gif) no-repeat center center;
+}
+.openid {
+	background: #FFF url(../img/social/openid.png) no-repeat center center;
+}
+.twitter {
+	background: #FFF url(../img/social/twitter.png) no-repeat center center;
+}
+.aol {
+	background: #FFF url(../img/social/aol.gif) no-repeat center center;
+}
+.openid {
+	background: #FFF url(../img/social/openid.gif) no-repeat center center;
+}
+

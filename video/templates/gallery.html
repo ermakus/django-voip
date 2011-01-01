@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="pagination">
+ {% if search %}
+  <h1>Результаты поиска для: {{ search }}</h1>
+ {% endif %}
+
+    <h1>
+        {% if movies.has_previous %}
+            <a href="/video/gallery/{{ type }}/{{ movies.previous_page_number }}">Назад</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ movies.number }} из {{ movies.paginator.num_pages }}
+        </span>
+
+        {% if movies.has_next %}
+            <a href="/video/gallery/{{ type }}/{{ movies.next_page_number }}">Вперед</a>
+        {% endif %}
+    </h1>
+</div>
+<center>
+    <ul class="grid">
+      {% for movie in movies.object_list %}
+          <li class="roundabout">
+	   {% include "card.html" %}
+          </li>
+     {% endfor %}
+    </ul>
+</center>
+{% endblock %}
