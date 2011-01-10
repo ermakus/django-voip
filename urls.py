@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     (r'^accounts/', include('registration.backends.default.urls')),
     (r'^admin/', admin.site.urls), 
     (r'^categories/', include('categories.urls')),
+    (r'^uploadify/', include('uploadify.urls')),
 )
 
 

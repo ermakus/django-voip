@@ -10,8 +10,8 @@ ALLOW_MULTIPLE_USERNAME_EDITS = getattr(settings, 'ALLOW_MULTIPLE_USERNAME_EDITS
 
 class EditProfileForm(forms.Form):
     email = forms.EmailField()
-    password = forms.CharField(max_length = 100, widget= forms.PasswordInput, required=False, help_text='Если вы укажете пароль, то сможете заходить на Yota Play под своим именем пользователя')
-    password2 = forms.CharField(max_length = 100, widget= forms.PasswordInput, required=False, label='Повторите пароль')
+    password = forms.CharField(max_length = 100, widget= forms.PasswordInput, required=False, help_text='Set password to login with your username')
+    password2 = forms.CharField(max_length = 100, widget= forms.PasswordInput, required=False, label='Repeat password')
     first_name = forms.CharField(max_length = 100, required=False)
     last_name = forms.CharField(max_length = 100, required=False)
     

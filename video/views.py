@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.views.decorators.cache import cache_page
 from settings import CACHE_VIEW_LENGTH
 from categories.models import Category
+from django.views.decorators.csrf import csrf_exempt
 
 import settings, operator
 
@@ -19,6 +20,19 @@ def index(request):
 
 def script(request):
    return render_to_response('common.js', { }, context_instance=RequestContext(request))
+
+def handle_uploaded_file(ufile):
+    destination = open('/tmp/test.up', 'wb+')
+    destination.write( ufile.name )
+    destination.close()
+
+@csrf_exempt
+def upload(request):
+    if request.method == 'POST':
+	    handle_uploaded_file( request.FILES['file'] )
+            return render_to_response('describe.html', { }, context_instance=RequestContext(request))
+    return render_to_response('upload.html', { }, context_instance=RequestContext(request))
+
 
 def context(request):
     if request.user.is_authenticated():

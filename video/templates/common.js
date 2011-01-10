@@ -39,8 +39,7 @@ function popup( href ) {
         if( href.indexOf('/accounts/register') == 0 || user )
                  $.fancybox({
 			'padding'		: 10,
-			'width'		        : 450,
-			'height'		: 300,
+			'width'		        : 500,
 			'href'			: href,
 			'type'			: 'iframe',
                         'onClosed' : reload,

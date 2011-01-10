@@ -3,37 +3,25 @@
 {% load filters %}
 <center>
 {% if rel %}
- <h2>Спасибо за покупку</h2>
+ <h2>Thank you!</h2>
 	<a href="/video/movie/{{ movie.pk }}">
               {% if movie.image %}
 		<img class="movie-container-img" src="{{ movie.image }}" alt="{{ movie.title }}">
                {% endif %}
             <h2>{{ movie.title }}</h2>
         </a>
-  <b><a href="/video/movie/{{ movie.pk }}" target="_top">Смотреть фильм</a></b>
+  <b><a href="/video/movie/{{ movie.pk }}" target="_top">Access content</a></b>
  {% else %}
- <h2>{{ movie.title }} - Цена: {{ movie.price|currency }}</h2>
+ <h2>{{ movie.title }} - Price: {{ movie.price|currency }}</h2>
 	<a href="/video/movie/{{ movie.pk }}">
               {% if movie.image %}
 		<img class="movie-container-img" src="{{ movie.image }}" alt="{{ movie.title }}">
                {% endif %}
         </a><br/>
-  <b>Подтвердите списание средств с вашего счета</b>
+  <b>Confirm payment</b>
   <form action="/video/buy/{{ movie.pk }}?{{ request.urlstate }}">
-   <input name="code" type="submit" value="Подтвердить">
+   <input name="code" type="submit" value="Confirm">
   </form>
-
-<form target="_TOP" action="https://secure.chronopay.com/index_shop.cgi" method="POST" name="payment_form">
-<input type="hidden" name="product_id" value="000000-0000-0000">
-<input type="hidden" name="product_name" value="Yota Play Payment">
-<input type="hidden" name="product_price" value="10.0">
-<input type="hidden" name="cs1" value="client value 1">
-<input type="hidden" name="cb_url" value="http://play.yota.ru/chronopay/callback">
-<input type="hidden" name="access_url" value="http://play.yota.ru/chronopay/success">
-<input type="hidden" name="declime_url" value="http://play.yota.ru/chronopay/decline">
-<input type="submit" value="Пополнить счет">
-</form>
-
 
 {% endif %}
 </center>

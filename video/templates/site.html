@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
 <head>
         <script type="text/javascript"> if (window != top) { top.location.href = location.href;}</script>
-	<title>{% block title %}i{% trans "HotCon" %}{% endblock %}</title>
+	<title>{% block title %}i{% trans "CloudPub" %}{% endblock %}</title>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
@@ -33,6 +33,7 @@
   <li><a href="{% url categories.views.category request.category %}?sort=rating&page={{ request.page }}" id="rating">{% trans "Highest Rated" %}</a></li>
   <li><a href="{% url categories.views.category request.category %}?sort=views&page={{ request.page }}" id="views">{% trans "Popular" %}</a></li>
   <li><a href="{% url categories.views.category request.category %}?sort=publish&page={{ request.page }}" id="publish">{% trans "New" %}</a></li>
+  <li><a class="act" href="{% url video.views.upload %}">{% trans 'Upload' %}</a></li>
   <li class="authorized"><a class="act" href="{% url socialauth.views.editprofile %}">{% trans 'Profile' %} (<u id="username"></u>)</a></li>
   <li class="authorized"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
   <li class="unauthorized"><a class="act" href="{% url socialauth.views.login_page %}">{% trans "Sign in" %}</a></li>

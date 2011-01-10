@@ -122,8 +122,9 @@ var openid = {
     },
     getBoxHTML: function(provider, box_size, image_ext) {
         var box_id = provider["name"].toLowerCase();
-        var html = '<a title="' + provider["name"] + '" href="javascript:openid.signin(\'' + box_id + '\');"';
+        var html = '<a title="' + provider["name"] + '"';
 	if( provider["link"] ) html += " href='" + provider["link"] + "' target='_top'";
+ 			  else html += ' href="javascript:openid.signin(\'' + box_id + '\');"';
 	html += ' class="' + box_id + ' openid_' + box_size + '_btn"></a>';
 	return html;
     },
