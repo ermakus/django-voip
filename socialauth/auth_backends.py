@@ -5,15 +5,10 @@ import facebook
 
 import urllib
 from socialauth.lib import oauthtwitter2 as oauthtwitter
-from socialauth.models import OpenidProfile as UserAssociation, TwitterUserProfile, FacebookUserProfile, KinopoiskUserProfile, LinkedInUserProfile, AuthMeta
+from socialauth.models import OpenidProfile as UserAssociation, TwitterUserProfile, FacebookUserProfile, LinkedInUserProfile, AuthMeta
 from socialauth.lib.linkedin import *
-from socialauth.lib.kinopoisk import *
 
 import random
-# Kinopoisk
-KINOPOISK_CONSUMER_KEY = getattr(settings, 'KINOPOISK_CONSUMER_KEY', '')
-KINOPOISK_CONSUMER_SECRET = getattr(settings, 'KINOPOISK_CONSUMER_SECRET', '')
-
 
 TWITTER_CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY', '')
 TWITTER_CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET', '')
@@ -26,45 +21,11 @@ FACEBOOK_SECRET_KEY = getattr(settings, 'FACEBOOK_SECRET_KEY', '')
 LINKEDIN_CONSUMER_KEY = getattr(settings, 'LINKEDIN_CONSUMER_KEY', '')
 LINKEDIN_CONSUMER_SECRET = getattr(settings, 'LINKEDIN_CONSUMER_SECRET', '')
 
-# OpenId setting map
-
 OPENID_AX_PROVIDER_MAP = getattr(settings, 'OPENID_AX_PROVIDER_MAP', {})
 
-class KinopoiskBackend:
-    def authenticate(self, kinopoisk_access_token, user=None):
-        kp = Kinopoisk(KINOPOISK_CONSUMER_KEY, KINOPOISK_CONSUMER_SECRET)
-        profile = kp.profile_api.getMyProfile(access_token = kinopoisk_access_token)
+def makeuser(provider,nick):
 
-        # FIXME: Temp workaround
-        id = "test_user"
-
-        try:
-            user_profile = KinopoiskUserProfile.objects.get(kp_uid = id)
-            user = user_profile.user
-            return user
-        except KinopoiskUserProfile.DoesNotExist:
-            # Create a new user
-            username = 'KP:%s' % id
-
-            if not user:
-                user = User(username =  username)
-                user.first_name = "Test"
-                user.last_name = "User"
-                user.email = '%s@socialauth' % (username)
-                user.save()
-                
-            userprofile = KinopoiskUserProfile(user=user, kp_uid=id)
-            userprofile.save()
-            
-            auth_meta = AuthMeta(user=user, provider='Kinopoisk').save()
-            return user
-
-    def get_user(self, user_id):
-        try:
-            return User.objects.get(pk=user_id)
-        except:
-            return None
-
+    return provider + '-' + nick
 
 class OpenIdBackend:
     def authenticate(self, openid_key, request, provider, user=None):
@@ -166,12 +127,12 @@ class LinkedInBackend:
             return user
         except LinkedInUserProfile.DoesNotExist:
             # Create a new user
-            username = 'LI:%s' % profile.id
+            username = 'linkedin-%s' % profile.id
 
             if not user:
                 user = User(username =  username)
                 user.first_name, user.last_name = profile.firstname, profile.lastname
-                user.email = '%s@socialauth' % (username)
+                user.email = '@'
                 user.save()
                 
             userprofile = LinkedInUserProfile(user=user, linkedin_uid=profile.id)
@@ -297,7 +258,7 @@ class FacebookBackend:
         except FacebookUserProfile.DoesNotExist:
             
             # create new FacebookUserProfile
-            username = uid
+            username = "facebook-" + uid
             if not user:
                 user = User.objects.create(username=username)
                 user.first_name = fb_data['first_name']

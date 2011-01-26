@@ -160,7 +160,10 @@ ul#menu li a:hover { color: #333; }
 
 ul#menu li a.current{ color: #FFF; background: #FFF url("../img/menu/current-bg.gif") top left repeat-x; padding: 10px 15px 0; }
 
-#menu4 {
+/* Sidebar menu */
+.sidemenu {
+	margin: 0 auto;
+	padding: 0;
 	list-style:none;
 	width: 100%; /* 200px; */
 	border-style: solid solid none solid;
@@ -169,7 +172,11 @@ ul#menu li a.current{ color: #FFF; background: #FFF url("../img/menu/current-bg.
 	border-width: 1px;
 	}
 
-#menu4 li a {
+.sidemenu li {
+	background-color: #F68618;
+}
+
+.sidemenu li a {
   	height: 32px;
   	voice-family: "\"}\""; 
   	voice-family: inherit;
@@ -177,18 +184,14 @@ ul#menu li a.current{ color: #FFF; background: #FFF url("../img/menu/current-bg.
 	text-decoration: none;
 	}
 
-	
-
-#menu4 li a:link, #menu4 li a:visited {
+.sidemenu li a:link, .sidemenu li a:visited {
 	color: #9E3C02;
 	display: block;
 	background: url(../img/menu/menu4.gif);
 	padding: 8px 0 0 30px;
 	}
 
-	
-
-#menu4 li a:hover {
+.sidemenu li a:hover {
 	color: #fff;
 	background: url(../img/menu/menu4.gif) 0 -32px;
 	padding: 8px 0 0 30px;
@@ -196,7 +199,7 @@ ul#menu li a.current{ color: #FFF; background: #FFF url("../img/menu/current-bg.
 
 	
 
-#menu4 li a:active {
+.sidemenu li a:active {
 	color: #fff;
 	background: url(../img/menu/menu4.gif) 0 -64px;
 	padding: 8px 0 0 30px;
@@ -209,6 +212,57 @@ ul#menu li a.current{ color: #FFF; background: #FFF url("../img/menu/current-bg.
         left: 740px;
 }
 
+
+/* Upload */
+ 
+ 	
+.uploadifyQueueItem {
+    background-color: #FFFFFF;
+    border-color: -moz-use-text-color -moz-use-text-color #E5E5E5;
+    border-style: none none solid;
+    border-width: medium medium 1px;
+    font: 11px Verdana,Geneva,sans-serif;
+    height: 50px;
+    margin-top: 0;
+    padding: 10px;
+    width: 350px;
+}
+
+.uploadifyError {
+    background-color: #FDE5DD !important;
+    border-color: -moz-use-text-color -moz-use-text-color #FBCBBC !important;
+    border-style: none none solid !important;
+    border-width: medium medium 1px !important;
+}
+
+.uploadifyQueueItem .cancel {
+    float: right;
+}
+
+.uploadifyQueue .completed {
+    color: #C5C5C5;
+}
+
+.uploadifyProgress {
+    background-color: #E5E5E5;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.uploadifyProgressBar {
+    background-color: #0099FF;
+    height: 3px;
+    width: 1px;
+}
+
+#upload-queue {
+    border: 1px solid #E5E5E5;
+    height: 213px;
+    margin-bottom: 10px;
+    width: 370px;
+}
+
+/* Content list */
 
 .list, .drop {
    list-style: none;

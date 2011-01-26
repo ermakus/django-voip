@@ -7,11 +7,15 @@ from categories.models import Category
 from video.models import Movie
 from django.core.paginator import Paginator
 from video.views import index
+from django.db.models import Q
+import operator
 import settings
 
+def catalog(request):
+    render_to_response('categories/catalog.html')
 
-@cache_page(settings.CACHE_VIEW_LENGTH)
-def category(request, path, with_stories=False, template_name='categories/category_detail.html', extra_context={}):
+#@cache_page(settings.CACHE_VIEW_LENGTH)
+def category(request, path):
 
     path_items = path.strip('/').split('/')
 
@@ -24,12 +28,6 @@ def category(request, path, with_stories=False, template_name='categories/catego
         category = get_object_or_404(Category,
             slug__iexact = path_items[-1],
             level = len(path_items)-1)
-    
-    templates = []
-    while path_items:
-        templates.append('categories/%s.html' % '_'.join(path_items))
-        path_items.pop()
-    templates.append(template_name)
 
     movies = Movie.objects.all().order_by( '-'+ request.sort )
     kwds = None
@@ -42,8 +40,4 @@ def category(request, path, with_stories=False, template_name='categories/catego
         movies = movies.filter( final_q )
     paginator = Paginator(movies, 10 )
 
-    context = RequestContext(request)
-    context.update({'category':category, 'movies':paginator.page( request.page ) })
-    if extra_context:
-        context.update(extra_context)
-    return HttpResponse(select_template(templates).render(context))
+    return render_to_response('categories/category.html', {'category':category, 'movies':paginator.page( request.page ) }, context_instance=RequestContext(request) )

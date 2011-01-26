@@ -11,8 +11,10 @@ from django.views.decorators.cache import cache_page
 from settings import CACHE_VIEW_LENGTH
 from categories.models import Category
 from django.views.decorators.csrf import csrf_exempt
+from backends import S3
+from django.core.urlresolvers import reverse
 
-import settings, operator
+import settings, operator, base64
 
 def index(request):
     cats = Category.objects.all().filter( level=1 )
@@ -21,39 +23,63 @@ def index(request):
 def script(request):
    return render_to_response('common.js', { }, context_instance=RequestContext(request))
 
-def handle_uploaded_file(ufile):
-    destination = open('/tmp/test.up', 'wb+')
-    destination.write( ufile.name )
-    destination.close()
-
-@csrf_exempt
 def upload(request):
-    if request.method == 'POST':
-	    handle_uploaded_file( request.FILES['file'] )
-            return render_to_response('describe.html', { }, context_instance=RequestContext(request))
-    return render_to_response('upload.html', { }, context_instance=RequestContext(request))
+
+    filename = 'test_upload';
+    MAX_FILE_SIZE = 50 * 1048576;
+    expiration = "2012-01-01T00:00:00Z"
+    is_mac = False
+    success_timeout = 0
+    if is_mac: success_timeout = 5
+
+    success_url=reverse('upload')
+
+    policy = '''{
+        "expiration": "%s",
+        "conditions": [
+        {"bucket": "%s"},
+        ["starts-with", "$key","%s"],
+        {"acl": "public-read"},
+        ["content-length-range", 0, %s],
+        {"success_action_status": "201"},
+        ["starts-with", "$Filename", ""], 
+        ["starts-with", "$Content-Type", "image/"]
+    ]}'''.replace("\n","") % ( expiration, settings.AWS_STORAGE_BUCKET_NAME, filename, MAX_FILE_SIZE, ) ;
+
+    policy = base64.encodestring(policy).replace("\n","")
+
+    opts = { 'is_mac':is_mac, 
+             'success_url':success_url, 
+             'success_timeout':success_timeout, 
+	     'access_key':settings.AWS_ACCESS_KEY_ID, 
+             'bucket':settings.AWS_STORAGE_BUCKET_NAME, 
+             'filename':filename,
+	     'max_size':MAX_FILE_SIZE,
+	     'policy':policy,
+	     'signature':S3.encode( settings.AWS_SECRET_ACCESS_KEY, policy )  }
+
+    return render_to_response('upload.html', opts, context_instance=RequestContext(request))
 
 
 def context(request):
     if request.user.is_authenticated():
         relations = MovieRelation.objects.filter( user = request.user )
-        return HttpResponse('{"user":"%s","bag":"%s"}' % ( request.user.username, relations.count() ), mimetype="text/json" )
+	username = request.user.first_name + " " + request.user.last_name
+	if username.strip() == "":
+	    username = request.user.email
+       	if username.strip() == "":
+	    username = request.user.username
+        return HttpResponse('{"user":"%s","bag":"%s"}' % ( username , relations.count() ), mimetype="text/json" )
     else:
         return HttpResponse("false", mimetype="text/json" )
 
-@cache_page( CACHE_VIEW_LENGTH )
-def feed(request,type,page):
-    movies = Movie.objects.all().order_by( '-'+type );
-    paginator = Paginator(movies, settings.PAGINATION)
-    return render_to_response('feed.html', { 'movies':paginator.page( page ), 'type':type }, context_instance=RequestContext(request))
-
-def bag_view(request,page):
+def user_conetent(request,page):
     relations = MovieRelation.objects.filter( user = request.user )
     paginator = Paginator(relations, settings.PAGINATION)
     return render_to_response('bag_view.html', { 'relations':paginator.page( page ) }, context_instance=RequestContext(request))
 
-def movie(request, movie_id ):
-    movie = get_object_or_404(Movie, pk=movie_id)
+def content(request, content_id ):
+    movie = get_object_or_404(Movie, pk=content_id)
     movie.views = movie.views + 1
     movie.save()
     purchased = "No"
@@ -62,39 +88,12 @@ def movie(request, movie_id ):
 	if len(relations) > 0:
             purchased = "Yes"
         
-    return render_to_response( request.mutator + 'movie.html', { 'movie':movie, 'purchased':purchased }, context_instance=RequestContext(request))
-
-@cache_page( CACHE_VIEW_LENGTH )
-def gallery(request, page, type ):
-    movies = Movie.objects.all().order_by( '-'+type )
-    kwds = None
-    if 'search' in request.GET:
-        kwds = request.GET['search']
-	keywords = kwds.split(' ')
-        list_title_qs = [Q(title__icontains=x) for x in keywords]  
-        list_description_qs = [Q(description__icontains=x) for x in keywords]  
-        final_q = reduce(operator.or_, list_title_qs + list_description_qs)  
-        movies = movies.filter( final_q )
-    paginator = Paginator(movies, settings.PAGINATION)
-    return render_to_response( request.mutator + 'gallery.html', { 'movies':paginator.page( page ), 'search':kwds, 'type':type }, context_instance=RequestContext(request))
+    return render_to_response( request.mutator + 'content.html', { 'movie':movie, 'purchased':purchased }, context_instance=RequestContext(request))
 
 @login_required
-def buy(request, movie_id):
-    movie = get_object_or_404(Movie, pk=movie_id)
+def buy(request, content_id):
+    content = get_object_or_404(Movie, pk=content_id)
     rel = None
     if 'code' in request.GET:
-        rel = movie.add_relation('buy', request.user, '')
-    return render_to_response('buy.html', { 'movie':movie,'rel':rel }, context_instance=RequestContext(request))
-
-@login_required
-def bag(request, movie_id):
-    movie = get_object_or_404(Movie, pk=movie_id)
-    rel = movie.add_relation('bag', request.user, '')
-    return render_to_response('bag.html', { 'movie':movie }, context_instance=RequestContext(request))
-
-@login_required
-def bag_drop(request, movie_id):
-    movie = get_object_or_404(Movie, pk=movie_id)
-    movie.del_relation( 'bag', request.user )
-    movie.del_relation( 'buy', request.user )
-    return HttpResponse("OK")
+        rel = content.add_relation('buy', request.user, '')
+    return render_to_response('buy.html', { 'content':content,'rel':rel }, context_instance=RequestContext(request))

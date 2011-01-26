@@ -1,35 +1,79 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block extra_head %}
-<link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.ui.plupload.css" type="text/css" />
-<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/plupload/gears_init.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/plupload/plupload.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/plupload/plupload.gears.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/plupload/plupload.silverlight.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/plupload/plupload.flash.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/plupload/plupload.browserplus.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/plupload/plupload.html4.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/plupload/plupload.html5.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/plupload/jquery.ui.plupload.js"></script>
+<link href="{{ MEDIA_URL }}css/upload.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{{ MEDIA_URL }}js/swfupload.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/swfupload.queue.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.swfupload.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/fileprogress.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/upload.js"></script>
+<script type="text/javascript">
+var swfu;
+
+$(function(){	
+	var settings = {		
+		upload_url: "http://{{ bucket }}.s3.amazonaws.com",
+		post_params: {"AWSAccessKeyId":"{{ access_key }}", "key":"{{ filename }}", "acl":"public-read", "policy":"{{ policy }}","signature":"{{ signature }}","success_action_status":"201", "content-type":"image/"},
+		http_success : [201], 
+		assume_success_timeout : {{ success_timeout }},
+
+		// File Upload Settings
+		file_post_name: 'file',
+		file_size_limit : "{{ max_size }}", 
+		file_types : "*.*",
+		file_types_description : "All Files",
+		file_upload_limit : "0",
+		file_queue_limit : "10",			
+		
+		button_image_url : "{{ MEDIA_URL }}img/upload.png",
+		button_width: "61",
+		button_height: "22",
+		button_placeholder_id : 'spanButtonPlaceHolder',
+
+		button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+		button_cursor: SWFUpload.CURSOR.HAND,
+		moving_average_history_size: 10,
+
+		// The event handler functions are defined in upload.js
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+		queue_complete_handler : queueComplete,	// Queue plugin event
+	   
+		// Flash Settings
+		flash_url : "{{ MEDIA_URL }}js/swfupload.swf",
+		custom_settings : {
+		  progressTarget : "fsUploadProgress",
+		  cancelButtonId : "btnCancel",
+		  upload_successful : false
+		},
+		// Debug Settings
+		debug: false
+	};
+
+	swfu = new SWFUpload(settings);
+});
+</script>
 {% endblock %}
 {% block content %}
-<form  method="post" action="dump.php"><div id="uploader"></div></form>
+<form id="form1" action="#" method="post" enctype="multipart/form-data">
+	<p>Upload your content to the cloud</p>
+<div>
+		<span id="spanButtonPlaceHolder"></span>
+	</div>
+</form>
 {% endblock %}
-
 {% block sidebar %}
+<div class="fieldset flash" id="fsUploadProgress">
+<span class="legend">Upload Queue</span>
+</div>
+<div id="divStatus">0 Files Uploaded</div>
+<input id="btnCancel" type="button" value="Cancel All Uploads" onclick="swfu.cancelQueue();" disabled="disabled" style="margin-left: 2px; font-size: 8pt; height: 24px;" />
 {% endblock %}
-
 {% block initscript %}
-$("#uploader").pluploadQueue({
-		// General settings
-		runtimes : 'html5,browserplus,flash,silverlight,gears,html4',
-		url : '{% url video.views.upload %}',
-		max_file_size : '1000mb',
-		chunk_size : '1mb',
-		unique_names : true,
-		multiple_queues : true,
-		flash_swf_url : '{{ MEDIA_URL }}js/plupload/plupload.flash.swf',
-		silverlight_xap_url : '{{ MEDIA_URL }}js/plupload/plupload.silverlight.xap'
-	});
 {% endblock %}

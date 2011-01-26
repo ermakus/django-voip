@@ -46,7 +46,7 @@ class Category(MPTTModel):
     
     def get_absolute_url(self):
         """Return a path"""
-        prefix = reverse('categories_tree_list')
+        prefix = '/categories/'
         ancestors = list(self.get_ancestors()) + [self,]
         return prefix + '/'.join([force_unicode(i.slug) for i in ancestors]) + '/'
         

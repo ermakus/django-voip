@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% load filters %}
+{% load i18n %}
 {% block content %}
-   <!-- Movie card html -->
-
+   <h1>{{ movie.title }}</h1>
    <div style="z-index: -9999; margin: 0 auto; width: 100%; height: 400px;">  
         <object id="player" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" name="player" width="100%" height="100%">
                 <param name="movie" value="{{ MEDIA_URL }}player/player.swf" />
@@ -22,22 +22,16 @@
                 />
         </object>
      </div>
+{% endblock %}
 
-<table>
- <tr>
-  <td width="20%">
-      <div style="padding: 10px;">
-       <h4>{{ movie.title }}</h4>
-       {{ movie.year }} год.<br>
-       Рейтинг: <b>{{ movie.rating }}</b>
+{% block sidebar %}
+<div class="box">{{ movie.description }}</div>
+<div style="padding: 10px;">
+       {{ movie.year }} {% trans 'year' %} <br>
+       {% trans 'Rating' %}: <b>{{ movie.rating }}</b>
        <h4>
-       {% ifequal purchased "No" %}<a class="act" href="/video/buy/{{ movie.pk }}">Купить ({{ movie.price|currency }})</a>{% endifequal %}
-       {% ifequal purchased "Yes" %}<a href="{{ movie.trailer }}">Скачать</a></h4>{% endifequal %}
+       {% ifequal purchased "No" %}<a class="act" href="/video/buy/{{ movie.pk }}">Full version ({{ movie.price|currency }})</a>{% endifequal %}
+       {% ifequal purchased "Yes" %}You purchased access this content</h4>{% endifequal %}
        </h4>
-       </div>
-   </td>
-   <td><div>{{ movie.description }}</td>
- </tr>
-</table>
-     
+</div>
 {% endblock %}

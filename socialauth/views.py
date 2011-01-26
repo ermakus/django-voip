@@ -81,6 +81,12 @@ def login_page(request):
     }, context_instance=RequestContext(request))
 
 
+def render_error(request, error):
+    return render_to_response('socialauth/login_page.html', {
+	'next' : request.session['login_next'],
+	'error': error,
+    }, context_instance=RequestContext(request))
+ 
 def linkedin_login(request):
     set_next(request)
     linkedin = LinkedIn(LINKEDIN_CONSUMER_KEY, LINKEDIN_CONSUMER_SECRET)
@@ -101,21 +107,18 @@ def linkedin_login_done(request):
         linkedin = LinkedIn(settings.LINKEDIN_CONSUMER_KEY, settings.LINKEDIN_CONSUMER_SECRET)
         verifier = request.GET.get('oauth_verifier', None)
         access_token = linkedin.getAccessToken(request_token,verifier)
-
         request.session['access_token'] = access_token
         user = authenticate(linkedin_access_token=access_token)
-    except:
-        user = None
 
-    # if user is authenticated then login user
-    if user:
-        login(request, user)
-    else:
-        # We were not able to authenticate user
-        # Redirect to login page
-        del_dict_key(request.session, 'access_token')
-        del_dict_key(request.session, 'request_token')
-        return HttpResponseRedirect(reverse('socialauth_login_page'))
+	if user:
+            login(request, user)
+	else:
+            raise Exception("Can't autorize associated user")
+
+    except Exception, e:
+         del_dict_key(request.session, 'access_token')
+         del_dict_key(request.session, 'request_token')
+         return render_error( request, "Linkedin connection error: %s" % e )
 
     return HttpResponseRedirect(request.session['login_next'])
 
@@ -217,14 +220,14 @@ def openid_done(request, provider=None):
         #authenticate and login
         try:
             user = authenticate(openid_key=openid_key, request=request, provider = provider)
-        except:
-            user = None
+        except Exception, e:
+	    return render_error( request, "Openid error: %s" % e )
 	    
         if user:
             login(request, user)
             return HttpResponseRedirect(request.session['login_next'])
-
-    return HttpResponseRedirect(LOGIN_URL)
+	    
+    return render_error( request, "User not authenticated" )
 
 def facebook_login(request):
     """

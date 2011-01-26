@@ -28,6 +28,6 @@ openid.init('openid_identifier');
 {% endif %}
 <div id="openid_btns">
 </div>
-<p>Have no account at all? <a href="{% url registration_register %}{{ request.urlstate }}">{% trans "Register at " %}<span style="color: #F68618;">CloudPub</span></a></p>
+<p>Have no account at all? <a href="{% url signup %}{{ request.urlstate }}">{% trans "Register at " %}<span style="color: #F68618;">CloudPub</span></a></p>
 </form>
 {% endblock %}

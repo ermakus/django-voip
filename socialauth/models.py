@@ -1,6 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from userprofile.models import BaseProfile
+from django.utils.translation import ugettext as _
+from django.conf import settings
+import datetime
+
+GENDER_CHOICES = ( ('F', _('Female')), ('M', _('Male')),)
+
+class Profile(BaseProfile):
+    firstname = models.CharField(max_length=255, blank=True)
+    surname = models.CharField(max_length=255, blank=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
+    birthdate = models.DateField(default=datetime.date.today(), blank=True)
+    url = models.URLField(blank=True)
+    about = models.TextField(blank=True)
+
+
 class AuthMeta(models.Model):
     """Metadata for Authentication"""
     def __unicode__(self):
@@ -45,19 +61,6 @@ class LinkedInUserProfile(models.Model):
 
     def __unicode__(self):
         return "%s's profile" % self.user
-
-class KinopoiskUserProfile(models.Model):
-    """
-    For users who login via kinopoisk
-    """
-    kp_uid = models.CharField(max_length = 50, unique = True, db_index=True)
-
-    user = models.ForeignKey(User, related_name='kinopoisk_profiles')
-    access_token = models.CharField(max_length=255, blank=True, null=True, editable=False)
-
-    def __unicode__(self):
-        return "%s's profile" % self.user
-
 
 class TwitterUserProfile(models.Model):
     """

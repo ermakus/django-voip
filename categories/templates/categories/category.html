@@ -1,16 +1,22 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block sidebar %}
-<ul id="menu4">
-{% if category.parent %}<li><a href="{{ category.parent.get_absolute_url }}{{ request.urlstate }}">{% trans "Back to " %}{{ category.get_title }}</a></li>{% endif %}
+<ul class="sidemenu">
+<li>Sort by</li>
+ <li><a href="{{ category.get_absolute_url }}?sort=rating&page={{ request.page }}" id="rating">{% trans "Rating" %}</a></li>
+ <li><a href="{{ category.get_absolute_url }}?sort=views&page={{ request.page }}" id="views">{% trans "Popularity" %}</a></li>
+ <li><a href="{{ category.get_absolute_url }}?sort=publish&page={{ request.page }}" id="publish">{% trans "Date" %}</a></li>
+<li>Subsections</li>
+{% if category.parent %}<li><a href="{{ category.parent.get_absolute_url }}{{ request.urlstate }}">{% trans "Back to " %}{{ category.parent.get_title }}</a></li>{% endif %}
 {% for child in category.children.all %}
 <li><a href="{{ child.get_absolute_url }}{{ request.urlstate }}">{{ child.get_title }}</a></li>
 {% endfor %}
-</ul>
+ </ul>
+
 {% endblock %}
 
 {% block content %}
-<h1 class="title">{{ category.get_title }}</h1>
+<p><h1 class="title">{{ category.get_title }}</h1></p>
 <p class="description">{{ category.description }}</p>
 
 <ul class="list">
@@ -20,7 +26,7 @@
 </ul>
 
 {% if search %}
-    <h1>Результаты поиска для: {{ search }}</h1>
+    <h1>Search results for: {{ search }}</h1>
 {% endif %}
 
 <div class="pages">
