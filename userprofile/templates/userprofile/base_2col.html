@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+	<div id="content-main" class="{{ css_classes.content_main_2col }}">
+		{% block userprofile_content %}{% endblock %}
+	</div><!-- END content-main -->
+{% endblock %}
+{% block sidebar %}
+	{% block userprofile_navigation %}{% endblock %}
+	{% block userprofile_content_related %}{% endblock %}
+{% endblock %}

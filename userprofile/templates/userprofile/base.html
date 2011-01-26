@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %} 
+		{% block userprofile_navigation %}{% endblock %}
+		<div id="columnwrap">
+			<div id="content-main" class="{{ css_classes.content_main }}">
+			{% block userprofile_content %}{% endblock %}
+			</div>
+		</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "userprofile/base_2col.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Crop &amp; resize the area you want" %}{% endblock %}
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">DEFAULT_AVATAR_SIZE = {{ DEFAULT_AVATAR_SIZE }}; MIN_AVATAR_SIZE = {{ MIN_AVATAR_SIZE }};</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}userprofile/js/jquery.imgareaselect-0.8.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}userprofile/js/jquery.crop.js"></script>
+{% endblock %}
+
+{% block userprofile_navigation %}
+{% include "userprofile/menu.html" %}
+{% endblock %}
+
+{% block userprofile_content %}
+	<form name="cropavatar" action="{% url profile_avatar_crop %}" method="post" accept-charset="utf-8">{% csrf_token %}
+	<fieldset>
+		<legend style='display:none'>{% trans "Crop &amp; resize the area you want" %}</legend>
+
+		{% if form.errors %}
+			{% for error,desc in form.errors.items %}
+				<p class="error">{{desc|join:"; "}}</p>
+			{% endfor %}
+		{% endif %}
+
+		<div style="text-align: center;">
+			<img src="{{ avatar.image.url }}" id="cropimage" />
+		</div>
+		<input type="hidden" name="top" value="0"/>
+		<input type="hidden" name="bottom" value="0"/>
+		<input type="hidden" name="left" value="0"/>
+		<input type="hidden" name="right" value="0"/>
+	</fieldset>
+	<input type="submit" class="done" value="{% trans 'Done' %}" />
+	</form>
+{% endblock %}
+
+{% block userprofile_content_related %}
+  <div class="box">
+    <h3>{% trans "Avatar selection page" %}</h3>
+    <p>{% trans "You have several options to select the image you want as avatar on your profile" %}.</p>
+  </div>
+
+  {% load avatars %}
+  <div class="center" id="avatarimg_container">
+    <img class="border" id="avatarimg" src="{% avatar DEFAULT_AVATAR_SIZE %}" />
+  </div>
+
+{% endblock %}
