@@ -1,0 +1,868 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: FeinCMS VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-09-15 14:29+0200\n"
+"PO-Revision-Date: 2010-09-15 11:21+0200\n"
+"Last-Translator: Bjorn Post <bjorn.post@gmail.com>\n"
+"Language-Team: Dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: models.py:208 content/template/models.py:37 content/template/models.py:47
+msgid "template"
+msgstr "template"
+
+#: models.py:431
+msgid "ordering"
+msgstr "volgorde"
+
+#: translations.py:153 module/blog/extensions/translations.py:9
+#: module/page/extensions/translations.py:102
+msgid "language"
+msgstr "taal"
+
+#: admin/filterspecs.py:35 admin/filterspecs.py:70
+msgid "All"
+msgstr "Alle"
+
+#: admin/filterspecs.py:46 module/page/models.py:223
+msgid "Parent"
+msgstr "Ouder"
+
+#: admin/filterspecs.py:81
+msgid "Category"
+msgstr "Categorie"
+
+#: admin/item_editor.py:133
+#, python-format
+msgid "Change %s"
+msgstr "%s veranderen"
+
+#: admin/tree_editor.py:186 content/rss/models.py:13
+#: content/section/models.py:29 module/blog/models.py:24
+#: module/medialibrary/models.py:43 module/page/models.py:220
+#: module/page/models.py:279
+msgid "title"
+msgstr "titel"
+
+#: admin/tree_editor.py:332
+#, python-format
+msgid "%s has been moved to a new position."
+msgstr "%s is verplaatst."
+
+#: admin/tree_editor.py:336
+msgid "Did not understand moving instruction."
+msgstr "Begreep verplaats instructie niet"
+
+#: admin/tree_editor.py:345
+msgid "actions"
+msgstr "acties"
+
+#: content/application/models.py:145
+msgid "application content"
+msgstr "applicatie content"
+
+#: content/application/models.py:146
+msgid "application contents"
+msgstr "applicatie contents"
+
+#: content/application/models.py:177
+msgid "application"
+msgstr "applicatie"
+
+#: content/comments/models.py:23
+msgid "enabled"
+msgstr "actief"
+
+#: content/comments/models.py:23
+msgid "New comments may be added"
+msgstr "Nieuwe reacties kunnen worden toegevoegd"
+
+#: content/comments/models.py:27 content/comments/models.py:28
+msgid "comments"
+msgstr "reacties"
+
+#: content/comments/models.py:43
+msgid "public"
+msgstr "gedeeld"
+
+#: content/comments/models.py:43
+msgid "not public"
+msgstr "niet gedeeld"
+
+#: content/contactform/models.py:10
+msgid "name"
+msgstr "naam"
+
+#: content/contactform/models.py:11
+msgid "email"
+msgstr "e-Mail"
+
+#: content/contactform/models.py:12
+msgid "subject"
+msgstr "onderwerp"
+
+#: content/contactform/models.py:15 content/raw/models.py:7
+msgid "content"
+msgstr "inhoud"
+
+#: content/contactform/models.py:26
+msgid "contact form"
+msgstr "contactformulier"
+
+#: content/contactform/models.py:27
+msgid "contact forms"
+msgstr "contactformulieren"
+
+#: content/file/models.py:11 content/file/models.py:15
+#: module/medialibrary/models.py:84
+msgid "file"
+msgstr "bestand"
+
+#: content/file/models.py:16
+msgid "files"
+msgstr "bestanden"
+
+#: content/image/models.py:19 content/image/models.py:23
+msgid "image"
+msgstr "afbeelding"
+
+#: content/image/models.py:24
+msgid "images"
+msgstr "afbeeldingen"
+
+#: content/image/models.py:37 content/medialibrary/models.py:75
+#: content/medialibrary/models.py:83
+msgid "position"
+msgstr "positie"
+
+#: content/medialibrary/models.py:31
+msgid "(no caption)"
+msgstr "(geen onderschrift)"
+
+#: content/medialibrary/models.py:60 content/medialibrary/models.py:71
+#: content/medialibrary/models.py:81 content/section/models.py:45
+#: module/medialibrary/models.py:96
+msgid "media file"
+msgstr "media-bestand"
+
+#: content/medialibrary/models.py:61 module/medialibrary/models.py:97
+msgid "media files"
+msgstr "media-bestanden"
+
+#: content/medialibrary/models.py:101
+msgid "block"
+msgstr "blok"
+
+#: content/medialibrary/models.py:102
+msgid "left"
+msgstr "links"
+
+#: content/medialibrary/models.py:103
+msgid "right"
+msgstr "rechts"
+
+#: content/raw/models.py:11
+msgid "raw content"
+msgstr "Ruwe Inhoud"
+
+#: content/raw/models.py:12
+msgid "raw contents"
+msgstr "ruwe inhoud"
+
+#: content/richtext/models.py:15 content/richtext/models.py:83
+#: content/section/models.py:30
+msgid "text"
+msgstr "tekst"
+
+#: content/richtext/models.py:31
+msgid "HTML Tidy"
+msgstr "HTML Tidy"
+
+#: content/richtext/models.py:32
+msgid "Ignore the HTML validation warnings"
+msgstr "Negeer de HTML validatie waarschuwingen"
+
+#: content/richtext/models.py:56
+#, python-format
+msgid "HTML validation produced %(count)d warnings. Please review the updated content below before continuing: %(messages)s"
+msgstr "HTML validatie leverde %(count)d waarschuwingen op. Kijk alsjeblieft de bijgewerkte content na voordat je verder gaat: %(messages)s"
+
+#: content/richtext/models.py:87
+msgid "rich text"
+msgstr "opgemaakte tekst"
+
+#: content/richtext/models.py:88
+msgid "rich texts"
+msgstr "opgemaakte teksten"
+
+#: content/richtext/models.py:134
+msgid "rich text (ckeditor)"
+msgstr "opgemaakte tekst (ckeditor)"
+
+#: content/richtext/models.py:135
+msgid "rich texts (ckeditor)"
+msgstr "opgemaakte teksten (ckeditor)"
+
+#: content/rss/models.py:14
+msgid "The rss field is updated several times a day. A change in the title will only be visible on the home page after the next feed update."
+msgstr "Het RSS veld wordt meerdere malen per dag geactualiseerd. Een verandering in de titel zal pas op de pagina verschijnen na de volgende update."
+
+#: content/rss/models.py:15
+msgid "link"
+msgstr "Link"
+
+#: content/rss/models.py:16
+msgid "pre-rendered content"
+msgstr "Vooraf-gerenderde Inhoud"
+
+#: content/rss/models.py:17
+msgid "last updated"
+msgstr "Laatste update"
+
+#: content/rss/models.py:18
+msgid "max. items"
+msgstr "Maximaal aantal"
+
+#: content/rss/models.py:22
+msgid "RSS feed"
+msgstr "RSS feed"
+
+#: content/rss/models.py:23
+msgid "RSS feeds"
+msgstr "RSS feeds"
+
+#: content/section/models.py:34
+msgid "section"
+msgstr "sectie"
+
+#: content/section/models.py:35
+msgid "sections"
+msgstr "secties"
+
+#: content/section/models.py:50 content/section/models.py:58
+#: content/table/models.py:67
+msgid "type"
+msgstr "type"
+
+#: content/table/models.py:48
+msgid "plain"
+msgstr "plat"
+
+#: content/table/models.py:49
+msgid "title row"
+msgstr "titel rij"
+
+#: content/table/models.py:51
+msgid "title row and column"
+msgstr "title rij en kolom"
+
+#: content/table/models.py:57
+msgid "table"
+msgstr "tabel"
+
+#: content/table/models.py:58
+msgid "tables"
+msgstr "tabellen"
+
+#: content/table/models.py:72
+msgid "data"
+msgstr "data"
+
+#: content/template/models.py:52
+msgid "template content"
+msgstr "template content"
+
+#: content/template/models.py:53
+msgid "template contents"
+msgstr "template contents"
+
+#: content/video/models.py:15
+msgid "video link"
+msgstr "video link"
+
+#: content/video/models.py:16
+msgid "This should be a link to a youtube or vimeo video, i.e.: http://www.youtube.com/watch?v=zmj1rpzDRZ0"
+msgstr "Dit moet een link naar een youtube of vimeo video zijn. Bijvoorbeeld: http://www.youtube.com/watch?v=zmj1rpzDRZ0"
+
+#: content/video/models.py:20
+msgid "video"
+msgstr "video"
+
+#: content/video/models.py:21
+msgid "videos"
+msgstr "videos"
+
+#: module/blog/models.py:23
+msgid "published"
+msgstr "gepubliceerd"
+
+#: module/blog/models.py:25 module/page/models.py:221
+msgid "This is used for the generated navigation too."
+msgstr "Dit wordt ook gebruikt voor de gegenereerde navigatie."
+
+#: module/blog/models.py:28
+msgid "published on"
+msgstr "gepubliceerd op"
+
+#: module/blog/models.py:29
+msgid "Will be set automatically once you tick the `published` checkbox above."
+msgstr "Wordt automatisch eenmalig ingesteld zodra `gepubliceerd` aangevinkt is."
+
+#: module/blog/models.py:34
+msgid "entry"
+msgstr "item"
+
+#: module/blog/models.py:35
+msgid "entries"
+msgstr "items"
+
+#: module/blog/extensions/tags.py:8
+msgid "tags"
+msgstr "tags"
+
+#: module/blog/extensions/translations.py:12
+#: module/page/extensions/translations.py:105
+msgid "translation of"
+msgstr "vertaling van"
+
+#: module/blog/extensions/translations.py:15
+#: module/page/extensions/translations.py:108
+msgid "Leave this empty for entries in the primary language."
+msgstr "Laat dit veld leeg voor bijdragen in de hoofd-taal."
+
+#: module/blog/extensions/translations.py:36
+#: templates/admin/feincms/item_editor.html:72
+msgid "available translations"
+msgstr "Beschikbare vertalingen"
+
+#: module/extensions/changedate.py:22
+msgid "creation date"
+msgstr "gemaakt op"
+
+#: module/extensions/changedate.py:23
+msgid "modification date"
+msgstr "laatst gewijzigd op"
+
+#: module/extensions/featured.py:9
+msgid "featured"
+msgstr "aanbevolen"
+
+#: module/extensions/featured.py:14
+msgid "Featured"
+msgstr "Aanbevolen"
+
+#: module/extensions/seo.py:9
+msgid "meta keywords"
+msgstr "meta trefwoorden"
+
+#: module/extensions/seo.py:10
+msgid "This will be prepended to the default keyword list."
+msgstr "Deze begrippen worden voor in de standaard trefwoordenlijst ingevoegd."
+
+#: module/extensions/seo.py:11
+msgid "meta description"
+msgstr "meta beschrijving"
+
+#: module/extensions/seo.py:12
+msgid "This will be prepended to the default description."
+msgstr "Deze beschrijving wordt voor in de standaard beschrijving ingevoegd."
+
+#: module/extensions/seo.py:18
+msgid "Search engine optimization"
+msgstr "Zoekmachine optimalisatie"
+
+#: module/medialibrary/models.py:46
+msgid "parent"
+msgstr "ouder"
+
+#: module/medialibrary/models.py:48 module/page/models.py:222
+msgid "slug"
+msgstr "slug"
+
+#: module/medialibrary/models.py:52
+msgid "category"
+msgstr "categorie"
+
+#: module/medialibrary/models.py:53 module/medialibrary/models.py:90
+#: module/medialibrary/models.py:107
+msgid "categories"
+msgstr "categorieën"
+
+#: module/medialibrary/models.py:85 module/medialibrary/models.py:167
+msgid "file type"
+msgstr "bestandstype"
+
+#: module/medialibrary/models.py:86 module/medialibrary/models.py:115
+msgid "created"
+msgstr "gemaakt"
+
+#: module/medialibrary/models.py:87
+msgid "copyright"
+msgstr "copyright"
+
+#: module/medialibrary/models.py:88 module/medialibrary/models.py:111
+msgid "file size"
+msgstr "bestandsgrootte"
+
+#: module/medialibrary/models.py:184
+msgid "file info"
+msgstr "bestandsinformatie"
+
+#: module/medialibrary/models.py:253
+msgid "Image"
+msgstr "Afbeelding"
+
+#: module/medialibrary/models.py:254
+msgid "Video"
+msgstr "Video"
+
+#: module/medialibrary/models.py:255
+msgid "Audio"
+msgstr "Audio"
+
+#: module/medialibrary/models.py:256
+msgid "PDF document"
+msgstr "PDF document"
+
+#: module/medialibrary/models.py:257
+msgid "Flash"
+msgstr "Flash"
+
+#: module/medialibrary/models.py:258
+msgid "Text"
+msgstr "Tekst"
+
+#: module/medialibrary/models.py:259
+msgid "Rich Text"
+msgstr "Opgemaakte Tekst"
+
+#: module/medialibrary/models.py:260
+msgid "Microsoft Word"
+msgstr "Microsoft Word"
+
+#: module/medialibrary/models.py:261
+msgid "Microsoft Excel"
+msgstr "Microsoft Excel"
+
+#: module/medialibrary/models.py:262
+msgid "Microsoft PowerPoint"
+msgstr "Microsoft PowerPoint"
+
+#: module/medialibrary/models.py:263
+msgid "Binary"
+msgstr "Binaire data"
+
+#: module/medialibrary/models.py:276
+msgid "caption"
+msgstr "onderschrift"
+
+#: module/medialibrary/models.py:277
+msgid "description"
+msgstr "omschrijving"
+
+#: module/medialibrary/models.py:280
+msgid "media file translation"
+msgstr "Mediabestand-vertaling"
+
+#: module/medialibrary/models.py:281
+msgid "media file translations"
+msgstr "Mediabestand-vertalingen"
+
+#: module/medialibrary/models.py:308
+#: templates/admin/feincms/item_editor.html:56
+msgid "Preview"
+msgstr "Voorbeeld"
+
+#: module/page/models.py:217
+msgid "active"
+msgstr "actief"
+
+#: module/page/models.py:225 module/page/models.py:688
+msgid "in navigation"
+msgstr "in navigatie"
+
+#: module/page/models.py:226
+msgid "override URL"
+msgstr "overschrijf URL"
+
+#: module/page/models.py:227
+msgid "Override the target URL. Be sure to include slashes at the beginning and at the end if it is a local URL. This affects both the navigation and subpages' URLs."
+msgstr "Overschrijft de URL. Als het een lokale URL betreft moet er aan aan weerszijden  een / staan. Dit veld heeft betrekking op zowel de navigatie als de URLs van subpagina's."
+
+#: module/page/models.py:228
+msgid "redirect to"
+msgstr "doorsturen naar"
+
+#: module/page/models.py:229
+msgid "Target URL for automatic redirects."
+msgstr "Eindpunt (URL) voor automatisch doorsturen."
+
+#: module/page/models.py:230
+msgid "Cached URL"
+msgstr "URL uit cache"
+
+#: module/page/models.py:241
+msgid "page"
+msgstr "pagina"
+
+#: module/page/models.py:242
+msgid "pages"
+msgstr "pagina's"
+
+#: module/page/models.py:259 module/page/models.py:794
+msgid "is active"
+msgstr "is actief"
+
+#: module/page/models.py:609
+msgid "This URL is already taken by an active page."
+msgstr "Deze URL is al in gebruik door een actieve pagina."
+
+#: module/page/models.py:627
+msgid "This URL is already taken by another active page."
+msgstr "Deze URL is al in gebruik door een andere actieve pagina."
+
+#: module/page/models.py:651
+msgid "Other options"
+msgstr "Overige opties"
+
+#: module/page/models.py:693 templates/admin/feincms/item_editor.html:57
+msgid "Add child page"
+msgstr "Voeg subpagina toe"
+
+#: module/page/models.py:695
+msgid "View on site"
+msgstr "Op de website bekijken"
+
+#: module/page/models.py:730
+msgid "You may edit the copied page below."
+msgstr "Je kunt de gekopieerde pagina hieronder wijzigen."
+
+#: module/page/models.py:736
+#, python-format
+msgid "You have replaced %s. You may continue editing the now-active page below."
+msgstr "Je hebt %s vervangen. Je kunt de nu actieve pagina hieronder verder wijzigen."
+
+#: module/page/models.py:786
+msgid "inherited"
+msgstr "geërfd"
+
+#: module/page/models.py:790
+msgid "extensions"
+msgstr "uitbreidingen"
+
+#: module/page/extensions/ct_tracker.py:123
+msgid "content types"
+msgstr "content types"
+
+#: module/page/extensions/datepublisher.py:48
+msgid "publication date"
+msgstr "gepubliceerd op"
+
+#: module/page/extensions/datepublisher.py:50
+msgid "publication end date"
+msgstr "gepubliceerd tot"
+
+#: module/page/extensions/datepublisher.py:52
+msgid "Leave empty if the entry should stay active forever."
+msgstr "Leeglaten als het item voor altijd actief moet blijven."
+
+#: module/page/extensions/datepublisher.py:78
+msgid "visible from - to"
+msgstr "zichtbaar van - tot"
+
+#: module/page/extensions/datepublisher.py:88
+msgid "Date-based publishing"
+msgstr "Datum-gebaseerde publicering"
+
+#: module/page/extensions/excerpt.py:9
+msgid "excerpt"
+msgstr "samenvatting"
+
+#: module/page/extensions/excerpt.py:10
+msgid "Add a brief excerpt summarizing the content of this page."
+msgstr "Voeg een korte samenvatting toe die de inhoud van deze pagina beschrijft."
+
+#: module/page/extensions/excerpt.py:12
+msgid "Excerpt"
+msgstr "Samenvatting"
+
+#: module/page/extensions/navigation.py:40
+#: module/page/extensions/navigation.py:52
+msgid "navigation extension"
+msgstr "navigatie-uitbreiding"
+
+#: module/page/extensions/navigation.py:54
+msgid "Select the module providing subpages for this page if you need to customize the navigation."
+msgstr "Kies de module die subpagina's voor deze pagina definieert als je de navigatie wilt uitbreiden."
+
+#: module/page/extensions/navigation.py:67
+msgid "Navigation extension"
+msgstr "Navigatie-uitbreiding"
+
+#: module/page/extensions/relatedpages.py:13
+msgid "Select pages that should be listed as related content."
+msgstr "Selecteer pagina's die beschouwd moet worden als gerelateerd aan deze."
+
+#: module/page/extensions/relatedpages.py:20
+msgid "Related pages"
+msgstr "Gerelateerde pagina's"
+
+#: module/page/extensions/symlinks.py:15
+msgid "symlinked page"
+msgstr "verbonden pagina"
+
+#: module/page/extensions/symlinks.py:16
+msgid "All content is inherited from this page if given."
+msgstr "Als dit ingesteld is, dan wordt de inhoud geleverd door de aangegeven pagina."
+
+#: module/page/extensions/symlinks.py:30
+msgid "Symlinked page"
+msgstr "Verbonden pagina"
+
+#: module/page/extensions/titles.py:13
+msgid "content title"
+msgstr "content titel"
+
+#: module/page/extensions/titles.py:14
+msgid "The first line is the main title, the following lines are subtitles."
+msgstr "De eerste regel is de hoofd-titel, de overige regels vormen de ondertitel."
+
+#: module/page/extensions/titles.py:15
+msgid "page title"
+msgstr "paginatitel"
+
+#: module/page/extensions/titles.py:16
+msgid "Page title for browser window. Same as title by default."
+msgstr "paginatitel voor het browservenster. Standaard gelijk aan de titel."
+
+#: module/page/extensions/titles.py:43
+msgid "Titles"
+msgstr "Titels"
+
+#: module/page/extensions/translations.py:171
+msgid "Edit translation"
+msgstr "Wijzig vertaling"
+
+#: module/page/extensions/translations.py:174
+msgid "Create translation"
+msgstr "Maak vertaling"
+
+#: module/page/extensions/translations.py:179
+msgid "translations"
+msgstr "vertalingen"
+
+#: templates/admin/filter.html:3
+#, python-format
+msgid " By %(filter_title)s "
+msgstr " Op %(filter_title)s"
+
+#: templates/admin/content/mediafile/init.html:9
+msgid "Search"
+msgstr "Zoeken"
+
+#: templates/admin/feincms/_messages_js.html:4
+msgid "Really delete item?"
+msgstr "Item echt verwijderen?"
+
+#: templates/admin/feincms/_messages_js.html:4
+msgid "Confirm to delete item"
+msgstr "Bevestig om het item te verwijderen"
+
+#: templates/admin/feincms/_messages_js.html:5
+msgid "Item deleted successfully."
+msgstr "Item verwijderd."
+
+#: templates/admin/feincms/_messages_js.html:5
+msgid "Cannot delete item"
+msgstr "Kan item niet verwijderen"
+
+#: templates/admin/feincms/_messages_js.html:6
+msgid "Cannot delete item, because it is parent of at least one other item."
+msgstr "Kan item niet verwijderen, omdat het de ouder is van een of meerdere sub-items."
+
+#: templates/admin/feincms/_messages_js.html:7
+msgid "Change template"
+msgstr "Template veranderen"
+
+#: templates/admin/feincms/_messages_js.html:8
+msgid "Really change template? <br />All changes are saved."
+msgstr "Template echt veranderen?<br />Alle wijzigingen zijn opgeslagen."
+
+#: templates/admin/feincms/_messages_js.html:9
+#, python-format
+msgid "Really change template? <br />All changes are saved and content from <strong>%(source_regions)s</strong> is moved to <strong>%(target_region)s</strong>."
+msgstr "Template echt veranderen? <br />Alle wijzigingen zijn opgeslagen en de inhoud van <strong>%(source_regions)s</strong>is verplaatst naar <strong>%(target_region)s</strong>."
+
+#: templates/admin/feincms/_messages_js.html:12
+msgid "Hide"
+msgstr "Verberg"
+
+#: templates/admin/feincms/_messages_js.html:13
+msgid "Show"
+msgstr "Laat zien"
+
+#: templates/admin/feincms/_messages_js.html:14
+msgid "After"
+msgstr "Na"
+
+#: templates/admin/feincms/_messages_js.html:15
+msgid "Before"
+msgstr "Voor"
+
+#: templates/admin/feincms/_messages_js.html:16
+msgid "Insert new:"
+msgstr "Voeg in:"
+
+#: templates/admin/feincms/content_editor.html:10
+msgid "Region empty"
+msgstr "Leeg gebied"
+
+#: templates/admin/feincms/content_editor.html:14
+msgid "Content from the parent site is automatically inherited. To override this behaviour, add some content."
+msgstr "Inhoud van de ouder-pagina wordt automatisch geërfd. Voeg zelf inhoud toe om dit te veranderen."
+
+#: templates/admin/feincms/content_editor.html:22
+msgid "Add new item"
+msgstr "Nieuw item toevoegen"
+
+#: templates/admin/feincms/content_editor.html:36
+msgid "Move to"
+msgstr "Verplaats naar"
+
+#: templates/admin/feincms/content_editor.html:40
+msgid "Move"
+msgstr "Verplaats"
+
+#: templates/admin/feincms/fe_editor.html:48
+msgid "Save"
+msgstr "Opslaan"
+
+#: templates/admin/feincms/fe_tools.html:26
+msgid "Stop Editing"
+msgstr "Stop met Wijzigen"
+
+#: templates/admin/feincms/fe_tools.html:31
+msgid "edit"
+msgstr "wijzigen"
+
+#: templates/admin/feincms/fe_tools.html:33
+msgid "new"
+msgstr "nieuw"
+
+#: templates/admin/feincms/fe_tools.html:34
+msgid "up"
+msgstr "naar boven"
+
+#: templates/admin/feincms/fe_tools.html:35
+msgid "down"
+msgstr "naar onder"
+
+#: templates/admin/feincms/fe_tools.html:36
+msgid "remove"
+msgstr "verwijderen"
+
+#: templates/admin/feincms/tree_editor.html:35
+msgid "Shortcuts"
+msgstr "Snelkoppelingen"
+
+#: templates/admin/feincms/tree_editor.html:37
+msgid "Collapse tree"
+msgstr "Alles dichtklappen"
+
+#: templates/admin/feincms/tree_editor.html:38
+msgid "Expand tree"
+msgstr "Alles openklappen"
+
+#: templates/admin/feincms/tree_editor.html:41
+msgid "Filter"
+msgstr "Filter"
+
+#: templates/admin/feincms/page/page/item_editor.html:9
+#, python-format
+msgid "Replace page %(to_replace)s"
+msgstr "Vervang pagina %(to_replace)s"
+
+#: templates/admin/feincms/page/page/item_editor.html:12
+msgid "Create hidden copy of this page"
+msgstr "Maak verborgen kopie"
+
+#: templates/admin/feincms/page/page/item_editor.html:13
+msgid "Edit on site"
+msgstr "Op de website wijzigen"
+
+#: templates/admin/feincms/page/page/item_editor.html:20
+#: templates/admin/feincms/page/page/tree_editor.html:7
+msgid "Home"
+msgstr "Startpagina"
+
+#: templates/admin/medialibrary/mediafile/change_list.html:12
+msgid "Bulk upload a ZIP file:"
+msgstr "Opload meerdere bestanden tegelijk (zip-bestand):"
+
+#: templates/admin/medialibrary/mediafile/change_list.html:15
+msgid "Send"
+msgstr "Verstuur"
+
+#: templates/content/comments/default.html:10
+#, python-format
+msgid "%(comment_count)s comments."
+msgstr "%(comment_count)s reacties"
+
+#: templates/content/comments/default.html:18
+#, python-format
+msgid ""
+"\n"
+"                    %(comment_username)s said on %(comment_submit_date)s<br />\n"
+"                "
+msgstr ""
+"\n"
+"                    %(comment_username)s zei op %(comment_submit_date)s<br />\n"
+"                "
+
+#: templates/content/comments/default.html:28
+msgid "No comments."
+msgstr "Geen reacties."
+
+#: templates/content/comments/default.html:36
+msgid "Post Comment"
+msgstr "Plaats Reactie"
+
+#: templates/content/contactform/form.html:9
+msgid "Submit"
+msgstr "Verzenden"
+
+#: templates/content/contactform/thanks.html:3
+msgid "Thanks!"
+msgstr "Bedankt!"
+
+#~ msgid "Add %(name)s"
+#~ msgstr "Voeg %(name)s toe"
+
+#~ msgid "Select an item on the left side if you want to edit it."
+#~ msgstr "Selecteer een item aan de linkerzijde als je het wilt wijzigen."
+
+#~ msgid "You can change the structure of the tree by drag-dropping elements. Please note that changes will be saved immediately. "
+#~ msgstr "Je kunt de structuur veranderen door de elementen te verslepen. Alle wijzigingen worden direct opgeslagen."
+
+#~ msgid "The context menu on the tree root and tree nodes provide you with additional modes of operation."
+#~ msgstr "Het contextmenu in de hoofdtak en takken van de boom voorzien je van extra functionaliteiten."
+
+#~ msgid "Cannot remove this frame while inside this admin section."
+#~ msgstr "Kan dit frame niet verwijderen terwijl we in deze admin sectie zijn."
+
+#~ msgid "Reload"
+#~ msgstr "Vernieuw"
+
+#~ msgid "Edit"
+#~ msgstr "Wijzigen"
+
+#~ msgid "Delete"
+#~ msgstr "Verwijderen"

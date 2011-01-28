@@ -48,6 +48,7 @@ MEDIA_URL = ''
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/'
+FEINCMS_ADMIN_MEDIA = '/site_media/feincms/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'tnrm*t2b80nu51mgz3kc2%_v6bv8e)8rup$03m)dp7xb0)m8t9'
@@ -64,8 +65,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'video.middleware.VideoMiddleware',
-    #'socialauth.middleware.FacebookConnectMiddleware'
+    'content.middleware.ContentMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -73,7 +73,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.request",
-    "video.context_processors.categories",
     "userprofile.context_processors.css_classes"
 )
 
@@ -90,19 +89,19 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.comments',
-    'categories',
+    'django.contrib.admin',
+    'feincms',
+    'feincms.module.page',
+    'feincms.module.blog',
+    'feincms.module.medialibrary',
     'socialauth',
     'openid_consumer',
-    'registration',
-    'mptt',
     'categories',
     'editor',
-    'voting',
-    'tagging',
     'userprofile',
-    'video',
-    'django.contrib.admin',
+    'mptt',
+    'categories',
+    'content',
 )
 
 LOGIN_URL = '/social/login'
@@ -112,11 +111,6 @@ LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_ACTIVATION_DAYS = 7
 
 PAGINATION=20
-
-try:
-    from localsettings import *
-except ImportError:
-    pass
 
 import os
 MEDIA_ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'media'))
@@ -129,6 +123,7 @@ CACHE_VIEW_LENGTH=10
 SITE_NAME = 'cloudpub'
 
 AWS_CALLING_FORMAT = 'REGULAR'
+FEINCMS_TREE_EDITOR_INCLUDE_ANCESTORS = True
 
 # START of django-profile specific options
 I18N_URLS = False
@@ -226,3 +221,9 @@ AUTHENTICATION_BACKENDS = (
     'socialauth.auth_backends.FacebookBackend',
     'socialauth.auth_backends.LinkedInBackend',
 )
+
+try:
+    from localsettings import *
+except ImportError:
+    pass
+

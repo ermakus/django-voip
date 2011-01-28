@@ -1,0 +1,94 @@
+{% extends "admin/change_form.html" %}
+{% load feincms_compat_tags i18n admin_modify adminmedia %}
+
+{% block extrahead %}{{ block.super }}
+{% block feincms_jquery_ui %}
+{% if FEINCMS_ADMIN_MEDIA_HOTLINKING %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+{% else %}
+<script type="text/javascript" src="{{ FEINCMS_ADMIN_MEDIA }}jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="{{ FEINCMS_ADMIN_MEDIA }}jquery-ui-1.8.7.custom.min.js"></script>
+{% endif %}
+{% endblock %}
+
+<link rel="stylesheet" type="text/css" href="{{ FEINCMS_ADMIN_MEDIA }}style.css" />
+<script type="text/javascript" src="{{ FEINCMS_ADMIN_MEDIA }}jquery.alerts.js"></script>
+<script type="text/javascript">
+    var feincms = {
+        {% if FEINCMS_JQUERY_NO_CONFLICT %}
+        "jQuery": jQuery.noConflict(true)
+        {% else %}
+        "jQuery": jQuery
+        {% endif %}
+    };
+</script>
+<script type="text/javascript" src="{{ FEINCMS_ADMIN_MEDIA }}item_editor.js"></script>
+
+{% include "admin/feincms/_messages_js.html" %}
+{% include "admin/feincms/_regions_js.html" %}
+
+{% for inc in model.feincms_item_editor_includes.head %}{% include inc %}{% endfor %}
+
+<script type="text/javascript">
+    feincms.jQuery(document).ready(function($){
+        {% block extra-init-js %}{# /* do not use this block, use feincms_item_editor_includes instead */ #}{% endblock %}
+
+        /* handle Cmd-S and Cmd-Shift-S as save-and-continue and save respectively */
+        $(document.documentElement).keydown(function(event) {
+            if(event.which == 83 && event.metaKey) {
+                sel = event.shiftKey ? 'form:first input[name=_continue]' :
+                    'form:first input[name=_save]';
+                $(sel).click();
+                return false;
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block object-tools %}
+{{ block.super }}
+{% if change and not is_popup %}
+<ul class="extra-object-tools">
+  {% if original.get_preview_url %}<li><a href="{{ original.get_preview_url }}" class="viewsitelink">{% trans "Preview" %}</a></li> {% endif %}
+  {% if has_add_permission and has_parent_attribute %}<li><a href="../add/?parent={{ object_id }}" class="addchild">{% trans "Add child page" %}</a></li> {% endif %}
+</ul>
+<script type="text/javascript">{# DRY object-tools addition #}
+  feincms.jQuery(function($){
+    $(".extra-object-tools li").appendTo("ul.object-tools");
+    $(".extra-object-tools").remove();
+  });
+</script>
+{% endif %}
+{% endblock %}
+
+{% block form_top %}
+  {% with original.available_translations as translations %}
+    {% if translations %}
+      <div style="float: right;padding: 5px 0 0 0" id="available_translations">
+        {% trans "available translations" %}:
+        {% for translation in translations %}
+          <a href="../{{ translation.id }}/" title="{{ translation }}">{{ translation.language|upper }}</a>{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      </div>
+      <script type="text/javascript">
+        feincms.jQuery(function($){
+            $('#id_language').parent().prepend($('#available_translations'));
+        });
+      </script>
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block after_related_objects %} {# as good a place as any... #}
+  {{ block.super }}
+  <div id="content-editor-fieldset" style="display: none">
+    {% include "admin/feincms/content_editor.html" %}
+  </div>
+  <script type="text/javascript">
+    feincms.jQuery(function($){
+      $("h2:contains('{{ FEINCMS_CONTENT_FIELDSET_NAME }}')").parent().replaceWith($("#main_wrapper"));
+    });
+  </script>
+{% endblock %}

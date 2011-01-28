@@ -4,14 +4,14 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', 'video.views.index'),
-    (r'^video/', include('video.urls')), 
+    (r'^$', 'content.views.index'),
+    (r'^content/', include('content.urls')), 
     (r'^social/', include('socialauth.urls')),
-#    (r'^accounts/', include('registration.backends.default.urls')),
     (r'^accounts/', include('userprofile.urls')),
     (r'^admin/', admin.site.urls), 
     (r'^categories/', include('categories.urls')),
-    (r'^uploadify/', include('uploadify.urls')),
+    url(r'^preview/(?P<page_id>\d+)/', 'feincms.views.base.preview_handler', name='feincms:preview'),
+    url(r'^(.*)/$|^$', 'feincms.views.applicationcontent.handler'),
 )
 
 
