@@ -8,7 +8,7 @@ var providers_large = {
      },
     yahoo: {
         name: 'Yahoo',      
-        url: 'https://me.yahoo.com/'
+        link: '{% url socialauth.views.yahoo_login %}'
     },    
     aol: {
         name: 'AOL',
@@ -17,17 +17,15 @@ var providers_large = {
     },
     linkedin: {
         name: 'Linkedin',     
-        label: "{% trans 'Login with Linkedin' %}",
         link: '{% url socialauth.views.linkedin_login %}'
     },
     twitter: {
         name: 'Twitter',     
-        label: 'Login with twitter',
         link: '{% url socialauth.views.twitter_login %}'
     },
-     google: {
+    google: {
         name: 'Google',
-        link: '{% url socialauth.views.gmail_login %}'
+        link: '{% url socialauth.views.google_login %}'
     },
     facebook: {
         name: 'Facebook',     
@@ -123,7 +121,10 @@ var openid = {
     getBoxHTML: function(provider, box_size, image_ext) {
         var box_id = provider["name"].toLowerCase();
         var html = '<a title="' + provider["name"] + '"';
-	if( provider["link"] ) html += " href='" + provider["link"] + "' target='_top'";
+	if( provider["link"] ) {
+		html += " href='" + provider["link"] + "' target='_top'";
+ 		html += ' onclick="openid.signin(\'' + box_id + '\');"';
+	}
  			  else html += ' href="javascript:openid.signin(\'' + box_id + '\');"';
 	html += ' class="' + box_id + ' openid_' + box_size + '_btn"></a>';
 	return html;
@@ -145,9 +146,12 @@ var openid = {
 			this.setOpenIdUrl(provider['url']);
 			if (!onload) {
 				$('#openid_form').submit();
-			}	
-		}
+   				$('#openid_form').hide();
+				$('#wait_image').show();
+			}
+	}
     },
+
 
     /* Sign-in button click */
     submit: function() {
@@ -156,7 +160,9 @@ var openid = {
     		url = url.replace('{username}', $('#openid_username').val());
     		openid.setOpenIdUrl(url);
     	}
-    	return true;
+    	$('#openid_form').hide();
+	$('#wait_image').show();
+	return true;
     },
     setOpenIdUrl: function (url) {
     	var hidden = $('#'+this.input_id);

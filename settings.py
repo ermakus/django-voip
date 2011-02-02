@@ -9,15 +9,12 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-#DATABASE_ENGINE = 'sqlite3'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#DATABASE_NAME = '/home/anton/yotaplay/data.db'              # Or path to database file if using sqlite3.
 DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'yotaplay'              # Or path to database file if using sqlite3.
-DATABASE_USER = 'root'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'daodeczin'         # Not used with sqlite3.
+DATABASE_NAME = 'cloudpub'              # Or path to database file if using sqlite3.
+DATABASE_USER = 'cloudpub'             # Not used with sqlite3.
+DATABASE_PASSWORD = 'cloud123#'         # Not used with sqlite3.
 DATABASE_HOST = 'localhost'             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
-
 
 DEFAULT_CHARSET='utf-8'
 
@@ -215,11 +212,11 @@ FACEBOOK_EXTENDED_PERMISSIONS = (
 
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
     'socialauth.auth_backends.OpenIdBackend',
     'socialauth.auth_backends.TwitterBackend',
     'socialauth.auth_backends.FacebookBackend',
     'socialauth.auth_backends.LinkedInBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 try:

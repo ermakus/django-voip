@@ -16,7 +16,7 @@ def get_user_info(api_key, api_secret, cookies):
                                         'call_id': time.time(),
                                         'v': '1.0',
                                         'uids': cookies[api_key + '_user'],
-                                        'fields': 'uid,first_name,last_name,pic_small, name, current_location',
+                                        'fields': 'uid,first_name,last_name,pic_small,name,current_location,sex,email',
                                         'format': 'json',
                                     }
 

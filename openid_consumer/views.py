@@ -130,7 +130,7 @@ def begin(request, redirect_to=None, on_failure=None, user_url=None, template_na
     
     OPENID_AX_PROVIDER_MAP = getattr(settings, 'OPENID_AX_PROVIDER_MAP', {})
     
-    openid_provider = 'Google' if 'google' in request.session.get('openid_provider', '') else 'Default'
+    openid_provider = 'Google' if 'Google' == request.session.get('openid_provider', '') else 'Default'
     ax = OPENID_AX_PROVIDER_MAP.get(openid_provider)
     
     if ax:
