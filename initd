@@ -1,0 +1,16 @@
+#!/bin/bash
+
+case "$1" in
+"start") 
+python /srv/cloudpub/manage.py runfcgi method=prefork host=127.0.0.1 port=8801 pidfile=/tmp/cloudpub.pid 
+;;
+"stop") 
+kill -9 `cat /tmp/cloudpub.pid` 
+;;
+"restart")
+$0 stop
+sleep 1
+$0 start
+;;
+*) echo "Usage: cloudpub {start|stop|restart}";;
+esac
