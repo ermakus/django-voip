@@ -14,7 +14,7 @@ openid.init('openid_identifier');
 {% block content %}
 <img id="wait_image" style="display: none; position: absolute; left: 50%; margin-left: -110px; top: 40%;" src="{{ MEDIA_URL }}/img/loading.gif"/>
 <form target="_top" class="login_form" method="post" id="openid_form">
-<h1>{% trans "Login with social network" %}</h1>
+<h1>{% trans "Sign In" %}</h1>
 {% if error %}
 <b class="error">{{ error }}</b>
 {% endif %}
@@ -27,8 +27,9 @@ openid.init('openid_identifier');
 	<input id="id_password" name="password" type="password"/>
 	<input class="btn" id="openid_submit" type="submit" value="{% trans "Sign-In" %}"/>
  </div>
+<b>Select social network login with</b>
 <div id="openid_btns">
 </div>
-<p>Have no account at all? <a href="{% url signup %}{{ request.urlstate }}">{% trans "Register at " %}<span style="color: #F68618;">CloudPub</span></a></p>
+<a href="{% url signup %}{{ request.urlstate }}"><h2>{% trans "Register" %}</h2></a>
 </form>
 {% endblock %}

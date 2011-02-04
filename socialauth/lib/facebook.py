@@ -1,5 +1,5 @@
 import md5
-import urllib
+import urllib, urllib2
 import time
 try:
     import json as simplejson
@@ -23,7 +23,7 @@ def get_user_info(api_key, api_secret, cookies):
     user_info_hash = get_facebook_signature(api_key, api_secret, user_info_params)
     user_info_params['sig'] = user_info_hash            
     user_info_params = urllib.urlencode(user_info_params)
-    user_info_response  = simplejson.load(urllib.urlopen(REST_SERVER, user_info_params))
+    user_info_response  = simplejson.load(urllib2.urlopen(REST_SERVER, user_info_params))
     return user_info_response
 
 def get_friends(api_key, api_secret, cookies):
@@ -55,7 +55,7 @@ def talk_to_fb(api_key, api_secret, params):
     sig = get_facebook_signature(api_key, api_secret, params)
     params['sig'] = sig
     data = urllib.urlencode(params)
-    response = simplejson.load(urllib.urlopen(REST_SERVER, data))
+    response = simplejson.load(urllib2.urlopen(REST_SERVER, data))
     return response
 
     

@@ -23,6 +23,7 @@ def index(request):
 def script(request):
    return render_to_response('common.js', { }, context_instance=RequestContext(request))
 
+@login_required
 def upload(request):
 
     filename = 'test_upload';

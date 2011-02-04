@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 import facebook
 
-import urllib
+import urllib, urllib2
 from socialauth.lib import oauthtwitter2 as oauthtwitter
 from socialauth.models import Profile
 from socialauth.lib.linkedin import *
@@ -23,6 +23,9 @@ LINKEDIN_CONSUMER_SECRET = getattr(settings, 'LINKEDIN_CONSUMER_SECRET', '')
 
 OPENID_AX_PROVIDER_MAP = getattr(settings, 'OPENID_AX_PROVIDER_MAP', {})
 
+            
+def LOG_ERROR(request,msg):
+    request.META['wsgi.errors'].write( msg )
 
 def random_username():
     return ''.join([random.choice('abcdefghijklmnopqrstuvwxyz') for i in xrange(10)])
@@ -164,7 +167,7 @@ class FacebookBackend:
 
             url = "https://graph.facebook.com/oauth/access_token?"+urllib.urlencode(params)
             from cgi import parse_qs
-            userdata = urllib.urlopen(url).read()
+            userdata = urllib2.urlopen(url).read()
             res_parse_qs = parse_qs(userdata)
 
             # Could be a bot query
@@ -173,17 +176,10 @@ class FacebookBackend:
 
             access_token = res_parse_qs['access_token'][0]
             graph = facebook.GraphAPI(access_token) 
-            fb_data = None
-            try:
-                fb_data = graph.get_object("me")
-            except Exception, e:
-                request.META['wsgi.errors'].write("Facebook API error: %s\n" % e )
-                return None
+            fb_data = graph.get_object("me")
                 
             if not fb_data:
-                return None
-
-            request.META['wsgi.errors'].write("Facebook profile: %s ACCESS_TOKEN: %s\n" % ( fb_data, access_token ) )
+                raise Exception("Error capturing facebook profile")
 
             uid = fb_data['id']
 
