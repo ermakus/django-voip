@@ -50,7 +50,7 @@ function popup( href ) {
 $(document).ready(function() {
 
 	$('body').ajaxError(function(e, r, settings){
-   		alert("Ошибка обращения к серверу\nURL: " + settings.url + "\nReason: " + r.responseText );
+   		//alert("Ошибка обращения к серверу\nURL: " + settings.url + "\nReason: " + r.responseText );
 	});
 
         $('.act').click( function() {

@@ -9,8 +9,8 @@ function getFlashMovie(movieName) {
     return (isIE) ? window[movieName] : document[movieName];  
 }
 </script>
-
-<table style="width: 640px;"><tbody><tr valign="top">
+<table width="100%">
+<tbody><tr valign="top">
 <td>
 <object width="320" height="240" id="video1" data="{{ MEDIA_URL }}VideoIO.swf" type="application/x-shockwave-flash">
     <param value="VideoIO.swf" name="movie">
@@ -21,7 +21,7 @@ function getFlashMovie(movieName) {
     <param value="controls=true" name="flashVars">
 </object>
 <center>
-<input type="hidden" value="rtmp://cloudpub.us/myapp" style="width: 170px;" autocomplete="off" id="src1">
+<input type="hidden" value="rtmp://localhost/myapp" style="width: 170px;" autocomplete="off" id="src1">
 <input type="hidden" value="anonymous" style="width: 50px;" autocomplete="off" id="publish1">
 <input type="button" onclick="getFlashMovie('video1').setProperty('src', document.getElementById('src1').value+ '?publish=' + document.getElementById('publish1').value)" value="Publish">
 <input type="button" onclick="getFlashMovie('video1').setProperty('src', null)" value="Stop">
@@ -37,7 +37,7 @@ function getFlashMovie(movieName) {
     <param value="controls=true" name="flashVars">
 </object>
 <center>
-<input type="hidden" value="rtmp://cloudpub.us/myapp" style="width: 170px;" autocomplete="off" id="src2">
+<input type="hidden" value="rtmp://localhost/myapp" style="width: 170px;" autocomplete="off" id="src2">
 <input type="hidden" value="anonymous" style="width: 50px;" autocomplete="off" id="play2">
 <input type="button" onclick="getFlashMovie('video2').setProperty('src', document.getElementById('src2').value+ '?play=' + document.getElementById('play2').value)" value="Connect room">
 <input type="button" onclick="getFlashMovie('video2').setProperty('src', null)" value="Disconnect">
@@ -45,7 +45,9 @@ function getFlashMovie(movieName) {
 </td>
 </table>
 
+<iframe id="app" width="100%" height="200px" src="http://localhost:8001/"></iframe>
 
+<!--
 {% ifequal role 'CUSTOMER' %}
 <h1>Request training</h1>
 {% else %}
@@ -58,9 +60,9 @@ function getFlashMovie(movieName) {
 </table>
 <input type="submit" value="Post request"/>
 </form>
+-->
 {% endblock %}
 {% block sidebar %}
-<div class="box">Here you can test our conferencing system and create your own training room</div>
 {% endblock %}
 {% block initscript %}
 {% endblock %}
