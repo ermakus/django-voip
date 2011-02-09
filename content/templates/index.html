@@ -1,36 +1,59 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block content %}
-  <h2>Online multimedia content marketplace</h2>
-  <ul class="drop">
-   <li>
-    <a href='{% url upload %}'>
-     <h1 class="card-title">{% trans "Sell your content here" %}</h1>
-     <div class="card-desc">{% trans "Here you can upload your content in the cloud or create it from scratch" %}</div>
-    </a>
-   </li>
-  </ul>
-  <ul class="list">
-   {% for cat in cats %}
-   <li>
-    <a href='{{ cat.get_absolute_url }}'>
-     <h1 class="card-title">{{ cat.get_title }}</h1>
-     <div class="card-desc">{{ cat.description }}</div>
-    </a>
-   </li>
-   {% endfor %}
+  <h2>Online video consultations</h2>
+<script type="text/javascript">
+function getFlashMovie(movieName) {
+    var isIE = navigator.appName.indexOf("Microsoft") != -1;
+    return (isIE) ? window[movieName] : document[movieName];  
+}
+</script>
+<table style="width: 640px;"><tbody><tr valign="top">
+<td>
+<object width="320" height="240" id="video1" data="{{ MEDIA_URL }}VideoIO.swf" type="application/x-shockwave-flash">
+    <param value="VideoIO.swf" name="movie">
+    <param value="high" name="quality">
+    <param value="#000000" name="bgcolor">
+    <param value="true" name="allowFullScreen">
+    <param value="always" name="allowScriptAccess">
+    <param value="controls=true" name="flashVars">
+</object>
+<center>
+<input type="text" value="rtmp://cloudpub.us/myapp" style="width: 170px;" autocomplete="off" id="src1">
+?publish=
+<input type="text" value="anonymous" style="width: 50px;" autocomplete="off" id="publish1">
+<br>
+<input type="button" onclick="getFlashMovie('video1').setProperty('src', 
+        document.getElementById('src1').value
+        + '?publish=' + document.getElementById('publish1').value)" value="set">
+<input type="button" onclick="getFlashMovie('video1').setProperty('src', null)" value="reset">
+</center>
+</td>
+<td>
+<object width="320" height="240" id="video2" data="{{ MEDIA_URL }}VideoIO.swf" type="application/x-shockwave-flash">
+    <param value="VideoIO.swf" name="movie">
+    <param value="high" name="quality">
+    <param value="#000000" name="bgcolor">
+    <param value="true" name="allowFullScreen">
+    <param value="always" name="allowScriptAccess">
+    <param value="controls=true" name="flashVars">
+</object>
+<center>
+<input type="text" value="rtmp://cloudpub.us/myapp" style="width: 170px;" autocomplete="off" id="src2">
+?play=
+<input type="text" value="anonymous" style="width: 50px;" autocomplete="off" id="play2">
+<br>
+<input type="button" onclick="getFlashMovie('video2').setProperty('src', 
+        document.getElementById('src2').value
+        + '?play=' + document.getElementById('play2').value)" value="set">
+<input type="button" onclick="getFlashMovie('video2').setProperty('src', null)" value="reset">
+</center>
+
+</td></tr></tbody></table>
+
 {% endblock %}
 {% block sidebar %}
-  <p style="margin: 10px;">What is <span style="color: #F68618;">Cloud Pub</span>?</p>
-  <ul style="list-style: square; margin: 10px; padding: 10px;">
-   <li>Create or upload your content in the cloud</li>
-   <li>Publish text, images, music, movies and software from fast cloud network</li>
-   <li>Access your content from mobile phones and tablets</li>
-   <li>Share it with community under Creative Commons licence</li>
-   <li>Sell content ypu own under commerical license for your price</li>
-   <li>Advertize your content in social networks</li>
-   <li>..just by few mouse clicks</li>
-  </ul>
+This is future site. Nothing interested yet.
 {% endblock %}
 {% block initscript %}
 {% endblock %}
