@@ -3,7 +3,7 @@ var user = false;
 
 function reload() {
    $('#player').show();
-   $.getJSON( "/content/context", null, function( context ) {
+   $.getJSON( "/tickets/context", null, function( context ) {
         	if( context ) {
 			user = context.user;
 			$("#bagcount").html( context.bag );

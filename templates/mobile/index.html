@@ -1,0 +1,13 @@
+{% extends "mobile/base.html" %}
+{% block content %}
+  <ul class="rounded">
+   {% for cat in cats %}
+   <li>
+    <a href='{{ cat.get_absolute_url }}'>
+     <h1 class="card-title">{{ cat.get_title }}</h1>
+     <div class="card-desc">{{ cat.description }}</div>
+    </a>
+   </li>
+   {% endfor %}
+  </ul>
+{% endblock %}

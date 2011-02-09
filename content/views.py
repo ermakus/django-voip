@@ -16,13 +16,6 @@ from django.core.urlresolvers import reverse
 
 import settings, operator, base64
 
-def index(request):
-    cats = Category.objects.all().filter( level=1 )
-    return render_to_response( request.mutator + 'index.html', {'cats':cats }, context_instance=RequestContext(request))
-
-def script(request):
-   return render_to_response('common.js', { }, context_instance=RequestContext(request))
-
 @login_required
 def upload(request):
 
@@ -59,43 +52,5 @@ def upload(request):
 	     'policy':policy,
 	     'signature':S3.encode( settings.AWS_SECRET_ACCESS_KEY, policy )  }
 
-    return render_to_response('upload.html', opts, context_instance=RequestContext(request))
+    return render_to_response('content/upload.html', opts, context_instance=RequestContext(request))
 
-
-def context(request):
-    if request.user.is_authenticated():
-        relations = Relation.objects.filter( user = request.user )
-	username = request.user.first_name + " " + request.user.last_name
-	if username.strip() == "":
-	    username = request.user.email
-       	if username.strip() == "":
-	    username = request.user.username
-        return HttpResponse('{"user":"%s","count":"%s"}' % ( username , relations.count() ), mimetype="text/json" )
-    else:
-        return HttpResponse("false", mimetype="text/json" )
-
-@login_required
-def private(request,page):
-    relations = Relation.objects.filter( user = request.user )
-    paginator = Paginator(relations, settings.PAGINATION)
-    return render_to_response('private.html', { 'relations':paginator.page( page ) }, context_instance=RequestContext(request))
-
-def content(request, content_id ):
-    movie = get_object_or_404(Entry, pk=content_id)
-    movie.views = movie.views + 1
-    movie.save()
-    purchased = "No"
-    if request.user.is_authenticated():
-        relations = Relation.objects.filter( user = request.user, movie = movie )
-	if len(relations) > 0:
-            purchased = "Yes"
-        
-    return render_to_response( request.mutator + 'content.html', { 'movie':movie, 'purchased':purchased }, context_instance=RequestContext(request))
-
-@login_required
-def buy(request, content_id):
-    content = get_object_or_404(Movie, pk=content_id)
-    rel = None
-    if 'code' in request.GET:
-        rel = content.add_relation('buy', request.user, '')
-    return render_to_response('buy.html', { 'content':content,'rel':rel }, context_instance=RequestContext(request))

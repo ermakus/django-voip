@@ -6,7 +6,7 @@ from django.template.loader import select_template
 from categories.models import Category
 from django.core.paginator import Paginator
 from django.db.models import Q
-from feincms.module.page.models import Page
+from tickets.models import *
 import operator
 import settings
 
@@ -28,15 +28,15 @@ def category(request, path):
             slug__iexact = path_items[-1],
             level = len(path_items)-1)
 
-    pages = Page.objects.all().order_by( '-'+ request.sort )
+    events = Event.objects.all().order_by( '-'+ request.sort )
     kwds = None
     if 'search' in request.GET:
         kwds = request.GET['search']
         keywords = kwds.split(' ')
         list_title_qs = [Q(title__icontains=x) for x in keywords]
-        list_description_qs = [Q(description__icontains=x) for x in keywords]
-        final_q = reduce(operator.or_, list_title_qs + list_description_qs)
-        pages = pages.filter( final_q )
-    paginator = Paginator(pages, 10 )
+        list_more_qs = [Q(more__icontains=x) for x in keywords]
+        final_q = reduce(operator.or_, list_title_qs + list_more_qs)
+        events = events.filter( final_q )
+    paginator = Paginator(events, 10 )
 
-    return render_to_response('categories/category.html', {'category':category, 'movies':paginator.page( request.page ) }, context_instance=RequestContext(request) )
+    return render_to_response('categories/category.html', {'category':category, 'events':events }, context_instance=RequestContext(request) )

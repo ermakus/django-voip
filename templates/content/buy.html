@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+{% load filters %}
+<center>
+{% if rel %}
+ <h2>Thank you!</h2>
+	<a href="{% url content content.pk %}">
+              {% if content.image %}
+		<img class="movie-container-img" src="{{ content.image }}" alt="{{ content.title }}">
+               {% endif %}
+            <h2>{{ content.title }}</h2>
+        </a>
+  <h4><a href="{% url content content.pk %}" target="_top">Now you can view your content</a></h4>
+ {% else %}
+ <h2>{{ content.title }} - Price: {{ content.price|currency }}</h2>
+	<a href="{% url content content.pk %}">
+              {% if content.image %}
+		<img class="movie-container-img" src="{{ content.image }}" alt="{{ content.title }}">
+               {% endif %}
+        </a><br/>
+  <b>Confirm payment</b>
+  <form action="{% url buy content.pk %}?{{ request.urlstate }}">
+   <input name="code" type="submit" value="Confirm">
+  </form>
+
+{% endif %}
+</center>
+{% endblock %}
+

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<h1>My requests</h1>
+<ul class="actions">
+    {% for rel in buy %}
+    <li>{{ rel.ticket }}<input style="float:right;" type="button" value="Cancel transaction" onclick="javascript:popup('{% url ticket_manage rel.ticket.id %}?embed=yes')"></li>
+    {% endfor %}
+</ul>
+<h1>My services</h1>
+<ul class="list">
+    {% for rel in sell %}
+    <li>{{ rel.ticket }}<input style="float:right;" type="button" value="Cancel transaction" onclick="javascript:popup('{% url ticket_manage rel.ticket.id %}?embed=yes')"></li>
+    {% endfor %}
+</ul>
+{% endblock %}
+{% block sidebar %}
+<div class="box">
+<b>Here you can access and manage your video-rooms</b>
+</div>
+{% endblock %}
+{% block initscript %}
+{% endblock %}
+

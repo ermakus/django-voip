@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+  <h1>Action</h1>
+  <ul class="actions">
+   <li><h1><a href='{% url ticket_view 0 %}?action=buy'>{% trans "Request consultation" %}</a></h1></li>
+   <li><h1><a href='{% url ticket_view 0 %}?action=sell'>{% trans "Offer consultation" %}</a></h1></li>
+  </ul>
+  <h1>Browse by category</h1>
+  <ul class="list">
+   {% for cat in cats %}
+   <li>
+    <a href='{{ cat.get_absolute_url }}'>
+     <h1 class="card-title">{{ cat.get_title }}</h1>
+     <div class="card-desc">{{ cat.description }}</div>
+    </a>
+   </li>
+   {% endfor %}
+{% endblock %}
+{% block sidebar %}
+<div class="box">
+<h4>Coming soon</h4>
+<b>CloudPub is place where live experts can consult you in video chat</b>
+</div>
+{% endblock %}
+{% block initscript %}
+{% endblock %}
+
