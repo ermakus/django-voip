@@ -1,31 +1,32 @@
 import os
 
-DEBUG = True
+DEBUG = False
+
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('Anton Ermak', 'anton@ermak.us'),
 )
+
 
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'cloudpub'              # Or path to database file if using sqlite3.
-DATABASE_USER = 'cloudpub'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'cloud123#'         # Not used with sqlite3.
+DATABASE_USER = 'root'             # Not used with sqlite3.
+DATABASE_PASSWORD = 'cloud123!'         # Not used with sqlite3.
 DATABASE_HOST = 'localhost'             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 DEFAULT_CHARSET='utf-8'
 
-# Local time zone for this installation. Choices can be found here:
+EMAIL_HOST = 'localhost'
+SERVER_EMAIL = 'robot@cloudpub.us'
+SEND_BROKEN_LINK_EMAILS = True
+
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
 TIME_ZONE = 'America/Chicago'
 
-# Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 #LANGUAGE_CODE = 'ru-RU'

@@ -28,10 +28,10 @@
 <li><h1><a href="{{ child.get_absolute_url }}{{ request.urlstate }}">{{ child.get_title }}</h1></a></li>
 {% endfor %}
 </ul>
-<h1>Events</h1>
+<h1>Experts in this category</h1>
 <ul class="list">
       {% for event in events %}
-          <li><a href="{% url ticket_view 0 %}{{ request.urlstate }}event={{ event.pk }}"><h3>{{ event }} ({{ event.get_ticket_count }} tickets available)</h3></a></li>
+          <li><a href="{% url ticket_view 0 %}{{ request.urlstate }}event={{ event.pk }}"><h3>{{ event }}</h3></a></li>
       {% endfor %}
 </ul>
 <h1>Actions</h1>

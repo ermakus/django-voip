@@ -3,6 +3,22 @@
 {% block extra_head %}
 {% endblock %}
 {% block content %}
+
+{% ifequal role 'CUSTOMER' %}
+<h1>Request consulting</h1>
+{% else %}
+<h1>Offer consulting</h1>
+{% endifequal %}
+<form action="{% url ticket_view id %}{{ request.urlstate }}&action={{ action }}" method="post">
+{% csrf_token %}
+<!--
+<table>
+{{ form.as_table }}
+</table>
+<input type="submit" value="Post request"/>
+</form>
+-->
+</form>
 <script type="text/javascript">
 function getFlashMovie(movieName) {
     var isIE = navigator.appName.indexOf("Microsoft") != -1;
@@ -23,8 +39,8 @@ function getFlashMovie(movieName) {
 <center>
 <input type="hidden" value="rtmp://cloudpub.us/myapp" style="width: 170px;" autocomplete="off" id="src1">
 <input type="hidden" value="anonymous" style="width: 50px;" autocomplete="off" id="publish1">
-<input type="button" onclick="getFlashMovie('video1').setProperty('src', document.getElementById('src1').value+ '?publish=' + document.getElementById('publish1').value)" value="Publish">
-<input type="button" onclick="getFlashMovie('video1').setProperty('src', null)" value="Stop">
+<input type="button" onclick="getFlashMovie('video1').setProperty('src', document.getElementById('src1').value+ '?publish=' + document.getElementById('publish1').value)" value="Me">
+<input type="button" onclick="getFlashMovie('video1').setProperty('src', null)" value="Out">
 </center>
 </td>
 <td>
@@ -39,28 +55,14 @@ function getFlashMovie(movieName) {
 <center>
 <input type="hidden" value="rtmp://cloudpub.us/myapp" style="width: 170px;" autocomplete="off" id="src2">
 <input type="hidden" value="anonymous" style="width: 50px;" autocomplete="off" id="play2">
-<input type="button" onclick="getFlashMovie('video2').setProperty('src', document.getElementById('src2').value+ '?play=' + document.getElementById('play2').value)" value="Connect room">
-<input type="button" onclick="getFlashMovie('video2').setProperty('src', null)" value="Disconnect">
+<input type="button" onclick="getFlashMovie('video2').setProperty('src', document.getElementById('src2').value+ '?play=' + document.getElementById('play2').value)" value="Room">
+<input type="button" onclick="getFlashMovie('video2').setProperty('src', null)" value="Close">
 </center>
 </td>
 </table>
-
-
-{% ifequal role 'CUSTOMER' %}
-<h1>Request training</h1>
-{% else %}
-<h1>Offer training</h1>
-{% endifequal %}
-<form action="{% url ticket_view id %}{{ request.urlstate }}&action={{ action }}" method="post">
-{% csrf_token %}
-<table>
-{{ form.as_table }}
-</table>
-<input type="submit" value="Post request"/>
-</form>
 {% endblock %}
 {% block sidebar %}
-<div class="box">Here you can test our conferencing system and create your own training room</div>
+<div class="box">Here you can request or offer consultation</div>
 {% endblock %}
 {% block initscript %}
 {% endblock %}
