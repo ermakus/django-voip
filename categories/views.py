@@ -6,7 +6,7 @@ from django.template.loader import select_template
 from categories.models import Category
 from django.core.paginator import Paginator
 from django.db.models import Q
-from tickets.models import *
+from room.models import *
 import operator
 import settings
 
@@ -28,7 +28,7 @@ def category(request, path):
             slug__iexact = path_items[-1],
             level = len(path_items)-1)
 
-    events = Event.objects.all().order_by( '-'+ request.sort )
+    rooms = Room.objects.all().order_by( '-'+ request.sort )
     kwds = None
     if 'search' in request.GET:
         kwds = request.GET['search']
@@ -36,7 +36,6 @@ def category(request, path):
         list_title_qs = [Q(title__icontains=x) for x in keywords]
         list_more_qs = [Q(more__icontains=x) for x in keywords]
         final_q = reduce(operator.or_, list_title_qs + list_more_qs)
-        events = events.filter( final_q )
-    paginator = Paginator(events, 10 )
+        rooms = events.filter( final_q )
 
-    return render_to_response('categories/category.html', {'category':category, 'events':events }, context_instance=RequestContext(request) )
+    return render_to_response('categories/category.html', {'category':category, 'rooms':rooms }, context_instance=RequestContext(request) )
