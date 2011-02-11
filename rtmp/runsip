@@ -1,0 +1,3 @@
+#!/bin/sh
+export PYTHONPATH=app:external:.
+python app/sipd.py -d

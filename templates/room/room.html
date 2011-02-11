@@ -5,32 +5,7 @@
 {% block content %}
 <script type="text/javascript">
 	<!--
-	
-	var base_url = "/room";
-    
-	// The Adobe stratus URL for my application
-	var media_url = 'rtmp://cloudpub.us/cloudpub';
-	
-	// The VideoIO play URL of my stream.
-	var src = null;
-	
-	// The VideoIO play URL of other person's stream
-	var dest = null;
-	
-	// The periodic timer to periodically login in soft-state.
-	var timer = null;
-	
-	// The periodic timer interval for login soft-state.
-	var publish_interval = 60000;
-	
-	// The socket created with channel API, created in createChannel().
-	var socket = null;
-	
-	// The channelId for the channel API for this client's ID (stream).
-	var channelId = null;
-	
-	// The channel created with channel API, created in createChannel().
-        var channel = null;
+	var media_url = 'rtmp://cloudpub.us/sip';
     
 	// Get the Flash Movie by name, e.g., "video1" or "video2".
 	function getFlashMovie(movieName) {
@@ -38,14 +13,14 @@
 	    return (isIE) ? window[movieName] : document[movieName];
 	}
     	
-	var stream = Math.floor(Math.random()*100000000).toString();
+	var stream = "{{ request.user.username }}";
 
         function createChannel() {
-		$.get( base_url + "/stream/" + stream + ":open", function( data ) {
+		$.get( "/room/stream/" + stream + ":open", function( data ) {
 			log("Channel created");
 			Server.connect( "http://cloudpub.us:9000" );
                         Server.subscribe( stream, function( data ) {
-				log("Data received:" + data );
+				log("Server reply:" + data );
 			});
 		} );
     	}
@@ -54,30 +29,48 @@
     
         // When VideoIO is created, and user has specified the name, start local video.
 	function onCreationComplete(event) {
+		var server = "cloudpub.us";
+		var user = "{{ request.user.username }}@" + server;
+		var authname = "{{ request.user.username }}";
+		var authpass = "mypass";
+		var displayname = "{{ request.user.first_name }} {{ request.user.last_name }}";
+		var rate = 8;
+		var rate_name = "narrowband";
+		var url = "rtmp://" +server+ "/sip/" +user+ "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
+		alert( url );
 		if (event.objectID == "video1") {
-			var url = media_url + "?publish=" + stream;
 			getFlashMovie("video1").setProperty("src", url);
 		}		
 		if (event.objectID == "video2") {
-			var url = media_url + "?play=" + stream;
-			getFlashMovie("video2").setProperty("src", url);
+		//	getFlashMovie("video2").setProperty("src", url);
 		}		
 	}
 
 	// When local video's nearID is set, set our "src" property and initiate login.
 	function onPropertyChange(event) {
-		if (event.property == "nearID" && event.objectID == "video1") {
-			src = media_url + "?nickname=" + me + "&play=" + stream + "&farID=" + event.newValue;
-			setTimeout("login(true)", 1000); // first invocation after 1 second.
-			timer = setInterval("login()", publish_interval);
+		log( "PROPERY: "  + event.property );
+		if (event.property == "src" && event.objectID == "video1") {
 		}
+	}
+
+	function onCallback(event) {
+		log( "NOTIFY: "  + event.method );
+		if (event.method == "accepted") {
+        		getFlashMovie('video1').setProperty('publish', 'local');
+        		getFlashMovie('video1').setProperty('play', 'remote');
+    		}
+		if (event.method == "invited") {
+			getFlashMovie('video1').callProperty('call', 'accept');
+			//getFlashMovie('phone1').callProperty('call', 'reject', '486 Busy Here'); // to reject
+    		}	 
 	}
 
 	function send() {
 		var msg = document.getElementById("input").value;
 		if (msg) {
 			document.getElementById("input").value = "";
-			log("Me: " + msg);
+			log("INVITE: " + msg);
+			getFlashMovie("video1").callProperty("call", "invite", msg );
 			Server.send( stream, msg );
 		}
 	}
