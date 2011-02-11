@@ -8,18 +8,12 @@ ADMINS = (
     ('Anton Ermak', 'anton@ermak.us'),
 )
 
-
 MANAGERS = ADMINS
-
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'cloudpub'              # Or path to database file if using sqlite3.
-DATABASE_USER = 'root'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'cloud123!'         # Not used with sqlite3.
-DATABASE_HOST = 'localhost'             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
 DEFAULT_CHARSET='utf-8'
 
+DATABASE_HOST = 'localhost'             # Set to empty string for localhost. Not used with sqlite3.
+DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 EMAIL_HOST = 'localhost'
 SERVER_EMAIL = 'robot@cloudpub.us'
 SEND_BROKEN_LINK_EMAILS = True
@@ -32,6 +26,8 @@ LANGUAGE_CODE = 'en-us'
 #LANGUAGE_CODE = 'ru-RU'
 
 SITE_ID = 1
+SITE_DOMAIN = "cloudpub.us"
+NODE_PORT = 9000
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

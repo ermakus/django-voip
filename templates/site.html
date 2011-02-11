@@ -25,6 +25,8 @@
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
 
         <script type="text/javascript" src="{{ MEDIA_URL }}js/common.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/faye-client-min.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/server-push.js"></script>
         {% block extra_head %}
         {% endblock %}
 </head>
@@ -39,9 +41,9 @@
   <li><a href="{% url index %}">{% trans "Home" %}</a></li>
   <li><a href="{% url category 'root' %}">{% trans 'Categories' %}</a></li>
   <li><a href="{% url rooms_view %}">{% trans 'My Rooms' %}</a></li>
-  <li class="authorized hidden"><a href="{% url profile_overview %}">{% trans 'Profile' %} (<u id="username"></u>)</a></li>
-  <li class="authorized hidden"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
-  <li class="unauthorized hidden"><a class="act" href="{% url socialauth.views.login_page %}">{% trans "Sign in" %}</a></li>
+  <li class="authorized" style="display: none;"><a href="{% url profile_overview %}">{% trans 'Profile' %} (<u id="username"></u>)</a></li>
+  <li class="authorized" style="display: none;"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
+  <li class="unauthorized" style="display: none;"><a class="act" href="{% url socialauth.views.login_page %}">{% trans "Sign in" %}</a></li>
 </ul>
 
 	<!-- Navigation end -->

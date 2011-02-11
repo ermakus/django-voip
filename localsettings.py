@@ -1,6 +1,12 @@
 #
 # Various services keys
 #
+DEBUG=True
+
+DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+DATABASE_NAME = 'cloudpub'              # Or path to database file if using sqlite3.
+DATABASE_USER = 'cloudpub'             # Not used with sqlite3.
+DATABASE_PASSWORD = 'cloud123#'         # Not used with sqlite3.
 
 TWITTER_CONSUMER_KEY = 'djT9ge47Z2MPaKZcb0gQ'
 TWITTER_CONSUMER_SECRET = 'nWYzLLBuX4XOIa3fbH43nOhlHmfwZ1frctIgIGWUtI'

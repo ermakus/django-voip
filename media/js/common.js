@@ -46,11 +46,7 @@ function popup( href ) {
 $(document).ready(function() {
 
 	$('body').ajaxError(function(e, r, settings){
-<<<<<<< HEAD
-   		//alert("Ошибка обращения к серверу\nURL: " + settings.url + "\nReason: " + r.responseText );
-=======
    		alert("Server connection failed.\nURL: " + settings.url);
->>>>>>> d0fd72f24d284706049cc919f459f299775abd1e
 	});
 
         $('.act').click( function() {
