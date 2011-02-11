@@ -9,7 +9,7 @@
 	var base_url = "/room";
     
 	// The Adobe stratus URL for my application
-	var media_url = 'rtmfp://stratus.rtmfp.net/d1e1e5b3f17e90eb35d244fd-c711881365d9/';
+	var media_url = 'rtmp://cloudpub.us/cloudpub';
 	
 	// The VideoIO play URL of my stream.
 	var src = null;
@@ -43,7 +43,7 @@
         function createChannel() {
 		$.get( base_url + "/stream/" + stream + ":open", function( data ) {
 			log("Channel created");
-			Server.connect( "http://localhost:9000" );
+			Server.connect( "http://cloudpub.us:9000" );
                         Server.subscribe( stream, function( data ) {
 				log("Data received:" + data );
 			});
