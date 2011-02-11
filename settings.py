@@ -62,7 +62,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'tickets.middleware.SiteMiddleware',
+    'room.middleware.SiteMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -81,7 +81,7 @@ MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), 'media'))
 
 EDITOR_MEDIA_PATH = MEDIA_URL + 'editor/'
 CATEGORIES_ALLOW_SLUG_CHANGE = True
-CATEGORIES_RELATION_MODELS = ['tickets.event']
+CATEGORIES_RELATION_MODELS = ['room.room']
 CACHE_VIEW_LENGTH=10
 
 SITE_NAME = 'cloudpub'
@@ -102,7 +102,7 @@ INSTALLED_APPS = (
     'editor',
     'mptt',
     'userprofile',
-    'tickets'
+    'room'
 )
 
 LOGIN_URL = '/social/login'

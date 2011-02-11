@@ -38,7 +38,7 @@
 <ul id="menu">
   <li><a href="{% url index %}">{% trans "Home" %}</a></li>
   <li><a href="{% url category 'root' %}">{% trans 'Categories' %}</a></li>
-  <li><a href="{% url ticket_my %}">{% trans 'My Consultations' %}</a></li>
+  <li><a href="{% url rooms_view %}">{% trans 'My Rooms' %}</a></li>
   <li class="authorized hidden"><a href="{% url profile_overview %}">{% trans 'Profile' %} (<u id="username"></u>)</a></li>
   <li class="authorized hidden"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
   <li class="unauthorized hidden"><a class="act" href="{% url socialauth.views.login_page %}">{% trans "Sign in" %}</a></li>

@@ -3,8 +3,8 @@
 {% block sidebar %}
 <ul class="sidemenu">
 <li>Sort by</li>
- <li><a href="{{ category.get_absolute_url }}?sort=date_time&page={{ request.page }}" id="rating">{% trans "Date" %}</a></li>
- <li><a href="{{ category.get_absolute_url }}?sort=place&page={{ request.page }}" id="views">{% trans "Place" %}</a></li>
+ <li><a href="{{ category.get_absolute_url }}?sort=rating&page={{ request.page }}" id="rating">{% trans "Rating" %}</a></li>
+ <li><a href="{{ category.get_absolute_url }}?sort=title&page={{ request.page }}" id="views">{% trans "Title" %}</a></li>
 <li>Subcategories</li>
 {% if category.parent %}<li><a href="{{ category.parent.get_absolute_url }}{{ request.urlstate }}">{% trans "Back to " %}{{ category.parent.get_title }}</a></li>{% endif %}
 {% for child in category.children.all %}
@@ -28,15 +28,15 @@
 <li><h1><a href="{{ child.get_absolute_url }}{{ request.urlstate }}">{{ child.get_title }}</h1></a></li>
 {% endfor %}
 </ul>
-<h1>Experts in this category</h1>
+<h1>Rooms in this category</h1>
 <ul class="list">
-      {% for event in events %}
-          <li><a href="{% url ticket_view 0 %}{{ request.urlstate }}event={{ event.pk }}"><h3>{{ event }}</h3></a></li>
+      {% for room in rooms %}
+          <li><a href="{% url room_view room.pk %}{{ request.urlstate }}"><h3>{{ room }}</h3></a></li>
       {% endfor %}
 </ul>
 <h1>Actions</h1>
 <ul class="actions">
-    <li class="action"><h1><a href="{% url ticket_view 0 %}?action=sell">Offer service this category</a></h1></li>
-    <li><h1><a href="{% url ticket_view 0 %}?action=buy">Request service in this category</a></h1></li>
+    <li class="action"><h1><a href="{% url room_view 0 %}?action=offer">Offer service this category</a></h1></li>
+    <li><h1><a href="{% url room_view 0 %}?action=request">Request service in this category</a></h1></li>
 </ul>
 {% endblock %}

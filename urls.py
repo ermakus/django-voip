@@ -4,8 +4,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', 'tickets.views.index'),
-    (r'^tickets/', include('tickets.urls')), 
+    (r'^$', 'room.views.index'),
+    (r'^room/', include('room.urls')), 
     (r'^social/', include('socialauth.urls')),
     (r'^accounts/', include('userprofile.urls')),
     (r'^admin/', admin.site.urls), 
