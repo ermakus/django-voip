@@ -16,7 +16,7 @@
 	var you = null;
 	
     // The base URL of the application, so that absolute API URL can be formed.
-	var base_url = location.href.substring(0,location.href.lastIndexOf('/'));
+	var base_url = "/room";
     
 	// The Adobe stratus URL for my application
 	var media_url = 'rtmfp://stratus.rtmfp.net/d1e1e5b3f17e90eb35d244fd-c711881365d9/';
@@ -77,7 +77,7 @@
 	// respectively for these messages.
     function createChannel() {
 		var request = getRequest();
-		var url = base_url + "/create/?stream=" + stream;
+		var url = base_url + "/stream/" + stream + ":open";
 		request.onreadystatechange = function() {
 			if (request.readyState == 4) {
 				if (request.status == 200) {
@@ -144,7 +144,7 @@
 		}
 		
 		var request = getRequest();
-		var url = base_url + "/login/?stream=" + stream + (change ? "&change=true" : "");
+		var url = base_url + "/stream/" + stream + ":connect";
 		request.onreadystatechange = function() {
 			if (request.readyState == 4) {
 				if (request.status == 200) {
@@ -156,18 +156,6 @@
 		};
 		request.open("POST", url, true);
 		request.send('{"publish":"' + src + '"}');
-	}
-
-	// Logout the local user, and clear the periodic login timer.
-	// Request: POST /logout/?stream={stream}
-	function logout() {
-		if (timer)
-			clearInterval(timer);
-		
-		var request = getRequest();
-		var url = base_url + "/logout/?stream=" + stream;
-		request.open("POST", url, true);
-		request.send(src);
 	}
 
 	// Send a text chat message, if connected to other person.
@@ -182,7 +170,7 @@
 			if (dest) {
 				log("Me: " + msg);
 				var request = getRequest();
-				var url = base_url + "/send/" + "?stream=" + stream;
+				var url = base_url + "/stream/" + stream + ":message";
 				request.open("POST", url, true);
 				request.send('{"dest":"' + dest + '", "body": "You: ' + msg + '"}');
 			}
@@ -291,13 +279,13 @@
 		<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="video2" width="320" height="240"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-			<param name="movie" value="/static/VideoIO.swf" />
+			<param name="movie" value="{{ MEDIA_URL }}VideoIO.swf" />
 			<param name="quality" value="high" />
 			<param name="bgcolor" value="#000000" />
 			<param name="allowFullScreen" value="true" />
 			<param name="flashVars" value="controls=true" />
 			<param name="allowScriptAccess" value="always" />
-			<embed src="/static/VideoIO.swf" quality="high" bgcolor="#000000"
+			<embed src="{{ MEDIA_URL }}VideoIO.swf" quality="high" bgcolor="#000000"
 				width="320" height="240" name="video2" align="middle"
 				play="true" loop="false" quality="high"
 				allowFullScreen="true"
