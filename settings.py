@@ -150,7 +150,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 try:
-    from localsettings import *
+    from local import *
 except ImportError:
     pass
 
