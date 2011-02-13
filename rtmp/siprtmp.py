@@ -461,9 +461,8 @@ try:
     from std.rfc4566 import SDP, attrs as format
     from std.rfc2833 import DTMF
 except:
-    print 'Please include p2p-sip src directory in your PYTHONPATH'
-    exit(1)
-    
+    pass
+ 
 _debug = False
 
 class Context(object):

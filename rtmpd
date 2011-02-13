@@ -1,0 +1,33 @@
+#!/bin/bash
+HOME=/srv/cloudpub/rtmp
+DAEMON=siprtmp.py
+USER=cloudpub
+GROUP=cloudpub
+PYTHON=$(which python)
+
+case "$1" in
+  start)
+    echo "Starting $DAEMON"
+    # Activate the virtual environment
+    # Run start-stop-daemon, the $DAEMON variable contains the path to the
+    # application to run
+    start-stop-daemon --background --start --make-pidfile --pidfile /tmp/$DAEMON.pid \
+        --user $USER --group $GROUP \
+        --chuid $GROUP \
+        --exec $PYTHON -- $HOME/$DAEMON
+    ;;
+  stop)
+    echo "Stopping $DAEMON"
+    # Start-stop daemon can also stop the application by sending sig 15
+    # (configurable) to the process id contained in the run/pid file
+    start-stop-daemon --stop --pidfile /tmp/$DAEMON.pid --verbose
+    ;;
+
+  *)
+    # Refuse to do other stuff
+    echo "Usage: $0 {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0

@@ -105,7 +105,13 @@ def overview(request):
     """
     Main profile page
     """
-    profile, created = Profile.objects.get_or_create(user=request.user, uid=("local-%s" % request.user.username) )
+    profiles = Profile.objects.all().filter(user=request.user)
+    if profiles.count() == 0:
+        profile = Profile(user=request.user,uid=(request.user.username))
+        profile.save()
+    else:
+        profile = profiles[0]
+
     validated = False
     try:
         email = EmailValidation.objects.exclude(verified=True).get(user=request.user).email

@@ -43,6 +43,13 @@ class Meeting( models.Model ):
 class Stream( models.Model ):
     uid = models.CharField(max_length=64)
     state = models.CharField(max_length=64)
+
     user = models.ForeignKey( User )
+    class Meta:
+        verbose_name_plural = 'Streams'
+
+    def __unicode__(self):
+        return "%s: %s (%s)" % ( self.uid, self.user.username, self.state )
+
 
 categories.register_m2m(Room, 'cats', )

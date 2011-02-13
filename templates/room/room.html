@@ -17,10 +17,10 @@
 
         function createChannel() {
 		$.get( "/room/stream/" + stream + ":open", function( data ) {
-			log("Channel created");
+			log("You connected to chat");
 			Server.connect( "http://cloudpub.us:9000" );
                         Server.subscribe( stream, function( data ) {
-				log("Server reply:" + data );
+				log(">" + data );
 			});
 		} );
     	}
@@ -37,31 +37,29 @@
 		var rate = 8;
 		var rate_name = "narrowband";
 		var url = "rtmp://" +server+ "/sip/" +user+ "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
-		alert( url );
 		if (event.objectID == "video1") {
 			getFlashMovie("video1").setProperty("src", url);
-		}		
-		if (event.objectID == "video2") {
-		//	getFlashMovie("video2").setProperty("src", url);
 		}		
 	}
 
 	// When local video's nearID is set, set our "src" property and initiate login.
 	function onPropertyChange(event) {
-		log( "PROPERY: "  + event.property );
 		if (event.property == "src" && event.objectID == "video1") {
 		}
 	}
 
 	function onCallback(event) {
-		log( "NOTIFY: "  + event.method );
+		log( "SIP: "  + event.method );
 		if (event.method == "accepted") {
         		getFlashMovie('video1').setProperty('publish', 'local');
         		getFlashMovie('video1').setProperty('play', 'remote');
     		}
 		if (event.method == "invited") {
-			getFlashMovie('video1').callProperty('call', 'accept');
-			//getFlashMovie('phone1').callProperty('call', 'reject', '486 Busy Here'); // to reject
+			if( confirm("Incoming call. Accept?") ) {		
+				getFlashMovie('video1').callProperty('call', 'accept');
+			} else {
+				getFlashMovie('video1').callProperty('call', 'reject', '486 Busy Here');
+			}
     		}	 
 	}
 
@@ -106,26 +104,36 @@
 		</object>
     </div>
     <div style="position: absolute; left: 10px; top: 260px; width: 320px; height: 240px;">
-		<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-			id="video2" width="320" height="240"
-			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
-			<param name="movie" value="{{ MEDIA_URL }}VideoIO.swf" />
-			<param name="quality" value="high" />
-			<param name="bgcolor" value="#000000" />
-			<param name="allowFullScreen" value="true" />
-			<param name="flashVars" value="controls=true" />
-			<param name="allowScriptAccess" value="always" />
-			<embed src="{{ MEDIA_URL }}VideoIO.swf" quality="high" bgcolor="#000000"
-				width="320" height="240" name="video2" align="middle"
-				play="true" loop="false" quality="high"
-				allowFullScreen="true"
-				allowScriptAccess="always"
-				flashVars="controls=true"
-				type="application/x-shockwave-flash"
-				pluginspage="http://www.adobe.com/go/getflashplayer">
-			</embed>
-		</object>
-    </div>
+    
+<table style="width: 80px;">
+    <caption><i>Dialpad</i>:</caption>
+    <tbody><tr><td>
+    <input value="1" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '1')" type="button">
+    </td><td>
+    <input value="2" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '2')" type="button">
+    </td><td>
+    <input value="3" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '3')" type="button">
+    </td></tr><tr><td>
+    <input value="4" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '4')" type="button">
+    </td><td>
+    <input value="5" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '5')" type="button">
+    </td><td>
+    <input value="6" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '6')" type="button">
+    </td></tr><tr><td>
+    <input value="7" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '7')" type="button">
+    </td><td>
+    <input value="8" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '8')" type="button">
+    </td><td>
+    <input value="9" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '9')" type="button">
+    </td></tr><tr><td>
+    <input value="*" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '*')" type="button">
+    </td><td>
+    <input value="0" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '0')" type="button">
+    </td><td>
+    <input value="#" onclick="getFlashMovie('video1').callProperty('call', 'sendDTMF', '#')" type="button">
+    </td></tr>
+</tbody></table>
+</div>
 
 	<div style="position: absolute; left: 340px; top: 10px; width: 320px; height: 490px;">
 		<div style="float: right; height: 18px;">
@@ -140,8 +148,7 @@
 			onkeypress="javascript: if ((event.keyCode || event.which) == 13) { send(); return false; }"/>
 			
 		<div style="float: right; height: 18px;">
-			<div id="remote" style="float: left;">You are not connected</div> &nbsp; |
-			<a href="#" onclick="javascript: login(true); return false;">Next Person in this category</a>
+			<div id="status" style="float: left;">You are not connected</div>
 		</div> 
 	</div>
 </div>
@@ -149,7 +156,8 @@
 {% endblock %}
 {% block sidebar %}
 <div class="box">
-Conferencing goes here
+You can chat or make voice and video call to peoples it this room.
+This page is under development, only web to web calls supported.
 </div>
 {% endblock %}
 {% block initscript %}
