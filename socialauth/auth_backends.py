@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.conf import settings
 import facebook
-
+from django.contrib.auth import authenticate, login
 import urllib, urllib2
 from socialauth.lib import oauthtwitter2 as oauthtwitter
 from socialauth.models import Profile
@@ -34,15 +34,18 @@ def random_username():
 class ProfileData(object):
     pass
 
-def update_profile(user,provider,uid,data):
+def update_profile(request,provider,uid,data):
 
     def def_val(name, val):
         if not hasattr(data,name) or getattr(data,name) is None:
              setattr(data,name,val)
     profile = None
-
+    user = request.user
     try:
         profile = Profile.objects.get(uid = uid)
+        user = profile.user
+        user.backend='django.contrib.auth.backends.ModelBackend'
+        login( request, user )
     except Profile.DoesNotExist:
 	profile = Profile()
         pass
@@ -93,7 +96,7 @@ class OpenIdBackend:
                 data.username = request.openid.ax.getSingle(ax_schema['nickname']) #should be replaced by correct schema
                 data.first_name, data.last_name = request.openid.ax.getSingle(ax_schema['fullname']).split(' ', 1)
 
-        return update_profile(request.user,provider,openid_key,data).user
+        return update_profile(request,provider,openid_key,data).user
   
     def get_user(self, user_id):
         try:
@@ -104,7 +107,7 @@ class OpenIdBackend:
 
 class LinkedInBackend:
     """LinkedInBackend for authentication"""
-    def authenticate(self, linkedin_access_token, user=None):
+    def authenticate(self, linkedin_access_token, request, user=None):
         linkedin = LinkedIn(LINKEDIN_CONSUMER_KEY, LINKEDIN_CONSUMER_SECRET)
         # get their profile
         
@@ -114,7 +117,7 @@ class LinkedInBackend:
         data.first_name, data.last_name = profile.firstname, profile.lastname       
         data.token = linkedin_access_token
 
-        return update_profile(user,"Linkedin",profile.id,data).user
+        return update_profile(request,"Linkedin",profile.id,data).user
 
     def get_user(self, user_id):
         try:
@@ -124,7 +127,7 @@ class LinkedInBackend:
 
 class TwitterBackend:
     
-    def authenticate(self, twitter_access_token, user=None):
+    def authenticate(self, twitter_access_token, request, user=None):
         twitter = oauthtwitter.TwitterOAuthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
         try:
             userinfo = twitter.get_user_info(twitter_access_token)
@@ -141,7 +144,7 @@ class TwitterBackend:
         except:
             data.first_name, data.last_name = data.username, ''
  
-        return update_profile(user,"Twitter",userinfo.id,data).user
+        return update_profile(request,"Twitter",userinfo.id,data).user
 
     def get_user(self, user_id):
         try:
@@ -189,7 +192,7 @@ class FacebookBackend:
         data.email = fb_data['email']
         data.token = access_token
  
-        return update_profile(request.user,"Facebook",uid,data).user
+        return update_profile(request,"Facebook",uid,data).user
     
     def get_user(self, user_id):
         try:

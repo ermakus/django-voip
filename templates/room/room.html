@@ -6,14 +6,22 @@
 <script type="text/javascript">
 	<!--
 	var media_url = 'rtmp://cloudpub.us/sip';
-    
+	var stream = "{{ request.user.pk }}";
+   	var server = "cloudpub.us";
+	var user = "{{ request.user.pk }}@" + server;
+	var authname = "{{ request.user.pk }}";
+	var authpass = "{{ request.session.session_key }}";
+	var displayname = "{{ request.user.first_name }} {{ request.user.last_name }}";
+	var rate = 8;
+	var rate_name = "narrowband";
+	var url = "rtmp://" +server+ "/sip/" +user+ "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
+ 
 	// Get the Flash Movie by name, e.g., "video1" or "video2".
 	function getFlashMovie(movieName) {
 	    var isIE = navigator.appName.indexOf("Microsoft") != -1;
 	    return (isIE) ? window[movieName] : document[movieName];
 	}
     	
-	var stream = "{{ request.user.username }}";
 
         function createChannel() {
 		$.get( "/room/stream/" + stream + ":open", function( data ) {
@@ -25,20 +33,11 @@
 		} );
     	}
     
-	createChannel();
-    
         // When VideoIO is created, and user has specified the name, start local video.
 	function onCreationComplete(event) {
-		var server = "cloudpub.us";
-		var user = "{{ request.user.username }}@" + server;
-		var authname = "{{ request.user.username }}";
-		var authpass = "mypass";
-		var displayname = "{{ request.user.first_name }} {{ request.user.last_name }}";
-		var rate = 8;
-		var rate_name = "narrowband";
-		var url = "rtmp://" +server+ "/sip/" +user+ "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
 		if (event.objectID == "video1") {
 			getFlashMovie("video1").setProperty("src", url);
+			//getFlashMovie("video1").setProperty("src", "http://www.mediacollege.com/video-gallery/testclips/20051210-w50s.flv" );
 		}		
 	}
 
@@ -67,9 +66,12 @@
 		var msg = document.getElementById("input").value;
 		if (msg) {
 			document.getElementById("input").value = "";
-			log("INVITE: " + msg);
-			getFlashMovie("video1").callProperty("call", "invite", msg );
-			Server.send( stream, msg );
+			if( msg.indexOf("sip:") == 0 ) {
+				log("INVITE: " + msg);
+				getFlashMovie("video1").callProperty("call", "invite", msg );
+			} else {
+				Server.send( stream, msg );
+			}
 		}
 	}
 	
@@ -78,6 +80,8 @@
 		var obj = document.getElementById("history");
 		obj.value += (obj.value == "" ? "" : "\n") + msg; 
 	}
+
+	createChannel();
 
 	//-->
 	</script>	
@@ -148,7 +152,7 @@
 			onkeypress="javascript: if ((event.keyCode || event.which) == 13) { send(); return false; }"/>
 			
 		<div style="float: right; height: 18px;">
-			<div id="status" style="float: left;">You are not connected</div>
+			<div id="status" style="float: left;"><b>Your number is <h2><a href='javascript:getFlashMovie("video1").callProperty("call", "invite", "sip:{{ request.user.pk }}@cloudpub.us")'>sip:{{ request.user.pk }}@cloudpub.us</a></h2></b></div>
 		</div> 
 	</div>
 </div>
@@ -158,6 +162,7 @@
 <div class="box">
 You can chat or make voice and video call to peoples it this room.
 This page is under development, only web to web calls supported.
+Type your friend phone number with <b>sip:</b> prefix to invite.
 </div>
 {% endblock %}
 {% block initscript %}

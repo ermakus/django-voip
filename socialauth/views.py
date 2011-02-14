@@ -66,7 +66,7 @@ def login_page(request):
 
 def render_error(request, error):
     return render_to_response('socialauth/login_page.html', {
-	'next' : request.session['login_next'],
+	'next' : request.session['login_next'] or LOGIN_REDIRECT_URL,
 	'error': error,
     }, context_instance=RequestContext(request))
  
@@ -89,7 +89,7 @@ def linkedin_login_done(request):
         verifier = request.GET.get('oauth_verifier', None)
         access_token = linkedin.getAccessToken(request_token,verifier)
         request.session['access_token'] = access_token
-        user = authenticate(linkedin_access_token=access_token, user=request.user )
+        user = authenticate(linkedin_access_token=access_token, request=request, user=request.user )
         login(request, user)
     except Exception, e:
          del_dict_key(request.session, 'access_token')
@@ -127,9 +127,10 @@ def twitter_login_done(request):
         twitter = oauthtwitter.TwitterOAuthClient(settings.TWITTER_CONSUMER_KEY, settings.TWITTER_CONSUMER_SECRET)
         access_token = twitter.fetch_access_token(token, verifier)
         request.session['access_token'] = access_token.to_string()
-        user = authenticate(twitter_access_token=access_token, user=request.user)
+        user = authenticate(twitter_access_token=access_token, request=request, user=request.user)
         login(request, user)
     except Exception, e:
+        raise
         del_dict_key(request.session, 'access_token')
         del_dict_key(request.session, 'request_token')
         return render_error(request,'System error: %s' % e)
