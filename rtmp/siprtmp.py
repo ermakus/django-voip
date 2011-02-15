@@ -1,5 +1,4 @@
 # Copyright (c) 2007-2009, Mamta Singh. All rights reserved. See LICENSING for details.
-
 '''
 Introduction
 ------------
@@ -461,8 +460,12 @@ try:
     from std.rfc4566 import SDP, attrs as format
     from std.rfc2833 import DTMF
 except:
-    pass
- 
+    print 'Please include p2p-sip src directory in your PYTHONPATH'
+    exit(1)
+
+from log import SimpleLogger
+logger = SimpleLogger('/var/log/cloudpub/siprtmp.log')
+    
 _debug = False
 
 class Context(object):
@@ -636,7 +639,7 @@ class Context(object):
     def _cleanup(self): # cleanup a session
         if self.session:
             yield self.session.close()    # close the session
-            if self.session.media: self.session.media.close(); self.session.media = None # clear the reference
+            if self.session and self.session.media: self.session.media.close(); self.session.media = None # clear the reference
             self.session = None
         if self._gss is not None: self._gss.close(); self._gss = None
 

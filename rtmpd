@@ -14,7 +14,7 @@ case "$1" in
     start-stop-daemon --background --start --make-pidfile --pidfile /tmp/$DAEMON.pid \
         --user $USER --group $GROUP \
         --chuid $GROUP \
-        --exec $PYTHON -- $HOME/$DAEMON
+        --exec $PYTHON -- $HOME/$DAEMON -d
     ;;
   stop)
     echo "Stopping $DAEMON"

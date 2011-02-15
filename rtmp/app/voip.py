@@ -754,9 +754,10 @@ class Session(object):
                 ua.sendRequest(ua.createRequest('BYE'))
                 try: response = yield ua.queue.get(timeout=5) # wait for atmost 5 seconds for BYE response
                 except multitask.Timeout: pass # ignore the no response for BYE
-            self.ua.queue = None
-            self.ua.close()  # this will remove dialog if needed
-            self.ua = None
+            if self.ua:
+                self.ua.queue = None
+                self.ua.close()  # this will remove dialog if needed
+                self.ua = None
     
     def _run(self):
         '''Thread method for this multitask task.'''

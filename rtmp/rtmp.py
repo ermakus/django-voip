@@ -1,4 +1,65 @@
 # Copyright (c) 2007-2009, Mamta Singh. All rights reserved. see README for details.
+
+'''
+This is a simple implementation of a Flash RTMP server to accept connections and stream requests. The module is organized as follows:
+1. The FlashServer class is the main class to provide the server abstraction. It uses the multitask module for co-operative multitasking.
+   It also uses the App abstract class to implement the applications.
+2. The Server class implements a simple server to receive new Client connections and inform the FlashServer application. The Client class
+   derived from Protocol implements the RTMP client functions. The Protocol class implements the base RTMP protocol parsing. A Client contains
+   various streams from the client, represented using the Stream class.
+3. The Message, Header and Command represent RTMP message, header and command respectively. The FLV class implements functions to perform read
+   and write of FLV file format.
+
+
+Typically an application can launch this server as follows:
+$ python rtmp.py
+
+To know the command line options use the -h option:
+$ python rtmp.py -h
+
+To start the server with a different directory for recording and playing FLV files from, use the following command.
+$ python rtmp.py -r some-other-directory/
+Note the terminal '/' in the directory name. Without this, it is just used as a prefix in FLV file names.
+
+A test client is available in testClient directory, and can be compiled using Flex Builder. Alternatively, you can use the SWF file to launch
+from testClient/bin-debug after starting the server. Once you have launched the client in the browser, you can connect to
+local host by clicking on 'connect' button. Then click on publish button to publish a stream. Open another browser with
+same URL and first connect then play the same stream name. If everything works fine you should be able to see the video
+from first browser to the second browser. Similar, in the first browser, if you check the record box before publishing,
+it will create a new FLV file for the recorded stream. You can close the publishing stream and play the recorded stream to
+see your recording. Note that due to initial delay in timestamp (in case publish was clicked much later than connect),
+your played video will start appearing after some initial delay.
+
+
+If an application wants to use this module as a library, it can launch the server as follows:
+>>> agent = FlashServer()   # a new RTMP server instance
+>>> agent.root = 'flvs/'    # set the document root to be 'flvs' directory. Default is current './' directory.
+>>> agent.start()           # start the server
+>>> multitask.run()         # this is needed somewhere in the application to actually start the co-operative multitasking.
+
+
+If an application wants to specify a different application other than the default App, it can subclass it and supply the application by
+setting the server's apps property. The following example shows how to define "myapp" which invokes a 'connected()' method on client when
+the client connects to the server.
+
+class MyApp(App):         # a new MyApp extends the default App in rtmp module.
+    def __init__(self):   # constructor just invokes base class constructor
+        App.__init__(self)
+    def onConnect(self, client, *args):
+        result = App.onConnect(self, client, *args)   # invoke base class method first
+        def invokeAdded(self, client):                # define a method to invoke 'connected("some-arg")' on Flash client
+            client.call('connected', 'some-arg')
+            yield
+        multitask.add(invokeAdded(self, client))      # need to invoke later so that connection is established before callback
+...
+agent.apps = dict({'myapp': MyApp, 'someapp': MyApp, '*': App})
+
+Now the client can connect to rtmp://server/myapp or rtmp://server/someapp and will get connected to this MyApp application.
+If the client doesn't define "function connected(arg:String):void" in the NetConnection.client object then the server will
+throw an exception and display the error message.
+
+'''
+
 import os, sys, time, struct, socket, traceback, multitask, amf, threading, Queue
 
 _debug = False
@@ -135,6 +196,9 @@ class Protocol(object):
         except ConnectionClosed:
             yield self.connectionClosed()
             if _debug: print 'parse connection closed'
+        except:
+            if _debug: print 'exception, closing connection'
+            yield self.connectionClosed()
                     
     def writeMessage(self, message):
         self.writeQueue.put(message)
@@ -157,9 +221,13 @@ class Protocol(object):
     def parseHandshake(self):
         '''Parses the rtmp handshake'''
         data = (yield self.stream.read(Protocol.PING_SIZE + 1)) # bound version and first ping
+        # send both data parts before reading next ping-size, to work with ffmpeg
+        #if struct.unpack('>I', data[5:9])[0] == 0:
+        #    data = struct.pack('>BII', 0x03, 0, int(time.time())) + data[9:]
         yield self.stream.write(data)
+        yield self.stream.write(data[1:])
         data = (yield self.stream.read(Protocol.PING_SIZE)) # bound second ping
-        yield self.stream.write(data)
+        # yield self.stream.write(data)
     
     def parseMessages(self):
         '''Parses complete messages until connection closed. Raises ConnectionLost exception.'''
@@ -322,7 +390,7 @@ class Command(object):
         if length == 0: raise ValueError('zero length message data')
         
         if message.type == Message.RPC3 or message.type == Message.DATA3:
-            assert message.data[0] == '\x00' # must be 0 in AMD3
+            assert message.data[0] == '\x00' # must be 0 in AMF3
             data = message.data[1:]
         else:
             data = message.data
@@ -330,10 +398,11 @@ class Command(object):
         amfReader = amf.AMF0(data)
 
         inst = cls()
+        inst.type = message.type
         inst.name = amfReader.read() # first field is command name
 
         try:
-            if message.type == Message.RPC:
+            if message.type == Message.RPC or message.type == Message.RPC3:
                 inst.id = amfReader.read() # second field *may* be message id
                 inst.cmdData = amfReader.read() # third is command data
             else:
@@ -419,7 +488,7 @@ class FLV(object):
     def writeDuration(self, duration):
         if _debug: print 'writing duration', duration
         output = amf.BytesIO()
-        amfWriter = amf.AMF0(output)
+        amfWriter = amf.AMF0(output) # TODO: use AMF3 if needed
         amfWriter.write('onMetaData')
         amfWriter.write({"duration": duration, "videocodecid": 2})
         output.seek(0); data = output.read()
@@ -454,7 +523,7 @@ class FLV(object):
             while self.fp is not None:
                 bytes = self.fp.read(11)
                 if len(bytes) == 0:
-                    response = Command(name='onStatus', id=stream.id, args=[dict(level='status',code='NetStream.Play.Stop', description='File ended', details=None)])
+                    response = Command(name='onStatus', id=stream.id, args=[amf.Object(level='status',code='NetStream.Play.Stop', description='File ended', details=None)])
                     stream.send(response.toMessage())
                     break
                 type, len0, len1, ts0, ts1, ts2, sid0, sid1 = struct.unpack('>BBHBHBBH', bytes)
@@ -469,7 +538,7 @@ class FLV(object):
                 # if _debug: print 'FLV.read() length=', length, 'hdr=', hdr
                 # if hdr.type == Message.AUDIO: print 'r', hdr.type, hdr.time
                 if type == Message.DATA: # metadata
-                    amfReader = amf.AMF0(body)
+                    amfReader = amf.AMF0(body) # TODO: use AMF3 if needed
                     name = amfReader.read()
                     obj = amfReader.read()
                     if _debug: print 'FLV.read()', name, repr(obj)
@@ -541,7 +610,7 @@ class Client(Protocol):
     def __init__(self, sock, server):
         Protocol.__init__(self, sock)
         self.server, self.agent, self.streams, self._nextCallId, self._nextStreamId, self.objectEncoding = \
-          server,      {},         {},           2,                1,                  0.0
+          server,      None,         {},           2,                1,                  0.0
         self.queue = multitask.Queue() # receive queue used by application
         multitask.add(self.parse()); multitask.add(self.write())
 
@@ -561,10 +630,10 @@ class Client(Protocol):
             # if _debug: print 'rtmp.Client.messageReceived cmd=', cmd
             if cmd.name == 'connect':
                 self.agent = cmd.cmdData
-                self.objectEncoding = self.agent['objectEncoding']
+                self.objectEncoding = self.agent.objectEncoding if hasattr(self.agent, 'objectEncoding') else 0.0
                 yield self.server.queue.put((self, cmd.args)) # new connection
             elif cmd.name == 'createStream':
-                response = Command(name='_result', id=cmd.id, type=(self.objectEncoding == 0.0 and Message.RPC or Message.RPC3), \
+                response = Command(name='_result', id=cmd.id, type=self.rpc, \
                                    args=[self._nextStreamId])
                 self.writeMessage(response.toMessage())
                 
@@ -589,12 +658,16 @@ class Client(Protocol):
             if not stream.client: stream.client = self 
             yield stream.queue.put(msg) # give it to stream
 
+    @property
+    def rpc(self):
+        return Message.RPC if self.objectEncoding == 0.0 else Message.RPC3
+    
     def accept(self):
         '''Method to accept an incoming client.'''
         response = Command()
-        response.id, response.name, response.type = 1, '_result', Message.RPC
+        response.id, response.name, response.type = 1, '_result', self.rpc
         if _debug: print 'Client.accept() objectEncoding=', self.objectEncoding
-        response.setArg(dict(level='status', code='NetConnection.Connect.Success',
+        response.setArg(amf.Object(level='status', code='NetConnection.Connect.Success',
                         description='Connection succeeded.', fmsVer='rtmplite/7,0', details=None,
                         objectEncoding=self.objectEncoding))
         self.writeMessage(response.toMessage())
@@ -602,15 +675,24 @@ class Client(Protocol):
     def rejectConnection(self, reason=''):
         '''Method to reject an incoming client.'''
         response = Command()
-        response.id, response.name, response.type = 1, '_error', Message.RPC
-        response.setArg(dict(level='status', code='NetConnection.Connect.Rejected',
+        response.id, response.name, response.type = 1, '_error', self.rpc
+        response.setArg(amf.Object(level='status', code='NetConnection.Connect.Rejected',
                         description=reason, fmsVer='rtmplite/7,0', details=None))
         self.writeMessage(response.toMessage())
             
+    def redirectConnection(self, url, reason='Connection failed'):
+        '''Method to redirect an incoming client to the given url.'''
+        response = Command()
+        response.id, response.name, response.type = 1, '_error', self.rpc
+        extra = dict(code=302, redirect=url)
+        response.setArg(amf.Object(level='status', code='NetConnection.Connect.Rejected',
+                        description=reason, fmsVer='rtmplite/7,0', details=None, ex=extra))
+        self.writeMessage(response.toMessage())
+
     def call(self, method, *args):
         '''Call a (callback) method on the client.'''
         cmd = Command()
-        cmd.id, cmd.name, cmd.type = self._nextCallId, method, (self.objectEncoding == 0.0 and Message.RPC or Message.RPC3)
+        cmd.id, cmd.name, cmd.type = self._nextCallId, method, self.rpc
         cmd.args, cmd.cmdData = args, None
         self._nextCallId += 1
         if _debug: print 'Client.call method=', method, 'args=', args, ' msg=', cmd.toMessage()
@@ -733,12 +815,12 @@ class FlashServer(object):
                 if not client:                # if the server aborted abnormally,
                     break                     #    hence close the listener.
                 if _debug: print 'client connection received', client, args
-                # if client.objectEncoding != 0 and client.objectEncoding != 3:
-                if client.objectEncoding != 0:
+                if client.objectEncoding != 0 and client.objectEncoding != 3:
+                #if client.objectEncoding != 0:
                     yield client.rejectConnection(reason='Unsupported encoding ' + str(client.objectEncoding) + '. Please use NetConnection.defaultObjectEncoding=ObjectEncoding.AMF0')
                     yield client.connectionClosed()
                 else:
-                    client.path = str(client.agent['app']); name, ignore, scope = client.path.partition('/')
+                    client.path = str(client.agent.app); name, ignore, scope = client.path.partition('/')
                     if '*' not in self.apps and name not in self.apps:
                         yield client.rejectConnection(reason='Application not found: ' + name)
                     else: # create application instance as needed and add in our list
@@ -750,6 +832,10 @@ class FlashServer(object):
                         win_ack = Message()
                         win_ack.type, win_ack.data = Message.WIN_ACK_SIZE, struct.pack('>L', client.writeWinSize)
                         client.writeMessage(win_ack)
+                        
+#                        set_peer_bw = Message()
+#                        set_peer_bw.type, set_peer_bw.data = Message.SET_PEER_BW, struct.pack('>LB', client.writeWinSize, 1)
+#                        client.writeMessage(set_peer_bw)
                         
                         try: 
                             result = inst.onConnect(client, *args)
@@ -835,7 +921,7 @@ class FlashServer(object):
                 except:
                     if _debug: print 'Client.call exception', (sys and sys.exc_info() or None) 
                     code, args = '_error', dict()
-                res.id, res.name, res.type = cmd.id, code, (client.objectEncoding == 0.0 and Message.RPC or Message.RPC3)
+                res.id, res.name, res.type = cmd.id, code, client.rpc
                 res.args, res.cmdData = args, None
                 if _debug: print 'Client.call method=', code, 'args=', args, ' msg=', res.toMessage()
                 client.writeMessage(res.toMessage())
@@ -857,7 +943,7 @@ class FlashServer(object):
     def streamhandler(self, stream, message):
         '''A generator to handle a single message on the stream.'''
         try:
-            if message.type == Message.RPC:
+            if message.type == Message.RPC or message.type == Message.RPC3:
                 cmd = Command.fromMessage(message)
                 if _debug: print 'streamhandler received cmd=', cmd
                 if cmd.name == 'publish':
@@ -891,11 +977,11 @@ class FlashServer(object):
             if stream.mode in ('record', 'append'): 
                 stream.recordfile = FLV().open(path, stream.mode)
             # elif stream.mode == 'live': FLV().delete(path) # TODO: this is commented out to avoid accidental delete
-            response = Command(name='onStatus', id=cmd.id, args=[dict(level='status', code='NetStream.Publish.Start', description='', details=None)])
+            response = Command(name='onStatus', id=cmd.id, args=[amf.Object(level='status', code='NetStream.Publish.Start', description='', details=None)])
             yield stream.send(response)
         except ValueError, E: # some error occurred. inform the app.
             if _debug: print 'error in publishing stream', str(E)
-            response = Command(name='onStatus', id=cmd.id, args=[dict(level='error',code='NetStream.Publish.BadName',description=str(E),details=None)])
+            response = Command(name='onStatus', id=cmd.id, args=[amf.Object(level='error',code='NetStream.Publish.BadName',description=str(E),details=None)])
             yield stream.send(response)
 
     def playhandler(self, stream, cmd):
@@ -917,11 +1003,11 @@ class FlashServer(object):
                 elif start >= 0: raise ValueError, 'Stream name not found'
             if _debug: print 'playing stream=', name, 'start=', start
             inst.onPlay(stream.client, stream)
-            response = Command(name='onStatus', id=cmd.id, args=[dict(level='status',code='NetStream.Play.Start', description=stream.name, details=None)])
+            response = Command(name='onStatus', id=cmd.id, args=[amf.Object(level='status',code='NetStream.Play.Start', description=stream.name, details=None)])
             yield stream.send(response)
         except ValueError, E: # some error occurred. inform the app.
             if _debug: print 'error in playing stream', str(E)
-            response = Command(name='onStatus', id=cmd.id, args=[dict(level='error',code='NetStream.Play.StreamNotFound',description=str(E),details=None)])
+            response = Command(name='onStatus', id=cmd.id, args=[amf.Object(level='error',code='NetStream.Play.StreamNotFound',description=str(E),details=None)])
             yield stream.send(response)
             
     def seekhandler(self, stream, cmd):
@@ -931,11 +1017,11 @@ class FlashServer(object):
             if stream.playfile is None or stream.playfile.type != 'read': 
                 raise ValueError, 'Stream is not seekable'
             stream.playfile.seek(offset)
-            response = Command(name='onStatus', id=cmd.id, args=[dict(level='status',code='NetStream.Seek.Notify', description=stream.name, details=None)])
+            response = Command(name='onStatus', id=cmd.id, args=[amf.Object(level='status',code='NetStream.Seek.Notify', description=stream.name, details=None)])
             yield stream.send(response)
         except ValueError, E: # some error occurred. inform the app.
             if _debug: print 'error in seeking stream', str(E)
-            response = Command(name='onStatus', id=cmd.id, args=[dict(level='error',code='NetStream.Seek.Failed',description=str(E),details=None)])
+            response = Command(name='onStatus', id=cmd.id, args=[amf.Object(level='error',code='NetStream.Seek.Failed',description=str(E),details=None)])
             yield stream.send(response)
             
     def mediahandler(self, stream, message):

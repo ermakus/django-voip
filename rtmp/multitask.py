@@ -949,6 +949,7 @@ class TaskManager(object):
 
         if self.has_io_waits():
             self._handle_io_waits(self._fix_run_timeout(timeout))
+
         if self.has_timeouts():
             self._handle_timeouts(self._fix_run_timeout(timeout))
 
@@ -1026,9 +1027,11 @@ class TaskManager(object):
     def _remove_bad_file_descriptors(self):
         for fd in (self._read_waits | self._write_waits | self._exc_waits):
             try:
-		select.select([fd], [fd], [fd], 0.0)
-            except (select.error, IOError), err:
-                #self._enqueue(fd.task, exc_info=sys.exc_info())
+                select.select([fd], [fd], [fd], 0.0)
+            except:
+                # TODO: do not enqueue the exception (socket.error) so that it does not crash
+                # when closing an already closed socket. See rtmplite issue #28
+                # self._enqueue(fd.task, exc_info=sys.exc_info())
                 fd._remove_from_fdsets(self._read_waits,
                                        self._write_waits,
                                        self._exc_waits)
