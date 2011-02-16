@@ -35,6 +35,7 @@ class Peers(models.Model):
     defaultuser = models.CharField(max_length=80, blank=True)
     fromuser = models.CharField(max_length=80, blank=True)
     subscribecontext = models.CharField(max_length=80, blank=True)
+    canreinvite = models.CharField(max_length=3, help_text="yes or no", default="no")
 
     class Meta:
         db_table = u"asterisk_peers"
