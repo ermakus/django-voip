@@ -7,5 +7,7 @@ class SimpleLogger:
         sys.stdout = self
         sys.stderr = self
     def write(self, string):
-        logging.debug(string.strip())
+        msg = string.strip()
+        if len(msg) > 0:
+            logging.debug(string.rstrip())
 

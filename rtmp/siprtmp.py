@@ -486,14 +486,14 @@ class Context(object):
     def rtmp_register(self, login=None, passwd='', display=None, rate='wideband'):
         scheme, ignore, aor = self.client.path.partition('/')
         if rate == 'narrowband': self._audio.rate = 8000
-        if _debug: print 'rtmp-register scheme=', scheme, 'aor=', aor, 'login=', login, 'passwd=', '*'*(len(passwd)), 'display=', display
+        if _debug: print 'rtmp-register scheme=%s aor=%s login=%s passwd=%s display=%s' % ( scheme, aor, login, '*'*(len(passwd)), display )
         addr = '"%s" <sip:%s>'%(display, aor) if display else 'sip:%s'%(aor)
         sock = socket.socket(type=socket.SOCK_DGRAM) # signaling socket for SIP
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         port = self.app._ports.get(aor, 0)
         try: sock.bind(('0.0.0.0', port)); port = sock.getsockname()[1] 
         except: 
-            if _debug: print '  exception in register', (sys and sys.exc_info() or None)
+            if _debug: print '  exception in register' ,  (sys and sys.exc_info() or None)
             self.client.rejectConnection(reason='Cannot bind socket port')
             raise StopIteration(None)
         #self.ports[name] = sock.getsockname()[1] # store the port number
@@ -501,9 +501,9 @@ class Context(object):
         user = self.user = User(sock, nat=False).start() # create SIP user. Ownership of sock is moved to User.
         user.context, user.username, user.password = self, login, passwd
         if user.password:
-            if _debug: print '  registering addr=', addr, 'port=', port
+            if _debug: print '  registering addr %s:%s' % ( addr, port )
             result, reason = yield user.bind(addr, refresh=True)
-            if _debug: print '  registration returned', result, reason
+            if _debug: print '  registration returned %s (%s)' % ( result, reason )
             if result == 'failed': 
                 self.client.rejectConnection(reason=reason)
                 raise StopIteration(None)
@@ -513,7 +513,7 @@ class Context(object):
         
     def rtmp_unregister(self):
         if self.user is not None:
-            if _debug: print 'rtmp-unregister', (self.client and self.client.path or None)
+            if _debug: print 'rtmp-unregister %s' % (self.client and self.client.path or None)
             yield self._cleanup()    # close the call first, if any
             yield self.user.close()
             yield self.user.stop()
@@ -532,7 +532,7 @@ class Context(object):
     
     def rtmp_invite(self, dest):
         try:
-            if _debug: print 'rtmp-invite', dest
+            if _debug: print 'rtmp-invite %s' % dest
             if self.user: # already a registered user exists
                 if not self.session: # not already in a session, so create one
                     try: dest = Address(dest) # first try the default scheme supplied by application
@@ -541,7 +541,7 @@ class Context(object):
                     self.outgoing = self.user.connect(dest, sdp=media.mysdp)
                     session, reason = yield self.outgoing
                     self.outgoing = None # because the generator returned, and no more pending outgoing call
-                    if _debug: print '  session=', session, 'reason=', reason
+                    if _debug: print '  session=%s reason=%s' % ( session, reason )
                     if session: # call connected
                         media.setRemote(session.yoursdp); session.media = media; self.session = session
                         self._gss = self._sessionhandler(); multitask.add(self._gss) # receive more requests from SIP
@@ -552,7 +552,7 @@ class Context(object):
                 else: self.client.call('rejected', 'Already in an active or pending call')
             else: self.client.call('rejected', 'Registration required before making a call')
         except:
-            if _debug: print 'exception in invite', (sys and sys.exc_info() or None)
+            if _debug: print 'exception in invite' , (sys and sys.exc_info() or None)
             self.client.call('rejected', 'Internal server error')
 
     def rtmp_accept(self):
@@ -572,7 +572,7 @@ class Context(object):
             else:
                 if _debug: print '  no incoming call. ignored.'
         except:
-            if _debug: print 'exception in rtmp_accept', (sys and sys.exc_info()) 
+            if _debug: print 'exception in rtmp_accept' , (sys and sys.exc_info()) 
             reason = '500 Internat Server Exception'
         if reason:
             if media: media.close()
@@ -615,7 +615,7 @@ class Context(object):
             user = self.user
             while True:
                 cmd, arg = (yield user.recv())
-                if _debug: print 'incominghandler', cmd
+                if _debug: print 'incominghandler %s' % cmd
                 if cmd == 'connect': # incoming invitation, inform RTMP side
                     self.incoming = arg
                     multitask.add(self.sip_invite(str(Address(arg[0]))))
@@ -624,7 +624,7 @@ class Context(object):
                     multitask.add(self.sip_cancel(str(Address(arg[0]))))
         except StopIteration: raise
         except: 
-            if _debug: print 'incominghandler exiting', (sys and sys.exc_info() or None)
+            if _debug: print 'incominghandler exiting' , (sys and sys.exc_info() or None)
         self._gin = None
             
     def _sessionhandler(self): # Handle SIP session messages
@@ -661,7 +661,7 @@ class Context(object):
                     #if _debug: print '  RTMP pt=%x len=%d hdr=%r'%(m.header.type, m.size, m.header)
                     self.play_stream.send(m)
         except (ValueError, AttributeError), E:
-            if _debug: print 'Invalid RTP parse error', E
+            if _debug: print 'Invalid RTP parse error %s' % E
         yield
 
     def rtmp_data(self, stream, message): # handle media data message received from RTMP
@@ -677,7 +677,7 @@ class Context(object):
         yield
 
     def rtmp_sendDTMF(self, digit):
-        if _debug: print 'rtmp-sendDTMF', digit
+        if _debug: print 'rtmp-sendDTMF %s' % digit
         if len(digit) != 1:
             if _debug: print '  only single digit DTMF is supported in sendDTMF'
         elif not self.session or not self.session.media or not self.session.media.hasType('audio'):
@@ -707,7 +707,7 @@ class Context(object):
                     self.session.media.send(payload=packet, ts=message.time*(self._video.rate/1000), marker=False, fmt=self._video)
                     # yield multitask.sleep(0.005) # sleep for 5 ms
         except: 
-            if _debug: print 'exception in rtmp2rtp', (sys and sys.exc_info())
+            if _debug: print 'exception in rtmp2rtp ' , (sys and sys.exc_info())
             return
             
     def video_rtp2rtmp(self, packet): # convert given RTP packet to RTMP message and play to the rtmp side.
@@ -749,7 +749,7 @@ class Context(object):
 
             if self.play_stream is not None: self.play_stream.send(message)
         except:
-            if _debug: print 'exception in rtp2rtmp', (sys and sys.exc_info())
+            if _debug: print 'exception in rtp2rtmp' , (sys and sys.exc_info())
 
 class Gateway(App):
     '''The SIP-RTMP gateway implemented as RTMP server application.'''
@@ -768,23 +768,23 @@ class Gateway(App):
         App.onCommand(self, client, cmd, args)
         if hasattr(client.context, 'rtmp_'+cmd) and callable(eval('client.context.rtmp_%s'%(cmd))): 
             exec 'multitask.add(client.context.rtmp_%s(*args))'%(cmd)
-        elif _debug: print 'invalid command', cmd
+        elif _debug: print 'invalid command %s' % cmd
     def onPublish(self, client, stream):
-        if _debug: print self.name, 'onPublish', client.path, stream.name
+        if _debug: print self.name, 'onPublish path=%s name=%s' % (client.path, stream.name)
         client.context.publish_stream = stream
     def onClose(self, client, stream):
-        if _debug: print self.name, 'onClose', client.path, stream.name
+        if _debug: print self.name, 'onClose path=%s name=%s' % (client.path, stream.name)
         client.context.publish_stream = None
     def onPlay(self, client, stream):
-        if _debug: print self.name, 'onPlay', client.path, stream.name
+        if _debug: print self.name, 'onPlay path=%s name=%s' % (client.path, stream.name)
         client.context.play_stream = stream
     def onStop(self, client, stream):
-        if _debug: print self.name, 'onStop', client.path, stream.name
+        if _debug: print self.name, 'onStop path=%s name=%s' % (client.path, stream.name)
         client.context.play_stream = None
     def onStatus(self, client, info):
-        if _debug: print self.name, 'onStatus', info
+        if _debug: print self.name, 'onStatus info=%s' % info
     def onResult(self, client, result):
-        if _debug: print self.name, 'onResult', result
+        if _debug: print self.name, 'onResult result=%s' % result
     def onPublishData(self, client, stream, message):
         multitask.add(client.context.rtmp_data(stream, message))
         return False

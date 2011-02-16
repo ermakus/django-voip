@@ -98,7 +98,8 @@ INSTALLED_APPS = (
     'editor',
     'mptt',
     'userprofile',
-    'room'
+    'asterisk',
+    'room',
 )
 
 LOGIN_URL = '/social/login'
