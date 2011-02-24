@@ -29,13 +29,13 @@ def category(request, path):
             level = len(path_items)-1)
 
     rooms = Room.objects.all().order_by( '-'+ request.sort )
-    kwds = None
+    search = kwds = None
     if 'search' in request.GET:
-        kwds = request.GET['search']
+        search = kwds = request.GET['search']
         keywords = kwds.split(' ')
         list_title_qs = [Q(title__icontains=x) for x in keywords]
         list_more_qs = [Q(more__icontains=x) for x in keywords]
         final_q = reduce(operator.or_, list_title_qs + list_more_qs)
-        rooms = events.filter( final_q )
+        rooms = rooms.filter( final_q )
 
-    return render_to_response('categories/category.html', {'category':category, 'rooms':rooms }, context_instance=RequestContext(request) )
+    return render_to_response('categories/category.html', {'category':category, 'rooms':rooms, 'search':search }, context_instance=RequestContext(request) )

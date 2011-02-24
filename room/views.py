@@ -33,7 +33,8 @@ class MeetingForm(forms.ModelForm):
 
 def index(request):
     cats = Category.objects.all().filter( level=1 )
-    return render_to_response( request.mutator + 'index.html', {'cats':cats }, context_instance=RequestContext(request))
+    rooms = Room.objects.all().order_by('rating')[:10]
+    return render_to_response( request.mutator + 'index.html', {'cats':cats,'rooms':rooms }, context_instance=RequestContext(request))
 
 def context(request):
     if request.user.is_authenticated():

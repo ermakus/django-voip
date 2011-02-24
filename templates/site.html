@@ -1,6 +1,6 @@
 {% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-GB">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
 <head>
         <script type="text/javascript"> if (window != top) { top.location.href = location.href;}</script>
 	<title>{% block title %}{% trans "Cloud Pub" %}{% endblock %}</title>
@@ -8,19 +8,15 @@
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
 	<meta name="robots" content="index, follow" />
-	<meta name="viewport" content="width=768px, minimum-scale=1.0, maximum-scale=1.0" />
 	<!-- Styles -->
-	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/style.css" media="screen" />
-	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}schedule/css/schedule.css" media="screen" />
-        <link rel="stylesheet" href="{{ MEDIA_URL}}userprofile/css/blueprint/screen.css" type="text/css" media="screen, projection" />
-        <link rel="stylesheet" href="{{ MEDIA_URL }}userprofile/css/blueprint/print.css" type="text/css" media="print" />
-        <link rel="stylesheet" href="{{ MEDIA_URL }}userprofile/css/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection" />
-        <!--[if IE]><link rel="stylesheet" href="{{ MEDIA_URL}}userprofile/css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/theme.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/schedule.css" media="screen" />
+        <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.fancybox-1.3.1.css"></script>
 
 	<!-- JQuery -->
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.fancybox-1.3.1.pack.js"></script>
-        <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.fancybox-1.3.1.css"></script>
 
         <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js" type="text/javascript"></script>
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
@@ -34,12 +30,16 @@
 <body>
 {% block extra_body %}
 {% endblock %}
-<div id="wrap">
-	<div id="header">
-	<img class="logo" src="{{ MEDIA_URL }}img/logo.png">
-	<h1 style="float:right;">Experemental version</h1>
-	<!-- Navigation start -->
-<ul id="menu">
+<!--header -->
+<div id="header-wrap">
+<div id="header">
+<a name="top"></a>
+<a href="/" title="Logo">
+<h1 style="padding-top: 50px; font-family: etica-1,etica-2,Helvetica,Arial,sans-serif; font-size: 84px; font-weight: bold;">Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
+</h1>
+</a>
+<div id="nav">
+<ul>
   <li><a href="{% url index %}">{% trans "Home" %}</a></li>
   <li><a href="{% url category 'root' %}">{% trans 'Categories' %}</a></li>
   <li><a href="{% url rooms_view %}">{% trans 'My Rooms' %}</a></li>
@@ -47,33 +47,71 @@
   <li class="authorized" style="display: none;"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
   <li class="unauthorized" style="display: none;"><a class="act" href="{% url socialauth.views.login_page %}">{% trans "Sign in" %}</a></li>
 </ul>
+</div>
+   <!-- <p id="rss"><a href="#">Grab the RSS feed</a></p> -->
+   <form id="quick-search" action="{% url category request.category %}">
+      <fieldset class="search">
+         <label for="qsearch">Search:</label>
+         <input class="tbox" id="search" name="search" value="Search..." title="Start typing and hit ENTER" type="text">
+         <button type="submit" class="btn" title="Submit Search">Search</button>
+      </fieldset>
+   </form>
+<!--/header-->
+</div></div>
+<!-- content-outer -->
+<div id="content-wrap" class="clear">
+   <div id="content">
+     <div id="main">
+	<!-- Main content start -->
+	{% block content %}{% endblock %}
+	<!-- Main content end -->
+     </div>
+     <!-- sidebar -->
+     <div id="sidebar" class="sidemenu">
+	{% block sidebar %}{% endblock %}
+     </div>
+   </div>
+</div>
 
-	<!-- Navigation end -->
-	</div>
-	<div id="content">
-		<div id="main">
-		<form id="search" action="{% url category request.category %}">
-		     <input type="text" name="search" value="" size="15"/><input type="submit" class="btn-go" value="{% trans "Search" %}" />
-		</form>
-			<!-- Main content start -->
-			{% block content %}{% endblock %}
-			<!-- Main content end -->
-		</div>
-		<div id="side">
-			<div id="sidea">
-			<!-- Side A content start -->
-			{% block sidebar %}
-            {% endblock %}
-			<!-- Side A content end -->
-			</div>
-		</div>
-	</div>
-	<div id="footer">
-	</div>
+<!-- footer-outer -->
+<div id="footer-outer" class="clear">
+  <div id="footer-wrap">
+    <div class="col-a">
+      <h3>Contact Info</h3>
+      <p><strong>E-mail: </strong>support@cloudpub.us</p>
+    </div>
+    <div class="col-b">
+      <h3>Updates</h3>
+      <ul class="subscribe-stuff">
+        <li><a title="Facebook" href="http://www.ermak.us/index.html" rel="nofollow">
+                                <img alt="Facebook" title="Facebook" src="{{ MEDIA_URL }}img/social_facebook.png"></a>
+                        </li>
+                        <li><a title="Twitter" href="http://www.ermak.us/index.html" rel="nofollow">
+                                <img alt="Twitter" title="Twitter" src="{{ MEDIA_URL }}/img/social_twitter.png"></a>
+                        </li>
+      </ul>
+      <p>Stay up to date. Subscribe via
+                <a href="http://www.ermak.us/index">Facebook</a>,
+                <a href="http://www.ermak.us/index">Twitter</a>
+      </p>
+   </div>
+<!-- /footer-outer -->
+</div></div>
+<!-- footer-bottom -->
+<div id="footer-bottom">
+        <p class="bottom-left">
+           © 2010 <strong>Ermak Consulting, Inc.</strong>&nbsp; &nbsp; &nbsp;
+        </p>
+        <p class="bottom-right">
+           <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> |
+           <a href="http://validator.w3.org/check/referer">XHTML</a>    |
+           <a href="/">Home</a> |
+           <strong><a href="#top">Back to Top</a></strong>
+        </p>
+<!-- /footer-bottom-->
 </div>
 <script type="text/javascript">
 {% block initscript %}{% endblock %}
-$('#{{ request.sort }}').addClass('current');
 </script>
 </body>
 </html>

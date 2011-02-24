@@ -53,6 +53,15 @@ $(document).ready(function() {
 		popup( $(this).attr('href') + '?embed=yes' );
 		return false;
 	} );
+
+        $('#search').focus( function() {
+                $(this).attr('value','');
+        });
+
+        $('#nav ul li').each( function() {
+                var href = $(this).children(':first-child').attr('href');
+		if( window.location.pathname.indexOf( href ) == 0 ) $(this).addClass('current');
+        } );
         reload();
 });
 	
