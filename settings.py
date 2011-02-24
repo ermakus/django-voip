@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     'userprofile',
     'asterisk',
     'room',
+    'schedule',
 )
 
 LOGIN_URL = '/social/login'

@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     (r'^accounts/', include('userprofile.urls')),
     (r'^admin/', admin.site.urls), 
     (r'^categories/', include('categories.urls')),
+    (r'^schedule/', include('schedule.urls')),
 )
 
 from django.conf import settings

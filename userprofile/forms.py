@@ -115,6 +115,8 @@ class RegistrationForm(UserCreationForm):
         try:
             User.objects.get(email__iexact=email)
             raise forms.ValidationError(_("That e-mail is already used."))
+        except User.MultipleObjectsReturned:
+            raise forms.ValidationError(_("That e-mail is already used."))
         except User.DoesNotExist:
             try:
                 EmailValidation.objects.get(email=email)
