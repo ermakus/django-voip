@@ -3,8 +3,7 @@
 {% if day_names %}
 <tr class="daysofweek">
 <td>&nbsp;</td>
-	{% for day_name in day_names %}<td{% ifnotequal size "small" %} width='120'{% endifnotequal %}>{{ day_name }}</td>
-{% endfor %}
+{% for day_name in day_names %}<td{% ifnotequal size "small" %} width='120'{% endifnotequal %}>{{ day_name }}</td>{% endfor %}
 {% endif %}
 {% for week in month.get_weeks %}
     <tr>
