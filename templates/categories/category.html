@@ -34,9 +34,4 @@
           <li><a href="{% url room_view room.pk %}{{ request.urlstate }}"><h3>{{ room }}</h3></a></li>
       {% endfor %}
 </ul>
-<h1>Actions</h1>
-<ul class="actions">
-    <li class="action"><h1><a href="{% url room_view 0 %}?action=offer">Offer service this category</a></h1></li>
-    <li><h1><a href="{% url room_view 0 %}?action=request">Request service in this category</a></h1></li>
-</ul>
 {% endblock %}

@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block content %}
-  <h1>Action</h1>
+  <h1>Most popular rooms</h1>
   <ul class="actions">
-   <li><h1><a href='{% url room_view 0 %}?action=ask'>{% trans "Request consultation" %}</a></h1></li>
-   <li><h1><a href='{% url room_view 0 %}?action=offer'>{% trans "Offer consultation" %}</a></h1></li>
+   {% for room in rooms %}
+   <li>
+    <a href='{{ room.get_absolute_url }}'>
+     <h1 class="card-title">{{ room }}</h1>
+    </a>
+   </li>
+  {% endfor %}
   </ul>
   <h1>Browse by category</h1>
   <ul class="list">

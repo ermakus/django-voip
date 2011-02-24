@@ -3,7 +3,7 @@
 {% load scheduletags %}
 
 {% block body %}
-<div class="navigation">
+<div class="cal-navigation">
   <a href="{% url day_calendar occurrence.event.calendar.slug %}{% querystring_for_date occurrence.start 3 %}">
     Day
   </a>
