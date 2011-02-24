@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block extra_head %}
-{% endblock %}
-{% block content %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/Orbited.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/stomp.js"></script>
 <script type="text/javascript">
 	<!--
 	var media_url = 'rtmp://cloudpub.us/sip';
@@ -15,6 +16,9 @@
 	var rate = 8;
 	var rate_name = "narrowband";
 	var url = "rtmp://" +server+ "/sip/" +user+ "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
+
+        var TCPSocket = Orbited.TCPSocket;
+	var client = new STOMPClient();
  
 	// Get the Flash Movie by name, e.g., "video1" or "video2".
 	function getFlashMovie(movieName) {
@@ -24,13 +28,35 @@
     	
 
         function createChannel() {
-		$.get( "/room/stream/" + stream + ":open", function( data ) {
+
+		client.onopen = function() {
 			log("You connected to chat");
-			Server.connect( "http://cloudpub.us:9000" );
-                        Server.subscribe( stream, function( data ) {
-				log(">" + data );
-			});
-		} );
+    			window.onbeforeunload = function() {
+        			client.disconnect(); 
+    			};
+    		};
+
+    		client.onclose = function(c) {
+			log("Connection lost, Code:" + c);
+    		};
+    		client.onerror = function(error) {
+        		log("ERROR: " + error); 
+    		};
+
+    		client.onerrorframe = function(frame) {
+        		log("ERROR FRAME:  " + frame.body); 
+    		};
+
+    		client.onconnectedframe = function() {
+        		client.subscribe( stream );
+    		};
+
+    		client.onmessageframe = function(frame) { //check frame.headers.destination?
+        		log( "MESSAGE: " + frame.body );
+    		};
+
+    		var cookie = $.cookie("sessionid");
+    		client.connect("localhost", 9999, authname, cookie);
     	}
     
         // When VideoIO is created, and user has specified the name, start local video.
@@ -70,7 +96,7 @@
 				log("INVITE: " + msg);
 				getFlashMovie("video1").callProperty("call", "invite", msg + "@cloudpub.us" );
 			} else {
-				Server.send( stream, msg );
+				client.send( '{"type":"chat","text":"' + msg + '"}', stream );
 			}
 		}
 	}
@@ -85,6 +111,8 @@
 
 	//-->
 	</script>	
+{% endblock %}
+{% block content %}
 <div style="height: 600px; position: relative;">
     <div style="position: absolute; left: 10px; top: 10px; width: 320px; height: 240px;">
 		<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
