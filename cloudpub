@@ -1,7 +1,6 @@
 #!/usr/bin/twistd -ny 
 from twisted.web import static, resource, server
 from twisted.application import internet, service
-<<<<<<< HEAD
 from morbid import StompFactory
 import sys,os
 
@@ -9,14 +8,6 @@ BASEDIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append( BASEDIR )
 
 from orbited import config
-=======
-
-from morbid import StompFactory
-
-# Config
-from orbited import logging, config
-logging.setup(config.map)
->>>>>>> a273c685750ec09545a7f28d90c2a67d3ce3673f
 INTERFACE = "0.0.0.0"
 #Runtime config, is there a cleaner way?:
 config.map["[access]"]={(INTERFACE, 9999):"*",("localhost",9999):"*"}
@@ -41,11 +32,7 @@ serviceCollection = service.IServiceCollection(application)
 # Django and static file server:
 root_resource = get_root_resource()
 root_resource.putChild("static", static.File("static"))
-<<<<<<< HEAD
 http_factory = server.Site(root_resource, logPath="/var/log/cloudpub/http.log")
-=======
-http_factory = server.Site(root_resource, logPath="http.log")
->>>>>>> a273c685750ec09545a7f28d90c2a67d3ce3673f
 internet.TCPServer(STATIC_PORT, http_factory, interface=INTERFACE).setServiceParent(serviceCollection)
 
 # Orbited server:
@@ -58,11 +45,7 @@ internet.TCPServer(STOMP_PORT, stomp_factory, interface=INTERFACE).setServicePar
 
 # RestQMessageProxy (message filter/logger/modifier):
 restq_resource = RestQMessageProxy(MESSAGE_HANDLERS)
-<<<<<<< HEAD
 restq_proxy_factory = server.Site(restq_resource, logPath="/var/log/cloudpub/restqproxy.log")
-=======
-restq_proxy_factory = server.Site(restq_resource, logPath="restqproxy.log")
->>>>>>> a273c685750ec09545a7f28d90c2a67d3ce3673f
 internet.TCPServer(RESTQ_PROXY_PORT, restq_proxy_factory, interface=INTERFACE).setServiceParent(serviceCollection)
 # vim: set syntax=python
 
