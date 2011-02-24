@@ -7,9 +7,9 @@ import urllib, urllib2
 from socialauth.lib import oauthtwitter2 as oauthtwitter
 from socialauth.models import Profile
 from socialauth.lib.linkedin import *
+from asterisk.models import Channel
 
-import random
-
+import random, unicodedata, string
 
 TWITTER_CONSUMER_KEY = getattr(settings, 'TWITTER_CONSUMER_KEY', '')
 TWITTER_CONSUMER_SECRET = getattr(settings, 'TWITTER_CONSUMER_SECRET', '')
@@ -27,9 +27,39 @@ OPENID_AX_PROVIDER_MAP = getattr(settings, 'OPENID_AX_PROVIDER_MAP', {})
 def LOG_ERROR(request,msg):
     request.META['wsgi.errors'].write( msg )
 
-def random_username():
-    return ''.join([random.choice('abcdefghijklmnopqrstuvwxyz') for i in xrange(10)])
+def make_username(full_name):
+        
+    name = unicodedata.normalize('NFKD', unicode(full_name.lower())).encode('ASCII', 'ignore')
+    name = name.split(' ')
+    lastname = name[-1]
+    firstname = name[0]
+    
+    username = '%s%s' % (firstname[0], lastname)
+    if User.objects.filter(username=username).count() > 0:
+        username = '%s%s' % (firstname, lastname[0])
+        if User.objects.filter(username=username).count() > 0:
+            users = User.objects.filter(username__regex=r'^%s[1-9]{1,}$' % firstname).order_by('username').values('username')                
+            if len(users) > 0:
+                last_number_used = map(lambda x: int(x['username'].replace(firstname,'')), users)
+                last_number_used.sort()
+                last_number_used = last_number_used[-1]
+                number = last_number_used + 1
+                username = '%s%s' % (firstname, number)
+            else:
+                username = '%s%s' % (firstname, 1)
+    
+    return username
 
+def make_channel():
+    ch = ''.join([random.choice('0123456789') for i in xrange(4)])
+    while True:
+        try:
+            Channel.objects.get( name = ch )
+        except Channel.DoesNotExist:
+            return ch
+
+def make_password():
+    return ''.join([random.choice(string.letters + string.digits) for i in xrange(8)])
 
 class ProfileData(object):
     pass
@@ -54,12 +84,18 @@ def update_profile(request,provider,uid,data):
         user = User()
     else:
         user = User.objects.get( username=user.username )
-                
-    def_val('username', random_username())
-    def_val('email', data.username + "@mail.cloudpub.us" )
-    def_val('first_name', "-")
-    def_val('last_name', "-")
 
+    def_val('first_name', "")
+    def_val('last_name', "")
+
+    fullname = ("%s %s" % (data.first_name, data.last_name)).strip()
+
+    if hasattr(data,"username"):
+        data.username = make_username( data.username )
+    else:
+        def_val('username', make_username( fullname or "user") )
+
+    def_val('email', data.username + "@cloudpub.us" )
     data.provider = provider
 
     for k,v in data.__dict__.iteritems():
@@ -72,6 +108,15 @@ def update_profile(request,provider,uid,data):
     profile.provider = provider
     profile.user = user
     profile.save()
+
+    try:
+        channel = Channel.objects.get( user = user )
+    except Channel.DoesNotExist:
+        channel = Channel( user=user )
+        channel.name = make_channel()
+        channel.secret = make_password()
+        channel.callerid = fullname
+        channel.save()
 
     return profile
  

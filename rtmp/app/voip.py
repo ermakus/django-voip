@@ -241,6 +241,7 @@ class User(object):
             
     def __del__(self):
         '''Destroy other internal references to Stack, etc.'''
+        print "******** USER DELETED **********"
         self.stop()
         self.reg = None
         if self.stack: self.stack.app = None # TODO: since self.stack has a reference to this, __del__will never get called. 

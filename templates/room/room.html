@@ -6,12 +6,12 @@
 <script type="text/javascript">
 	<!--
 	var media_url = 'rtmp://cloudpub.us/sip';
-	var stream = "{{ request.user.pk }}";
+	var stream = "{{ channel.name }}";
    	var server = "cloudpub.us";
-	var user = "{{ request.user.pk }}@" + server;
-	var authname = "{{ request.user.pk }}";
-	var authpass = "{{ request.session.session_key }}";
-	var displayname = "{{ request.user.first_name }} {{ request.user.last_name }}";
+	var user = "{{ channel.name }}@" + server;
+	var authname = "{{ channel.name }}";
+	var authpass = "{{ channel.secret }}";
+	var displayname = "{{ channel.callerid }}";
 	var rate = 8;
 	var rate_name = "narrowband";
 	var url = "rtmp://" +server+ "/sip/" +user+ "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
@@ -68,7 +68,7 @@
 			document.getElementById("input").value = "";
 			if( msg.indexOf("sip:") == 0 ) {
 				log("INVITE: " + msg);
-				getFlashMovie("video1").callProperty("call", "invite", msg );
+				getFlashMovie("video1").callProperty("call", "invite", msg + "@cloudpub.us" );
 			} else {
 				Server.send( stream, msg );
 			}
@@ -152,7 +152,7 @@
 			onkeypress="javascript: if ((event.keyCode || event.which) == 13) { send(); return false; }"/>
 			
 		<div style="float: right; height: 18px;">
-			<div id="status" style="float: left;"><b>Your number is <h2><a href='javascript:getFlashMovie("video1").callProperty("call", "invite", "sip:{{ request.user.pk }}@cloudpub.us")'>sip:{{ request.user.pk }}@cloudpub.us</a></h2></b></div>
+			<div id="status" style="float: left;"><b>Your number is <h2><a href='javascript:getFlashMovie("video1").callProperty("call", "invite", "sip:{{ channel.name }}@cloudpub.us")'>sip:{{ channel.name }}@cloudpub.us</a></h2></b></div>
 		</div> 
 	</div>
 </div>

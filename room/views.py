@@ -14,6 +14,7 @@ from django.core.urlresolvers import reverse
 from django import forms
 from django.template.loader import render_to_string
 import django.forms as forms
+from asterisk.models import Channel
 
 class SelectWithPop(forms.Select):
     def render(self, name, *args, **kwargs):
@@ -54,18 +55,13 @@ def rooms_view(request):
 def room_view(request, id):
 
     try:
-        instance = Room.objects.get( pk=id )
+        room = Room.objects.get( pk=id )
     except Room.DoesNotExist:
-        instance = Room()
+        room = Room()
 
-    form = RoomForm(request.POST or None, initial={'moderator':request.user}, instance=instance )
+    channel = get_object_or_404(Channel,user=request.user)
 
-    if request.method == 'POST':
-        if form.is_valid():
-            room = form.save()
-            return HttpResponseRedirect( reverse( 'room_view' ) )
-
-    return render_to_response( request.mutator + 'room/room.html', { 'form':form, 'id':id }, context_instance=RequestContext(request))
+    return render_to_response( request.mutator + 'room/room.html', { 'room':room, 'channel':channel }, context_instance=RequestContext(request))
 
 @login_required
 def meeting_view(request,id):

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from asterisk.models import * 
 
-class PeersAdmin(admin.ModelAdmin):
+class ChannelAdmin(admin.ModelAdmin):
     list_display = ("name","host","type","context","useragent","ipaddr","fullcontact",)
 
-admin.site.register(Peers, PeersAdmin)
+admin.site.register(Channel, ChannelAdmin)

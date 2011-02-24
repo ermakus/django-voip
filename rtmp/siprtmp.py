@@ -453,6 +453,11 @@ import os, sys, socket, time, traceback, random, multitask
 from struct import pack, unpack
 from rtmp import App, Header, Message, FlashServer
 
+from guppy import hpy
+from guppy.heapy.Remote import on
+heapdbg = hpy()
+#on()
+ 
 try:
     from app.voip import User, Session, MediaSession
     from std.rfc3550 import RTP
@@ -520,11 +525,20 @@ class Context(object):
             if self.user.sock:
                 try: self.user.sock.close()
                 except: pass
+                self.user.sock.close()
                 self.user.sock = None
-            self.user.context = None; self.user = None
+            self.user.stack.app = None
+            self.user.stack = None
+            self.user.context = None
+            self.user = None
             if self._gin is not None: self._gin.close(); self._gin = None
             if self._gss is not None: self._gss.close(); self._gss = None
-    
+            import gc
+            gc.collect()
+            print "====================== HEAP DUMP ========================="
+            print heapdbg.heap()
+            heapdbg.setref()
+
     def _get_sdp_streams(self): # returns a list of audio and video streams.
         audio, video = SDP.media(media='audio'), SDP.media(media='video')
         audio.fmt, video.fmt = [format(pt=96, name=self._audio.name, rate=self._audio.rate)], [format(pt=97, name=self._video.name, rate=self._video.rate)]
@@ -638,8 +652,8 @@ class Context(object):
         
     def _cleanup(self): # cleanup a session
         if self.session:
-            yield self.session.close()    # close the session
             if self.session and self.session.media: self.session.media.close(); self.session.media = None # clear the reference
+            yield self.session.close()    # close the session
             self.session = None
         if self._gss is not None: self._gss.close(); self._gss = None
 
