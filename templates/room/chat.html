@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block extra_head %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/Orbited.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/stomp.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/JSON.js"></script>
+<script type="text/javascript">
+	var stream    = "{{ room.pk }}";
+   	var server    = "{{ site.domain }}";
+	var user      = "{{ request.user.username }}";
+        var comet_port = 9999;
+        var TCPSocket = Orbited.TCPSocket;
+	var client = new STOMPClient();
+
+        $( function() {
+		log("Connecting...");
+		client.onopen = function() {
+			log("You connected to chat");
+    			window.onbeforeunload = function() {
+        			client.disconnect(); 
+    			};
+    		};
+
+    		client.onclose = function(c) {
+			log("Connection lost, Code:" + c);
+    		};
+    		client.onerror = function(error) {
+        		log("ERROR: " + error); 
+    		};
+
+    		client.onerrorframe = function(frame) {
+        		log("ERROR FRAME:  " + frame.body); 
+    		};
+
+    		client.onconnectedframe = function() {
+        		client.subscribe( stream );
+    		};
+
+    		client.onmessageframe = function(frame) { //check frame.headers.destination?
+        		log( "MESSAGE: " + frame.body );
+    		};
+
+    		var cookie = $.cookie("sessionid");
+    		client.connect(server, comet_port, user, cookie);
+		$('#msg').keypress( function(event) {
+			if ((event.keyCode || event.which) == 13) { 
+				send( $(this).attr('value') );
+				$(this).attr('value','');
+				return false; 
+			}
+		});
+    	} );
+    
+	function send(msg) {
+		client.send( '{"type":"chat","text":"' + msg + '"}', stream );
+	}
+	
+	// Write a message to the chat history text area.
+	function log(msg) {
+		var obj = document.getElementById("history");
+		obj.value += (obj.value == "" ? "" : "\n") + msg; 
+	}
+	</script>	
+{% endblock %}
+{% block content %}
+<textarea id="history" autocomplete="off" style="width: 90%; height: 410px;"></textarea>
+<br/>
+Enter your text message:
+<br/>
+<input id="msg" type="text" autocomplete="off" style="width: 90%; height: 24px;"/>
+{% endblock %}
+{% block sidebar %}
+<div class="box">
+This is text chat with user
+</div>
+{% endblock %}
+{% block initscript %}
+{% endblock %}
+
