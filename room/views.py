@@ -53,6 +53,35 @@ def rooms_view(request):
     return render_to_response('room/rooms.html', { 'rooms':rooms }, context_instance=RequestContext(request))
 
 @login_required
+def call_view(request, id):
+    try:
+        room = Room.objects.get( pk=id )
+    except Room.DoesNotExist:
+        room = Room()
+
+    channel = get_object_or_404(Channel,user=request.user)
+    try:
+        site = Site.objects.get_current()
+    except:
+        site = Site(domain='localhost')
+    return render_to_response( request.mutator + 'room/call.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
+
+@login_required
+def chat_view(request, id):
+    try:
+        room = Room.objects.get( pk=id )
+    except Room.DoesNotExist:
+        room = Room()
+
+    channel = get_object_or_404(Channel,user=request.user)
+    try:
+        site = Site.objects.get_current()
+    except:
+        site = Site(domain='localhost')
+    return render_to_response( request.mutator + 'room/chat.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
+
+
+@login_required
 def room_view(request, id):
 
     try:

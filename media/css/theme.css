@@ -127,7 +127,6 @@ form {
 	width: 477px;
 }
 form p {
-	border-bottom: 1px solid #E6E6E6;
 	padding: 12px 0 5px 0;	margin: 0;	
 	color: #2C76A6;
 }
@@ -170,13 +169,18 @@ input.button, #comments input[type=button], #div-feedback input[type=submit] {
     L A Y O U T
 --------------------------------------------------------------------------------- */
 
+.header-bg {
+  background: url('../img/header-bg.jpg') repeat-x scroll 0 0 transparent;
+}
+
 /* header */
 #header-wrap {
   float: left;
   height: 200px;
+  min-width: 1000px;
   width: 100%;
-  background: url(../img/header-bg.jpg) repeat-x;
 }
+
 #header {
   position: relative;
   margin: 0 auto;
@@ -268,7 +272,7 @@ fieldset.search {
   	height: 40px;
   	cursor: pointer;
   	text-indent: -9999px;
-  	background: #fbc900 url(../img/search.gif) no-repeat top right;
+  	background: transparent url(../img/search.gif) no-repeat top right;
 }
 
 /*  navigation  */
