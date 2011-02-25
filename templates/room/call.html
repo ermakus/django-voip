@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block extra_head %}
+<script type="text/javascript">
+   	var server    = "{{ site.domain }}";
+	var media_url = 'rtmp://' + server + '/sip';
+	var stream    = "{{ channel.name }}";
+	var user      = "{{ channel.name }}";
+	var authname  = "{{ channel.name }}";
+	var authpass  = "{{ channel.secret }}";
+	var displayname = "{{ channel.callerid }}";
+        var sipnumber   = user + "@" + server;
+	var rate        = 8;
+	var rate_name   = "narrowband";
+	var url         = "rtmp://" +server+ "/sip/" + sipnumber + "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
+        var phone;
+
+	function getFlashMovie(movieName) {
+	    var isIE = navigator.appName.indexOf("Microsoft") != -1;
+	    return (isIE) ? window[movieName] : document[movieName];
+	}
+
+        // When VideoIO is created, and user has specified the name, start local video.
+	function onCreationComplete(event) {
+		if (event.objectID == "flash_phone") {
+			phone = getFlashMovie("flash_phone");
+			phone.setProperty("src", url);
+			phone.setProperty("poster", "{{ MEDIA_URL }}img/poster.jpg" );
+			status("Ready");
+			init();
+		}
+	}
+
+	function onPropertyChange(event) {
+		if (event.property == "bandwith" && event.objectID == "flash_phone") {
+			status("Bandwith: " + event.newValue );
+		}
+	}
+
+	function onCallback(event) {
+		if (event.method == "accepted") {
+			status("Call accepted");
+        		phone.setProperty('publish', 'local');
+        		phone.setProperty('play', 'remote');
+    		}
+		if (event.method == "rejected") {
+			status("Call rejected:" + event.args[0] );
+    		}
+   	        if (event.method == "invited") {
+			status("Incoming call from " + event.args[0] );
+			if( confirm("Incoming call from " + event.args[0] + ".\n Accept?") ) {
+				phone.callProperty('call', 'accept');
+				status("Accepted");
+			} else {
+				phone.callProperty('call', 'reject', '486 Busy Here');
+				status("Rejected");
+			}
+    		}	 
+   	        if (event.method == "canceled") {
+			status("Call canceled by remote party");
+		}
+  		if (event.method == "byed") {
+			status("Call finished");
+        		phone.setProperty('publish', null);
+        		phone.setProperty('play', null);
+    		}
+	}
+
+	function init() {
+	    $('#call').click( function() {
+		var num = $('#callnumber').attr('value');
+		invite( num );
+	    });
+	    $('#hungup').click( function() { 
+		hungup(); 
+	    });
+	    $('#callnumber').keypress( function( event ) {
+		if( event.keyCode == 13 ) {
+			var num = $('#callnumber').attr('value');
+			invite( num );
+		}
+	    });
+	}
+
+	function invite( num ) {
+		if(phone && num ) { 
+			if( num.indexOf('sip:') != 0 ) num = "sip:" + num;
+			if( num.indexOf('@') == -1 ) num += ("@" + server);
+			status("Calling: " + num );
+			phone.callProperty("call", "invite", num );
+		}
+	}
+
+	function hungup() {
+	 	if(phone) {
+			status("Hung up");
+			$('#callnumber').attr('value', '' );
+			phone.setProperty('publish', null);
+			phone.setProperty('play', null);
+			phone.callProperty('call', 'bye' );
+		}
+	}
+
+	function dial( digit ) {
+		status("DTMF: " + digit );
+		var num = $('#callnumber').attr('value');
+		$('#callnumber').attr('value', num + digit );
+	 	if(phone) phone.callProperty('call', 'sendDTMF', digit );
+	}
+
+	function status(msg) {
+		$('#statusmsg').html( msg );
+	}
+
+	</script>	
+{% endblock %}
+{% block content %}
+<div style="text-align: left; width: 520px; margin: 0 auto;">
+<div style="width: 400px; text-align: center;">
+Call number: <input type="text" name="callnumber" id="callnumber"/>
+<input type="button" name="call" id="call" value="Call"/>
+<input type="button" name="hungup" id="hungup" value="Hung"/>
+</div>
+
+<div style="float: left;">
+	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="flash_phone" width="320" height="240"
+			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
+			<param name="movie" value="{{ MEDIA_URL }}VideoIO.swf" />
+			<param name="quality" value="high" />
+			<param name="bgcolor" value="#FFFFFF" />
+			<param name="allowFullScreen" value="true" />
+			<param name="flashVars" value="controls=true&cameraQuality=80" />
+			<param name="allowScriptAccess" value="always" />
+			<embed src="{{ MEDIA_URL }}VideoIO.swf" quality="high" bgcolor="#FFFFFF"
+				width="320" height="240" name="flash_phone" align="middle"
+				play="true" loop="false" quality="high"
+				allowFullScreen="true"
+				flashVars="controls=true&cameraQuality=80"
+				allowScriptAccess="always"
+				type="application/x-shockwave-flash"
+				pluginspage="http://www.adobe.com/go/getflashplayer">
+			</embed>
+	</object>
+</div>
+
+<table style="float: left; margin: 0px; padding: 0px;">
+    <tbody><tr><td>
+    <input value="1" onclick="dial('1')" type="button">
+    </td><td>
+    <input value="2" onclick="dial('2')" type="button">
+    </td><td>
+    <input value="3" onclick="dial('3')" type="button">
+    </td></tr><tr><td>
+    <input value="4" onclick="dial('4')" type="button">
+    </td><td>
+    <input value="5" onclick="dial('5')" type="button">
+    </td><td>
+    <input value="6" onclick="dial('6')" type="button">
+    </td></tr><tr><td>
+    <input value="7" onclick="dial('7')" type="button">
+    </td><td>
+    <input value="8" onclick="dial('8')" type="button">
+    </td><td>
+    <input value="9" onclick="dial('9')" type="button">
+    </td></tr><tr><td>
+    <input value="*" onclick="dial('*')" type="button">
+    </td><td>
+    <input value="0" onclick="dial('0')" type="button">
+    </td><td>
+    <input value="#" onclick="dial('#')" type="button">
+    </td></tr>
+</tbody>
+</table>
+
+<div style="clear: both;">Your number: <a href="javascript:invite(sipnumber);">sip:{{ channel.name }}@cloudpub.us</a></div>
+<div><span id="statusmsg"></span></div>
+</div>
+
+{% endblock %}
+{% block sidebar %}
+<div class="box">
+Video chat and phone calls
+</div>
+{% endblock %}
+{% block initscript %}
+{% endblock %}
+
