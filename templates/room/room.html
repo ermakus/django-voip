@@ -5,7 +5,6 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/Orbited.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/stomp.js"></script>
 <script type="text/javascript">
-	<!--
 	var media_url = 'rtmp://cloudpub.us/sip';
 	var stream    = "{{ channel.name }}";
    	var server    = "{{ site.domain }}";
@@ -13,13 +12,13 @@
 	var authname  = "{{ channel.name }}";
 	var authpass  = "{{ channel.secret }}";
 	var displayname = "{{ channel.callerid }}";
-	var rate = 8;
+	var rate      = 8;
 	var rate_name = "narrowband";
 	var url = "rtmp://" +server+ "/sip/" +user + "@" + server + "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
         var comet_port = 9999;
         var TCPSocket = Orbited.TCPSocket;
 	var client = new STOMPClient();
- 
+
 	// Get the Flash Movie by name, e.g., "video1" or "video2".
 	function getFlashMovie(movieName) {
 	    var isIE = navigator.appName.indexOf("Microsoft") != -1;
@@ -28,7 +27,7 @@
     	
 
         function createChannel() {
-
+		log("Connecting...");
 		client.onopen = function() {
 			log("You connected to chat");
     			window.onbeforeunload = function() {
@@ -107,9 +106,7 @@
 		obj.value += (obj.value == "" ? "" : "\n") + msg; 
 	}
 
-	createChannel();
-
-	//-->
+	$( function() { createChannel(); } );
 	</script>	
 {% endblock %}
 {% block content %}
