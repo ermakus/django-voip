@@ -8,6 +8,8 @@ BASEDIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append( BASEDIR )
 
 from orbited import config
+LOG_DIR='/var/log/cloudpub'
+DJANGO_ADMIN_MEDIA='/usr/local/lib/python2.6/dist-packages/django/contrib/admin/media'
 INTERFACE = "0.0.0.0"
 STOMP_PORT = 9999
 #Runtime config, is there a cleaner way?:
@@ -31,8 +33,10 @@ serviceCollection = service.IServiceCollection(application)
 
 # Django and static file server:
 root_resource = get_root_resource()
-root_resource.putChild("media", static.File("media"))
-http_factory = server.Site(root_resource, logPath="/var/log/cloudpub/http.log")
+root_resource.putChild("site_media", static.File("media"))
+root_resource.putChild("media", static.File( DJANGO_ADMIN_MEDIA ))
+
+http_factory = server.Site(root_resource, logPath=LOG_DIR + "/http.log")
 internet.TCPServer(STATIC_PORT, http_factory, interface=INTERFACE).setServiceParent(serviceCollection)
 
 # Orbited server:
@@ -45,7 +49,7 @@ internet.TCPServer(STOMP_PORT, stomp_factory, interface=INTERFACE).setServicePar
 
 # RestQMessageProxy (message filter/logger/modifier):
 restq_resource = RestQMessageProxy(MESSAGE_HANDLERS)
-restq_proxy_factory = server.Site(restq_resource, logPath="/var/log/cloudpub/restqproxy.log")
+restq_proxy_factory = server.Site(restq_resource, logPath=LOG_DIR + "/restqproxy.log")
 internet.TCPServer(RESTQ_PROXY_PORT, restq_proxy_factory, interface=INTERFACE).setServiceParent(serviceCollection)
 # vim: set syntax=python
 

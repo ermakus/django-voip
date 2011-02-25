@@ -7,15 +7,15 @@
 <script type="text/javascript">
 	<!--
 	var media_url = 'rtmp://cloudpub.us/sip';
-	var stream = "{{ channel.name }}";
-   	var server = "cloudpub.us";
-	var user = "{{ channel.name }}@" + server;
-	var authname = "{{ channel.name }}";
-	var authpass = "{{ channel.secret }}";
+	var stream    = "{{ channel.name }}";
+   	var server    = "{{ site.domain }}";
+	var user      = "{{ channel.name }}";
+	var authname  = "{{ channel.name }}";
+	var authpass  = "{{ channel.secret }}";
 	var displayname = "{{ channel.callerid }}";
 	var rate = 8;
 	var rate_name = "narrowband";
-	var url = "rtmp://" +server+ "/sip/" +user+ "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
+	var url = "rtmp://" +server+ "/sip/" +user + "@" + server + "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
         var comet_port = 9999;
         var TCPSocket = Orbited.TCPSocket;
 	var client = new STOMPClient();

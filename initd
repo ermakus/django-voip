@@ -11,10 +11,14 @@ case "$1" in
     # Activate the virtual environment
     # Run start-stop-daemon, the $DAEMON variable contains the path to the
     # application to run
-    start-stop-daemon --start --pidfile /tmp/$DAEMON.pid \
-        --user $USER --group $GROUP \
-        --chuid $GROUP \
-        --exec $TWISTD -- --logfile=/var/log/cloudpub/twistd.log --pidfile=/tmp/$DAEMON.pid -y $HOME/$DAEMON 
+    PYTHONPATH=$HOME start-stop-daemon --start \
+        --background \
+        --pidfile /tmp/$DAEMON.pid \
+        --chdir $HOME \
+        --user  $USER \
+        --group $GROUP \
+        --chuid $USER \
+        --exec $TWISTD -- --logfile=/var/log/cloudpub/twistd.log --pidfile=/tmp/$DAEMON.pid -ny $HOME/$DAEMON 
     ;;
   stop)
     echo "Stopping $DAEMON"

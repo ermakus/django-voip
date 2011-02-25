@@ -10,7 +10,7 @@ from django.views.decorators.cache import cache_page
 from categories.models import Category
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
-
+from django.contrib.sites.models import Site
 from django import forms
 from django.template.loader import render_to_string
 import django.forms as forms
@@ -61,8 +61,11 @@ def room_view(request, id):
         room = Room()
 
     channel = get_object_or_404(Channel,user=request.user)
-
-    return render_to_response( request.mutator + 'room/room.html', { 'room':room, 'channel':channel }, context_instance=RequestContext(request))
+    try:
+        site = Site.objects.get_current()
+    except:
+        site = Site(domain='localhost')
+    return render_to_response( request.mutator + 'room/room.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
 
 @login_required
 def meeting_view(request,id):
