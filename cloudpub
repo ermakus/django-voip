@@ -9,11 +9,11 @@ sys.path.append( BASEDIR )
 
 from orbited import config
 INTERFACE = "0.0.0.0"
+STOMP_PORT = 9999
 #Runtime config, is there a cleaner way?:
-config.map["[access]"]={(INTERFACE, 9999):"*",("localhost",9999):"*"}
+config.map["[access]"]={(INTERFACE, STOMP_PORT):"*",("localhost",STOMP_PORT):"*",("cloudpub.us",STOMP_PORT):"*"}
 STATIC_PORT = 8000
 RESTQ_PROXY_PORT = 5000
-STOMP_PORT = 9999
 
 #The below depend on Orbited's logging.setup(...), from above.
 from orbited import cometsession
@@ -31,7 +31,7 @@ serviceCollection = service.IServiceCollection(application)
 
 # Django and static file server:
 root_resource = get_root_resource()
-root_resource.putChild("static", static.File("static"))
+root_resource.putChild("media", static.File("media"))
 http_factory = server.Site(root_resource, logPath="/var/log/cloudpub/http.log")
 internet.TCPServer(STATIC_PORT, http_factory, interface=INTERFACE).setServiceParent(serviceCollection)
 

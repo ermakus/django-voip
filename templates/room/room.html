@@ -16,7 +16,7 @@
 	var rate = 8;
 	var rate_name = "narrowband";
 	var url = "rtmp://" +server+ "/sip/" +user+ "?rate=" +rate+ "&bidirection=true"+ "&arg=" +authname+ "&arg=" +authpass+ "&arg=" +displayname+ "&arg=" +rate_name;
-
+        var comet_port = 9999;
         var TCPSocket = Orbited.TCPSocket;
 	var client = new STOMPClient();
  
@@ -56,7 +56,7 @@
     		};
 
     		var cookie = $.cookie("sessionid");
-    		client.connect("localhost", 9999, authname, cookie);
+    		client.connect(server, comet_port, authname, cookie);
     	}
     
         // When VideoIO is created, and user has specified the name, start local video.
