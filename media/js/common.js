@@ -23,6 +23,7 @@ function login( next ) {
 	$.fancybox({
 			'padding'		: 10,
 			'width'		        : 500,
+			'height'		: 460,
 			'href'			: '/social/login/?next=' + escape( next ) + embed,
 			'type'			: 'iframe',
 			'scrolling' : 'no',
@@ -35,7 +36,8 @@ function popup( href ) {
         if( href.indexOf('/accounts/register') == 0 || user )
                  $.fancybox({
 			'padding'		: 10,
-			'width'		        : 500,
+			'width'		        : 550,
+			'height'		: 450,
 			'href'			: href,
 			'type'			: 'iframe',
                         'onClosed' : reload,
@@ -60,7 +62,7 @@ $(document).ready(function() {
 
         $('#nav ul li').each( function() {
                 var href = $(this).children(':first-child').attr('href');
-		if( window.location.pathname.indexOf( href ) == 0 ) $(this).addClass('current');
+		if( window.location.pathname == href ) $(this).addClass('current');
         } );
         reload();
 });
