@@ -28,7 +28,6 @@
 <body>
 {% block extra_body %}
 {% endblock %}
-<!--header -->
 <div id="header-wrap" class="header-bg">
 <div id="header">
 <a name="top"></a>
@@ -41,14 +40,13 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
 <ul>
   <li><a href="{% url index %}">{% trans "Home" %}</a></li>
   <li><a href="{% url category 'root' %}">{% trans 'Categories' %}</a></li>
-  <li><a href="{% url rooms_view %}">{% trans 'My Rooms' %}</a></li>
+  <li class="protected"><a href="{% url rooms_view %}">{% trans 'My Rooms' %}</a></li>
   <li class="authorized" style="display: none;"><a class="act" href="{% url call_view %}">{% trans "Call" %}</a></li>
   <li class="authorized" style="display: none;"><a href="{% url profile_overview %}">{% trans 'Profile' %} (<u id="username"></u>)</a></li>
   <li class="authorized" style="display: none;"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
   <li class="unauthorized" style="display: none;"><a class="act" href="{% url socialauth.views.login_page %}">{% trans "Sign in" %}</a></li>
 </ul>
 </div>
-   <!-- <p id="rss"><a href="#">Grab the RSS feed</a></p> -->
    <form id="quick-search" action="{% url category request.category %}">
       <fieldset class="search">
          <label for="qsearch">Search:</label>
@@ -56,25 +54,21 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
          <button type="submit" class="btn" title="Submit Search">Search</button>
       </fieldset>
    </form>
-<!--/header-->
 </div>
-</div>
-<!-- content-outer -->
-<div id="content-wrap" class="clear">
-   <div id="content">
-     <div id="main">
-	<!-- Main content start -->
-	{% block content %}{% endblock %}
-	<!-- Main content end -->
-     </div>
-     <!-- sidebar -->
-     <div id="sidebar" class="sidemenu">
-	{% block sidebar %}{% endblock %}
-     </div>
-   </div>
 </div>
 
-<!-- footer-outer -->
+<div id="drawer">
+    <iframe id="drawer_iframe"></iframe>
+    <div class="drawer_button" id="drawer_off" style="display: none;"><img src="{{ MEDIA_URL }}img/collapse.png" alt="collapse" /> <a href="#">Close</a></div>
+</div>
+
+<div id="content-wrap" class="clear">
+ <div id="content">
+  <div id="main">{% block content %}{% endblock %}</div>
+  <div id="sidebar" class="sidemenu">{% block sidebar %}{% endblock %}</div>
+ </div>
+</div>
+
 <div id="footer-outer" class="clear">
   <div id="footer-wrap">
     <div class="col-a">
@@ -96,9 +90,7 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
                 <a href="http://www.ermak.us/index">Twitter</a>
       </p>
    </div>
-<!-- /footer-outer -->
 </div></div>
-<!-- footer-bottom -->
 <div id="footer-bottom">
         <p class="bottom-left">
            © 2010 <strong>Ermak Consulting, Inc.</strong>&nbsp; &nbsp; &nbsp;
@@ -109,7 +101,6 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
            <a href="/">Home</a> |
            <strong><a href="#top">Back to Top</a></strong>
         </p>
-<!-- /footer-bottom-->
 </div>
 <script type="text/javascript">
 {% block initscript %}{% endblock %}

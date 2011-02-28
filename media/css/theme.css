@@ -967,3 +967,52 @@ ul#years {
 }
 
 
+#drawer iframe {
+   width: 100%;
+   height: 90%;
+   border: none;
+   background-color: #161B1F;
+   padding: 0;
+}
+
+#drawer {
+	position: absolute;
+	height: 0;
+	margin-right: 0;
+        margin-left: -300px;
+        left: 50%;
+	width: 580px;
+	top: 59px;
+	z-index: 10;
+	overflow: hidden;
+	text-align: left;
+	background-color: transparent;
+}
+
+.drawer_button {
+        padding: 0px;
+	display: block;
+        margin-top: -10px;
+	margin-left: auto;
+	margin-right: auto;
+	width: 173px;
+	height: 54px;
+	background: url(../img/panel_button.png);
+	cursor: pointer;
+}
+
+.drawer_button img {
+    display: block;
+    padding: 12px;
+}
+
+.drawer_button a {
+    display: block;
+    position: relative;
+    top: -55px;
+    left: 50px;
+    font-size: 200%;
+    padding: 15px;   
+    text-color: white;
+}
+

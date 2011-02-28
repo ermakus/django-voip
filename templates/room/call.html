@@ -115,6 +115,7 @@
 	</script>	
 {% endblock %}
 {% block content %}
+<div style="background-color: white; margin: 10px; height: 510px; text-align: center;">
 <h1>Call user by phone</h1>
 <div style="text-align: left; width: 520px; margin: 0 auto;">
 <div style="width: 400px; text-align: center;">
@@ -176,6 +177,8 @@ Phone number: <input type="text" name="callnumber" id="callnumber"/>
 
 <div style="clear: both;">Your number: <a href="javascript:invite(sipnumber);">{{ channel.name }}</a></div>
 <div><span id="statusmsg"></span></div>
+</div>
+
 </div>
 
 {% endblock %}

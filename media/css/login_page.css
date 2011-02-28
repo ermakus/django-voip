@@ -1,12 +1,14 @@
 .login_form {
-	width: 440px;
+	width: 490px;
 	margin: 0 auto;
         display: block;
 	text-align: center;
+        height: 480px;
 }
 
 .login_form h1 {
-        margin: 5px;
+        margin: 0px;
+        padding: 0px;
 }
 
 #openid_input_area {

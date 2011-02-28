@@ -4,7 +4,7 @@
 <h1>Your rooms</h1>
 <ul class="actions">
     {% for room in rooms %}
-    <li><a href="{% url room_view room.pk %}">{{ room }}</a></li>
+    <li><h1><a href="{% url room_view room.pk %}">{{ room }}</a></h1></li>
     {% endfor %}
 </ul>
 {% endblock %}

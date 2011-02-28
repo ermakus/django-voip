@@ -1,5 +1,5 @@
 {% load i18n %}
-	<form action="{% url signup %}" method="post" accept-charset="utf-8">{% csrf_token %}
+	<form action="{% url signup %}?embed=yes" method="post" style="height: 470px;" accept-charset="utf-8">{% csrf_token %}
 	<fieldset>
 		<legend>{% trans "User registration" %}</legend>
 		{% for field in form.visible_fields %}
