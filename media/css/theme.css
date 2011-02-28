@@ -173,6 +173,17 @@ input.button, #comments input[type=button], #div-feedback input[type=submit] {
   background: url('../img/header-bg.jpg') repeat-x scroll 0 0 transparent;
 }
 
+.header-logo {
+	padding-top: 50px; 
+	font-family: etica-1,etica-2,Helvetica,Arial,sans-serif; 
+	font-size: 84px; 
+	font-weight: bold;
+}
+
+.color-1 {
+	color: #147DB6 !important;
+}
+
 /* header */
 #header-wrap {
   float: left;
@@ -321,7 +332,7 @@ fieldset.search {
    min-height: 300px;
    width: 1000px;
    margin: 0 auto;
-   padding: 0 0 20px 0;
+   padding: 0;
    background: #FFF url(../img/content.gif) repeat-y center top;
    overflow: hidden;
 }
@@ -329,16 +340,16 @@ fieldset.search {
 /* columns */
 #main {
 	float: left;
-   margin: 0;
-   padding: 25px 0 0 0;
+ 	margin: 0;
+   	padding: 0;
 	width: 740px;
 }
 #sidebar {
 	width: 245px;
 	float: right;
-   margin: 0;
-   padding: 15px 0;
-   font-size: .95em;
+   	margin: 0;
+   	padding: 0;
+   	font-size: .95em;
 }
 
 #main h2 {

@@ -27,29 +27,40 @@ class Room( models.Model ):
         ordering = ('rating',)
         get_latest_by = 'rating'
 
-class Meeting( models.Model ):
+class Snippet( models.Model ):
+    author = models.ForeignKey( User, related_name='author_id' )
+    target = models.ForeignKey( User, related_name='target_id' )
+    room   = models.ForeignKey( Room )
+    content_type = models.CharField(max_length=64)
+    url = models.CharField(max_length=2048)
+    message = models.TextField()
+    class Meta:
+        verbose_name_plural = 'Snippets'
+
+    def __unicode__(self):
+        return "%s: %s" % ( self.content_type, self.message )
+
+class Action( models.Model ):
+    snippet = models.ForeignKey( Snippet )
+    issuer  = models.ForeignKey( User )
+    command = models.CharField(max_length=64)
+    params  = models.TextField()
+    class Meta:
+        verbose_name_plural = 'Actions'
+
+    def __unicode__(self):
+        return "%s: %s (%s)" % ( self.command, self.params  )
+
+class Invite( models.Model ):
+    from_user = models.ForeignKey( User, related_name='from_user_id' )
+    to_user   = models.ForeignKey( User, related_name='to_user_id' )
     room      = models.ForeignKey( Room )
-    comment   = models.TextField( blank=True )
-    date_time = models.DateTimeField()
-    duration  = models.IntegerField()
-    participants = models.ManyToManyField(User)
-
+    status    = models.CharField(max_length=64)
+    comment   = models.TextField()
     class Meta:
-        verbose_name_plural = 'Meetings'
+        verbose_name_plural = 'Actions'
 
     def __unicode__(self):
-        return "%s" % ( self.room, self.event.place, self.count, self.price )
-
-class Stream( models.Model ):
-    uid = models.CharField(max_length=64)
-    state = models.CharField(max_length=64)
-
-    user = models.ForeignKey( User )
-    class Meta:
-        verbose_name_plural = 'Streams'
-
-    def __unicode__(self):
-        return "%s: %s (%s)" % ( self.uid, self.user.username, self.state )
-
+        return "%s: %s (%s)" % ( self.command, self.params  )
 
 categories.register_m2m(Room, 'cats', )

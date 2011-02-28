@@ -16,21 +16,6 @@ from django.template.loader import render_to_string
 import django.forms as forms
 from asterisk.models import Channel
 
-class SelectWithPop(forms.Select):
-    def render(self, name, *args, **kwargs):
-        html = super(SelectWithPop, self).render(name, *args, **kwargs)
-        popupplus = render_to_string("room/popup_field.html", {'field': name})
-        return html+popupplus
-
-class RoomForm(forms.ModelForm):
-    class Meta:
-        model = Room
-
-class MeetingForm(forms.ModelForm):
-    participants = forms.ModelChoiceField(User.objects, widget=SelectWithPop) 
-    class Meta:
-        model = Meeting
-
 def index(request):
     cats = Category.objects.all().filter( level=1 )
     rooms = Room.objects.all().order_by('rating')[:10]
@@ -91,22 +76,29 @@ def room_view(request, id):
         site = Site(domain='localhost')
     return render_to_response( request.mutator + 'room/room.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
 
-@login_required
-def meeting_view(request,id):
-    if request.method == 'POST':
-        form = MeetingForm(request.POST)
-    else:
-        form = MeetingForm()
-    return render_to_response( request.mutator + 'room/meeting.html', { 'form':form }, context_instance=RequestContext(request))
+def update_object(request,instance):
+    instance.content_type = "text/plain"
+    instance.message = request.POST['message']
+    return
 
+def delete_object(request,instance):
+    instance.content_type = "text/plain"
+    instance.message = request.POST['message']
+    return
+
+
+ACTIONS={ 'update':update_object, 'delete':update_object }
+
+@login_required
 @csrf_exempt
-def stream(request,uid,action):
+def snippet(request,id,action):
     try:
-        instance = Stream.objects.get( uid=uid )
+        instance = Snippet.objects.get( uid=uid )
     except Stream.DoesNotExist:
-        instance = Stream(uid=uid)
+        instance = Snippet()
+        instance.user = request.user
+    if action in ACTIONS:
+        ACTIONS[action]( instance )
     instance.state=action
-    instance.user = request.user
     instance.save()
     return HttpResponse("true")
-  

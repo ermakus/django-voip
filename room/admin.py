@@ -5,5 +5,5 @@ class RoomAdmin(admin.ModelAdmin):
     filter_horizontal = ['cats',]
 
 admin.site.register( Room, RoomAdmin )
-admin.site.register( Meeting )
-admin.site.register( Stream )
+admin.site.register( Snippet )
+admin.site.register( Action )

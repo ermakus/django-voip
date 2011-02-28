@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block extra_head %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/chat.css"/>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/Orbited.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/stomp.js"></script>
@@ -12,6 +13,12 @@
         var comet_port = 9999;
         var TCPSocket = Orbited.TCPSocket;
 	var client = new STOMPClient();
+
+	jQuery.extend(jQuery.expr[':'], {
+    		focus: function(element) { 
+        		return element == document.activeElement; 
+    		}
+	});
 
         $( function() {
 		log("Connecting...");
@@ -39,7 +46,7 @@
 
     		client.onmessageframe = function(frame) { //check frame.headers.destination?
 			var msg = eval( "(" + frame.body + ")" );
-        		log( "<b>" + msg.from + "</b>: " + msg.text );
+        		log( "<div style='float: left; clear: both; width: 100%;'><img src='http://lh6.ggpht.com/_ezj-aDmzzk8/S1G4SBFgWRI/AAAAAAAAHDU/dctu2DdALHs/s72-c/satflm-.jpg'/>" + "<span style='width: 78%;' class='triangle-border left'>" + msg.text + "</span></div>" );
     		};
 
     		var cookie = $.cookie("sessionid");
@@ -52,28 +59,41 @@
 			}
 		});
 		$('#msg').bind('focus',function() {
-        		$(window).scrollTop(600);
+			scrollme();
     		});
+		$('#chat').tabs();
 
     	} );
-    
+   
+	function scrollme() {
+		var msg = $('#msg');
+		if( msg.is(':focus') ) {
+			var pos = msg.position();
+			var offset = $('body').height() - pos.top - 30;
+			$(window).scrollTop(parseInt(pos.top) - offset );
+		}
+	}
+ 
 	function send(msg) {
 		client.send( '{"type":"chat","text":"' + msg + '"}', stream );
 	}
 	
 	// Write a message to the chat history text area.
 	function log(msg) {
-		var ctrl = $("#history").append( msg + "\n" );
-		ctrl.attr({ scrollTop: ctrl.attr("scrollHeight") });
+		$("#chat-public").append( msg + "\n" );
+		scrollme();
 	}
 	</script>	
 {% endblock %}
 {% block content %}
-<pre id="history" style="width: 95%; padding: 5px; height: 410px; word-wrap: break-word; overflow-x: hidden; overflow-y: auto; border: solid black 1px;"></pre>
-<br/>
-Enter your text message:
-<br/>
-<input id="msg" type="text" autocomplete="off" style="width: 90%; height: 24px;"/>
+<div id="chat">
+ <ul>
+  <li><a href="#chat-public">Public</a></li>
+ </ul>
+ <div id="chat-public">
+ </div>
+ <input id="msg" type="text" autocomplete="off" style="width: 98%; height: 24px;"/>
+</div>
 {% endblock %}
 {% block sidebar %}
 <div class="box">
