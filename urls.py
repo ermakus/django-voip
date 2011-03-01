@@ -6,6 +6,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     (r'^$', 'room.views.index'),
     (r'^room/', include('room.urls')), 
+    (r'^bunch/', include('bunch.urls')), 
     (r'^social/', include('socialauth.urls')),
     (r'^accounts/', include('userprofile.urls')),
     (r'^admin/', admin.site.urls), 

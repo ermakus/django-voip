@@ -14,7 +14,7 @@ openid.init('openid_identifier');
 {% block content %}
 <img id="wait_image" style="display: none; position: absolute; left: 50%; margin-left: -110px; top: 40%;" src="{{ MEDIA_URL }}/img/loading.gif"/>
 <form target="_top" class="login_form" method="post" id="openid_form">
-<h1>{% trans "Sign In" %}</h1>
+<h2>{% trans "Sign In" %}</h2>
 {% if error %}
 <b class="error">{{ error }}</b>
 {% endif %}

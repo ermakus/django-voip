@@ -1,10 +1,8 @@
-{% extends "userprofile/base_2col.html" %}
+{% extends "base.html" %}
 {% load i18n %}
-
 {% block title %}{% trans "User registration" %}{% endblock %}
-{% block robots %}noindex,nofollow{% endblock %}
 
-{% block extrajs %}
+{% block initscript %}
 <script type="text/javascript">
 	$(function() {
 		$("input#id_username").focus();
@@ -13,11 +11,11 @@
 </script>
 {% endblock %}
 
-{% block userprofile_content %}
+{% block content %}
 	{% include "userprofile/account/includes/registration_form.html" %}
 {% endblock %}
 
-{% block userprofile_content_related %}
+{% block sidebar %}
 	<div class="box">
 		<h3>{% trans "Register a new account" %}</h3>
 		<p>{% trans "Joining this community is quick and easy. You only need to fill the form to get access to all the private content" %}.</p>

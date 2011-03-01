@@ -33,6 +33,7 @@ function login( next ) {
 }
 
 function popup( href ) {
+        return drawer( href );
         if( href.indexOf('/accounts/register') == 0 || user )
                  $.fancybox({
 			'padding'		: 10,
@@ -42,6 +43,25 @@ function popup( href ) {
 			'type'			: 'iframe',
                         'onClosed' : reload,
 	}); else login( href  );
+}
+
+function drawer( href ) {
+       if( $('#drawer').height() > 0 ) return drawer_close();
+       $('#drawer_iframe').attr("src",href);
+       $("#drawer").animate({
+                        height: "700px"
+                })
+                .animate({
+                        height: "600px"
+                }, "fast" );
+                $(".drawer_button").toggle();
+}
+
+function drawer_close() {
+                $("#drawer").animate({
+                        height: "0px"
+                }, "fast");
+                $(".drawer_button").toggle();
 }
 
 // Common initialization
@@ -64,6 +84,22 @@ $(document).ready(function() {
                 var href = $(this).children(':first-child').attr('href');
 		if( window.location.pathname == href ) $(this).addClass('current');
         } );
+
+	$('.protected').click(function(){
+                if( user ) return true;
+		 var href = $(this).children(':first-child').attr('href');
+		drawer("/social/login?embed=yes&next=" + href );
+		return false;
+	});
+
+	$("#drawer_on").click(function(){
+		drawer("/social/login?embed=yes");
+        });
+
+	$("#drawer_off").click(function(){
+		drawer_close();
+	});
+
         reload();
 });
 	

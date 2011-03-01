@@ -4,7 +4,7 @@
   <h1>Most popular rooms</h1>
   <ul class="actions">
    {% for room in rooms %}
-   <li>
+   <li class="protected">
     <a href='{{ room.get_absolute_url }}'>
      <h1 class="card-title">{{ room }}</h1>
     </a>
