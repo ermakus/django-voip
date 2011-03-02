@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block content %}
-<div id="{{ bunch.uid }}" class="{{ bunch.kind }}">
- <p>{{ bunch.content }}</p>
- <ul id="{{ bunch.uid }}-children">
- </ul>
-</div>
+<ul id="_pwd">{{ bunch.html|safe }}</ul>
 {% endblock %}
 {% block sidebar %}
 Send instant messages or upload files on this page

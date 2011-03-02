@@ -6,8 +6,8 @@ from django.utils.encoding import force_unicode
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
-
 from mptt.models import MPTTModel
+import random
 
 class Bunch(MPTTModel):
     parent = models.ForeignKey('self', 
@@ -20,14 +20,21 @@ class Bunch(MPTTModel):
     kind = models.CharField(max_length=128)
     content = models.TextField(blank=True, null=True)
 
-    def as_node( self ):
-        return self.content
+    def html( self, level=2 ):
+        if level > 0:
+            children = ''.join( child.html(level-1) for child in self.get_children())
+            return "<li id='%s' class='%s'><p>%s</p><ul id='%s-children'>%s</ul></li>" % ( self.uid, self.kind, self.content, self.uid, children )
+        else:
+            return ""
 
-    def as_list( self ):
-        html = '<ul class="%s">' % self.kind
-        for i in self.get_ancestors():
-             html += '<li class="%s">%s</lI>' % ( i.kind , i.as_node() )
-        return html + "</ul>"
+    @classmethod
+    def uidme( self, uid, content=None ):
+        uid = ''.join([random.choice('0123456789') for i in xrange(8)])
+        while True:
+            try:
+                Bunch.objects.get( uid = uid )
+            except Bunch.DoesNotExist:
+                return uid
 
     @classmethod
     def resolve( self, path ):

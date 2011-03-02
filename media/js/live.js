@@ -48,6 +48,7 @@
 				var msg = {};
                                 msg.content = $(this).attr('value');
 				msg.kind    = "message"
+				msg.uid     = "!auto";
 				send(msg);
 				$(this).attr('value','');
 				return false; 
@@ -75,11 +76,12 @@
 	}
  
 	function send(msg) {
+		msg.parent = path;
 		client.send( JSON.stringify(msg), path );
 	}
 	
 	function update(msg) {
-	       	var html = ( "<div id='" + msg.uid + "' class='" + msg.kind + "'>" + msg.content + "</div>" );
+	       	var html = ( "<li id='" + msg.uid + "' class='" + msg.kind + "'><p>" + msg.content + "</p><ul id='" + msg.uid + "-children'></ul></li>" );
 		$( '#' + bunch.uid + "-children").append( html );
 		scrollme();
 	}

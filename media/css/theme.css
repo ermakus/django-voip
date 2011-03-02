@@ -43,7 +43,7 @@ ul, ol {
 	margin: 10px 25px;
 	padding: 0 20px;
 }
-ul { list-style: disc; }
+ul { list-style: none; }
 ol { list-style: decimal; }
 
 dt {
@@ -338,8 +338,9 @@ fieldset.search {
 #main {
  	margin: 0 auto;
    	padding: 0;
-	width: 740px;
+	width: 1000px;
 }
+
 #sidebar {
 }
 
