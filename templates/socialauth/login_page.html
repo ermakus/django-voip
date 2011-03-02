@@ -14,7 +14,6 @@ openid.init('openid_identifier');
 {% block content %}
 <img id="wait_image" style="display: none; position: absolute; left: 50%; margin-left: -110px; top: 40%;" src="{{ MEDIA_URL }}/img/loading.gif"/>
 <form target="_top" class="login_form" method="post" id="openid_form">
-<h2>{% trans "Sign In" %}</h2>
 {% if error %}
 <b class="error">{{ error }}</b>
 {% endif %}
@@ -22,12 +21,12 @@ openid.init('openid_identifier');
  <input type="hidden" name="next" value="{{ next }}" />
   {% csrf_token %}
  <div id="openid_input_area">
-        <p>{% trans 'Enter your username and password' %}</p>
+        <p>{% trans 'Enter your username and password' %}</p><
 	<input id="id_username" name="username" type="text"/>
 	<input id="id_password" name="password" type="password"/>
 	<input class="btn" id="openid_submit" type="submit" value="{% trans "Sign-In" %}"/>
  </div>
-<b>Select social network login with</b>
+<b>Select social network to login with or register new accounti</b>
 <div id="openid_btns">
 </div>
 <a href="{% url signup %}{{ request.urlstate }}"><h2>{% trans "Register" %}</h2></a>

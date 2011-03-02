@@ -122,9 +122,6 @@ td {
 form {
 	margin: 10px 25px 10px 25px;
 	padding: 10px 25px 25px 25px;
-    background: #F3F4F5;
-    border: 1px solid #E2E4E7;
-	width: 477px;
 }
 form p {
 	padding: 12px 0 5px 0;	margin: 0;	
@@ -330,26 +327,20 @@ fieldset.search {
 }
 #content {
    min-height: 300px;
-   width: 1000px;
+   width: 100%;
    margin: 0 auto;
    padding: 0;
-   background: #FFF url(../img/content.gif) repeat-y center top;
+   background-color: #FFF;
    overflow: hidden;
 }
 
 /* columns */
 #main {
-	float: left;
- 	margin: 0;
+ 	margin: 0 auto;
    	padding: 0;
 	width: 740px;
 }
 #sidebar {
-	width: 245px;
-	float: right;
-   	margin: 0;
-   	padding: 0;
-   	font-size: .95em;
 }
 
 #main h2 {
@@ -497,7 +488,7 @@ p.thumbs img {
 
 /* footer columns */
 #footer-wrap .col-a {
-	width: 250px;
+	width: 730px;
 	float: left;
 }
 #footer-wrap .col-b {

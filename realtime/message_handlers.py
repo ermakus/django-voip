@@ -21,6 +21,10 @@ def handle_subscribe(msg, username, channel_id):
     print "=handle_subscribe= ", msg, username, channel_id
     return msg
 
+def handle_unsubscribe(msg, username, channel_id):
+    print "=handle_unsubscribe= ", msg, username, channel_id
+    return msg
+
 def handle_connect(msg, username, channel_id):
     print "=handle_connect= ", msg, username, channel_id
     return msg
@@ -33,6 +37,7 @@ def handle_disconnect(msg, username, channel_id):
 MESSAGE_HANDLERS = {
     "send":handle_send,
     "subscribe":handle_subscribe,
+    "unsubscribe":handle_unsubscribe,
     "connect":handle_connect,
     "disconnect":handle_disconnect
 }

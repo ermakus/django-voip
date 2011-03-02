@@ -655,10 +655,9 @@
 .example-twitter {
 	position:relative;
 	padding:15px;
-	margin:100px 0 0.5em;
+	margin:40px 10px 0.5em;
 	color:#333;
 	background:#eee;
-	
 	/* css3 */
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
@@ -669,7 +668,6 @@
 
 /* this isn't necessary, just saves me having to edit the HTML of the demo */
 .example-twitter:before {
-	content:url(twitter-logo.gif);
 	display:block; /* reduce the damage in FF3.0 */
 	position:absolute;
 	top:-60px;

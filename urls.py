@@ -4,7 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', 'room.views.index'),
+    (r'^$', 'bunch.views.bunch',{'path':'/god'}),
     (r'^room/', include('room.urls')), 
     (r'^bunch/', include('bunch.urls')), 
     (r'^social/', include('socialauth.urls')),
@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     (r'^admin/', admin.site.urls), 
     (r'^categories/', include('categories.urls')),
     (r'^schedule/', include('schedule.urls')),
+    url(r'^(?P<path>.+)/$', 'bunch.views.bunch', name="bunch"),
 )
 
 from django.conf import settings

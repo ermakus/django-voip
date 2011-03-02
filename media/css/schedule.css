@@ -258,27 +258,6 @@ div.time-picker li.selected {
 
 #id_start_1, #id_end_1 { width:80px;}
 
-/**** GENERAL SETTINGS ****/
-
-#demo {
-  border-color:#e0e0e0;
-  border-style:solid;
-  border-width: 0 3px 3px 0;
-  float:left;
-  padding-right:5px;
-}
-
-body, td {font-family:sans-serif;}
-
-.error {
-  border:1px solid red;
-}
-
-#messages {
-  position:absolute;
-  top:50px;
-}
-
 div.calendarname {
   border-color:#e0e0e0;
   border-style:solid;
