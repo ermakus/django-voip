@@ -7,11 +7,11 @@ IPAD_AGENT_RE=re.compile(r".*(ipad)",re.IGNORECASE)
 class BunchMiddleware(object):
     def process_request(self, request):
 
-        if not request.path or request.path == '/': request.path ='/god'
- 
-
         try:
-            request.bunch = Bunch.resolve( request.path )
+            if not request.path or request.path == '/':
+                request.bunch = Bunch.resolve( "/" )
+            else:
+                request.bunch = Bunch.resolve( request.path )
         except Bunch.DoesNotExist:
             request.bunch = Bunch(uid='error',kind='error',content='Path not exists: %s' % request.path )
 

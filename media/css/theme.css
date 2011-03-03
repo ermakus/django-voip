@@ -160,7 +160,7 @@ input.button, #comments input[type=button], #div-feedback input[type=submit] {
         left: 1%;
         top: 0%;
         width: 80%;
-	background-color: black;
+	background-color: #DDDDDD;
 	font-size: 200%;
 }
 .commands input {
@@ -169,7 +169,7 @@ input.button, #comments input[type=button], #div-feedback input[type=submit] {
 }
 
 .selected {
-	background: black !important;	
+	background: #DDD !important;	
 }
 
 #input_content {

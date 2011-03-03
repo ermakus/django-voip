@@ -39,6 +39,9 @@ class Bunch(MPTTModel):
     @classmethod
     def resolve( self, path ):
 
+        if( path == "/"):
+            return Bunch.objects.get( uid="root" )
+
         path_items = path.strip('/').split('/')
 
         if len(path_items) >= 2:

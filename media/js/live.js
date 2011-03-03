@@ -47,7 +47,7 @@
 		$('#input_content').keypress( function(event) {
 			if ((event.keyCode || event.which) == 13) { 
 				var msg = {};
-                                msg.content = $(this).attr('value');
+                                msg.content = $(this).val();
 				msg.kind    = "message"
 				msg.uid     = "!auto";
 				send(msg);
@@ -60,7 +60,7 @@
 
 		$('#button_bunch').click( function() {
 				var msg = {};
-				msg.content = $('#input_content').attr('value');
+				msg.content = $('#input_content').val();
 				msg.kind    = "message"
 				send(msg);
 				$('#input_content').attr('value','');
@@ -72,13 +72,21 @@
 				msg.uid  = selected.attr('id');
 				msg.kind = "delete"
 				send(msg);
-				select("new");
 			}
 			return false;
 		});
 
 
-		$("#pwd li ul li,#new").click( function() { select( $(this).attr("id") );});
+		$("#pwd>li>ul").append("<li id='new' class='new'>Bunch!</li>");
+
+		$("#pwd>li>ul>li").live( 'click', function() { 
+			var id = $(this).attr("id");  
+			if( $(this).hasClass('selected') && id != "new") {
+				window.location.href = document.location.href + id;
+				return true;
+			}
+			select( id );
+		});
 
 		select("new");
     	} );
@@ -87,17 +95,17 @@
         function select( id ) {
 			var li = $('#'+id);
                         if( li.length == 0 ) {
+				$("#commands").appendTo( $("#new") ).show();
+				$('#input_content').html( "" );
 				selected = false;
-				$("#commands").appendTo( $("#new") ).hide();
 				return;
-			} 
-			else if( li.hasClass('selected') ) {
-				return true;
 			} else {
 				if(selected) selected.removeClass("selected");
 				li.addClass("selected");
 				selected = li;
 				$("#commands").appendTo( li ).show();
+                                var val = li.children("p").html();
+				$('#input_content').val( val ).focus();
 			}
 	
         }
@@ -116,14 +124,16 @@
 	}
 	
 	function update(msg) {
+		var li = $('#'+msg.uid);
 		if( msg.kind == "delete" ) 
 		{
+			if( li.next().length ) select( li.next().attr( "id" ) ); else select("new");
 			$("#" + msg.uid ).remove();
 		} 
 		else 
 		{
-	       		var html = ( "<li id='" + msg.uid + "' class='" + msg.kind + "'><p>" + msg.content + "</p><ul id='" + msg.uid + "-children'></ul></li>" );
-			$( '#' + bunch.uid + "-children").append( html );
+	       		var html = $( "<li id='" + msg.uid + "' class='" + msg.kind + "'><p>" + msg.content + "</p><ul id='" + msg.uid + "-children'></ul></li>" );
+			if( !li.length ) html.insertBefore( $('#new') ); else li.replaceWith( html );
 			scrollme();
 		}
 	}

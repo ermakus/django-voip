@@ -48,9 +48,9 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
 </h1>
 <div id="nav">
 <ul>
-  <li><a href="/god">{% trans "The Root" %}</a></li>
-  <li class="authorized" style="display: none;"><a class="act" href="{% url call_view %}">{% trans "Call Friend" %}</a></li>
-  <li class="authorized" style="display: none;"><a href="{% url profile_overview %}">{% trans 'My Stuff' %} (<u id="username"></u>)</a></li>
+  <li><a href="/">{% trans "Root" %}</a></li>
+  <li class="authorized" style="display: none;"><a href="/home/{{ request.user.username }}">{% trans 'Home' %} (<u id="username"></u>)</a></li>
+  <li class="authorized" style="display: none;"><a class="act" href="{% url call_view %}">{% trans "Invite" %}</a></li>
   <li class="authorized" style="display: none;"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
   <li class="unauthorized" style="display: none;"><a class="act" href="{% url socialauth.views.login_page %}">{% trans "Sign in" %}</a></li>
 </ul>
@@ -70,7 +70,7 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
     <div class="drawer_button" id="drawer_off" style="display: none;"><img src="{{ MEDIA_URL }}img/collapse.png" alt="collapse" /> <a href="#">Close</a></div>
 </div>
 
-   <div id="commands" class="commands">
+   <div id="commands" class="commands" style="display: none;">
     <textarea id="input_content"></textarea>
     <input id="button_bunch" type="image" src="{{ MEDIA_URL }}img/bunch.png" value="Bunch!"/> 
     <input id="button_delete" type="image" src="{{ MEDIA_URL }}img/delete.png" value="Delete"/>
@@ -78,8 +78,7 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
  
  <div id="content" class="clear">
   <ul id="pwd">
-   {{ bunch.html|safe }}
-   <li id="new" class="new" id="new">Click here to bunch!</li>
+   {{ request.bunch.html|safe }}
    <li id="status" class="status"></li>
   </ul>
  </div>
