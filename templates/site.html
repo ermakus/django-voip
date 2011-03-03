@@ -70,26 +70,20 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
     <div class="drawer_button" id="drawer_off" style="display: none;"><img src="{{ MEDIA_URL }}img/collapse.png" alt="collapse" /> <a href="#">Close</a></div>
 </div>
 
-<div id="content-wrap" class="clear">
- <div id="content">
-  <div id="main">{% block content %}{% endblock %}</div>
- </div>
-</div>
-
-<div id="footer-outer" class="clear">
-  <div id="footer-wrap">
-    <div class="col-a">
-	<div class="example-twitter" width="100%">
-         <input id="_content" type="text" style="width: 510px;"/>
-         <input id="_button_bunch" type="button" value="Bunch!" style="width:70px;"/> 
-         <input id="_button_attach" type="button" value="Attach" style="width:70px;" onclick="popup('/drawer/attach');"/> 
-	</div>
-        <div id="status" class="status"></div>
-    </div>
-    <div class="col-b">
-      <div id="sidebar" class="sidemenu">{% block sidebar %}{% endblock %}</div>
+   <div id="commands" class="commands">
+    <textarea id="input_content"></textarea>
+    <input id="button_bunch" type="image" src="{{ MEDIA_URL }}img/bunch.png" value="Bunch!"/> 
+    <input id="button_delete" type="image" src="{{ MEDIA_URL }}img/delete.png" value="Delete"/>
    </div>
-</div></div>
+ 
+ <div id="content" class="clear">
+  <ul id="pwd">
+   {{ bunch.html|safe }}
+   <li id="new" class="new" id="new">Click here to bunch!</li>
+   <li id="status" class="status"></li>
+  </ul>
+ </div>
+
 <script type="text/javascript">
 {% block initscript %}{% endblock %}
 </script>

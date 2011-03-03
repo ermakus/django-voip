@@ -102,6 +102,7 @@ $(document).ready(function() {
 		drawer_close();
 	});
 
+
         reload();
 });
 	

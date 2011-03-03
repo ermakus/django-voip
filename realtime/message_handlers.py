@@ -15,9 +15,13 @@ def handle_send(msg, username, channel_id):
     print "=handle_send= ", msg, username, channel_id
     msg = json.loads(msg)
     try:
-        if 'path' in msg: bunch = Bunch.resolve( msg.path )
-        if 'uid' in msg:  bunch = Bunch.objects.get( uid=msg['uid'] )
-        raise Exception("No path nor uid in message")
+        if 'path' in msg: 
+            bunch = Bunch.resolve( msg.path )
+	else:
+            if 'uid' in msg:  
+                bunch = Bunch.objects.get( uid=msg['uid'] )
+            else:
+                raise Exception("No path nor uid in message")
     except Bunch.DoesNotExist:
         bunch = Bunch( uid=Bunch.uidme( msg["uid"], msg["content"] ), content=msg["content"], kind=msg["kind"] )
 
@@ -28,8 +32,11 @@ def handle_send(msg, username, channel_id):
     except Bunch.DoesNotExist:
         raise Exception('Parent channel not found: %s' % channel_id )
 
-    bunch.insert_at( parent )
-    bunch.save()
+    if msg["kind"] == "delete":
+        bunch.delete()
+    else:
+        bunch.insert_at( parent )
+        bunch.save()
 
     return msg
 

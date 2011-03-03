@@ -3,6 +3,7 @@
         var comet_port = 9999;
         var TCPSocket = Orbited.TCPSocket;
 	var client = new STOMPClient();
+        var selected = false;
 
 	jQuery.extend(jQuery.expr[':'], {
     		focus: function(element) { 
@@ -43,7 +44,7 @@
     		var cookie = $.cookie("sessionid");
     		client.connect(server, comet_port, "dude", cookie);
 
-		$('#_content').keypress( function(event) {
+		$('#input_content').keypress( function(event) {
 			if ((event.keyCode || event.which) == 13) { 
 				var msg = {};
                                 msg.content = $(this).attr('value');
@@ -57,20 +58,54 @@
 			scrollme();
     		});
 
-		$('#_button_bunch').click( function() {
+		$('#button_bunch').click( function() {
 				var msg = {};
-				msg.content = $('#_content').attr('value');
+				msg.content = $('#input_content').attr('value');
 				msg.kind    = "message"
 				send(msg);
-				$('#_content').attr('value','');
+				$('#input_content').attr('value','');
 		});
 
+		$('#button_delete').click( function() {
+			if( selected ) {
+				var msg = {};
+				msg.uid  = selected.attr('id');
+				msg.kind = "delete"
+				send(msg);
+				select("new");
+			}
+			return false;
+		});
+
+
+		$("#pwd li ul li,#new").click( function() { select( $(this).attr("id") );});
+
+		select("new");
     	} );
-   
+  
+
+        function select( id ) {
+			var li = $('#'+id);
+                        if( li.length == 0 ) {
+				selected = false;
+				$("#commands").appendTo( $("#new") ).hide();
+				return;
+			} 
+			else if( li.hasClass('selected') ) {
+				return true;
+			} else {
+				if(selected) selected.removeClass("selected");
+				li.addClass("selected");
+				selected = li;
+				$("#commands").appendTo( li ).show();
+			}
+	
+        }
+ 
 	function scrollme() {
-		var msg = $('#_content');
+		var msg = $('#input_content');
 		if( msg.is(':focus') ) {
-			var offset = $('body').height() - 30;
+			var offset = $('html').height(); 
 			$(window).scrollTop( offset );
 		}
 	}
@@ -81,8 +116,15 @@
 	}
 	
 	function update(msg) {
-	       	var html = ( "<li id='" + msg.uid + "' class='" + msg.kind + "'><p>" + msg.content + "</p><ul id='" + msg.uid + "-children'></ul></li>" );
-		$( '#' + bunch.uid + "-children").append( html );
-		scrollme();
+		if( msg.kind == "delete" ) 
+		{
+			$("#" + msg.uid ).remove();
+		} 
+		else 
+		{
+	       		var html = ( "<li id='" + msg.uid + "' class='" + msg.kind + "'><p>" + msg.content + "</p><ul id='" + msg.uid + "-children'></ul></li>" );
+			$( '#' + bunch.uid + "-children").append( html );
+			scrollme();
+		}
 	}
 
