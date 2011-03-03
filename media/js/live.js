@@ -1,8 +1,6 @@
-	var path    = window.location.pathname;
-   	var server    = "localhost";
         var comet_port = 9999;
         var TCPSocket = Orbited.TCPSocket;
-	var client = new STOMPClient();
+        var client = new STOMPClient();
         var selected = false;
 
 	jQuery.extend(jQuery.expr[':'], {
@@ -14,9 +12,9 @@
         $( function() {
 		status("Connecting...");
 		client.onopen = function() {
-			status("You connected to: " + window.location.pathname );
+			status("You connected to: " + path );
     			window.onbeforeunload = function() {
-        			client.unsubscribe( window.location.pathname );
+        			client.unsubscribe( path );
         			client.disconnect(); 
     			};
     		};
@@ -33,7 +31,7 @@
     		};
 
     		client.onconnectedframe = function() {
-        		client.subscribe( window.location.pathname );
+        		client.subscribe( path );
     		};
 
     		client.onmessageframe = function(frame) { //check frame.headers.destination?
@@ -82,10 +80,12 @@
 		$("#pwd>li>ul>li").live( 'click', function() { 
 			var id = $(this).attr("id");  
 			if( $(this).hasClass('selected') && id != "new") {
-				window.location.href = document.location.href + id;
+                                var href = $(this).children("a").attr("href");
+				window.location.href = href;
 				return true;
 			}
 			select( id );
+			return false;
 		});
 
 		select("new");
@@ -104,7 +104,7 @@
 				li.addClass("selected");
 				selected = li;
 				$("#commands").appendTo( li ).show();
-                                var val = li.children("p").html();
+                                var val = li.children("a").html();
 				$('#input_content').val( val ).focus();
 			}
 	
@@ -132,7 +132,7 @@
 		} 
 		else 
 		{
-	       		var html = $( "<li id='" + msg.uid + "' class='" + msg.kind + "'><p>" + msg.content + "</p><ul id='" + msg.uid + "-children'></ul></li>" );
+	       		var html = $( "<li id='" + msg.uid + "' class='" + msg.kind + "'><a href='"+ msg.path +"'>" + msg.content + "</a><ul id='" + msg.uid + "-children'></ul></li>" );
 			if( !li.length ) html.insertBefore( $('#new') ); else li.replaceWith( html );
 			scrollme();
 		}

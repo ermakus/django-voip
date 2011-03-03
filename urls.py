@@ -4,7 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-#    (r'^$', 'bunch.views.bunch',{'path':'/'}),
+    (r'^$', 'bunch.views.bunch',{'path':'/'}),
     (r'^room/', include('room.urls')), 
     (r'^bunch/', include('bunch.urls')), 
     (r'^social/', include('socialauth.urls')),

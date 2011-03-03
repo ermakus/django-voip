@@ -23,7 +23,9 @@
         <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
 
 	<script type="text/javascript">
-          var bunch = {'kind':'{{ request.bunch.kind }}','uid':'{{ request.bunch.uid }}','path':'{{ request.bunch.path }}',content:'{{ request.bunch.content }}'};
+   	   var server    = "{{ request.domain }}";
+           var bunch = {'kind':'{{ request.bunch.kind }}','uid':'{{ request.bunch.uid }}','path':'{{ request.bunch.path }}',content:'{{ request.bunch.content }}'};
+   	   var path    = "{{ request.bunch.path }}";
         </script>
 
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
