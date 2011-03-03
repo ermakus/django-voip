@@ -58,7 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'room.middleware.SiteMiddleware',
+    'bunch.middleware.BunchMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

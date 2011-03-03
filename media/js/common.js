@@ -2,7 +2,6 @@
 var user = false;
 
 function reload() {
-   $('#player').show();
    $.getJSON( "/room/context", null, function( context ) {
         	if( context ) {
 			user = context.user;
@@ -33,7 +32,6 @@ function login( next ) {
 }
 
 function popup( href ) {
-        return drawer( href );
         if( href.indexOf('/accounts/register') == 0 || user )
                  $.fancybox({
 			'padding'		: 10,
@@ -49,10 +47,10 @@ function drawer( href ) {
        if( $('#drawer').height() > 0 ) return drawer_close();
        $('#drawer_iframe').attr("src",href);
        $("#drawer").animate({
-                        height: "700px"
+                        height: "600px"
                 })
                 .animate({
-                        height: "600px"
+                        height: "500px"
                 }, "fast" );
                 $(".drawer_button").toggle();
 }
@@ -64,6 +62,10 @@ function drawer_close() {
                 $(".drawer_button").toggle();
 }
 
+function status(message) {
+	$("#status").html( message );
+}
+
 // Common initialization
 $(document).ready(function() {
 
@@ -72,7 +74,7 @@ $(document).ready(function() {
 	});
 
         $('.act').click( function() {
-		popup( $(this).attr('href') + '?embed=yes' );
+		drawer( $(this).attr('href') + '?embed=yes' );
 		return false;
 	} );
 
@@ -99,6 +101,7 @@ $(document).ready(function() {
 	$("#drawer_off").click(function(){
 		drawer_close();
 	});
+
 
         reload();
 });

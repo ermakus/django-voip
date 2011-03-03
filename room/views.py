@@ -19,7 +19,7 @@ from asterisk.models import Channel
 def index(request):
     cats = Category.objects.all().filter( level=1 )
     rooms = Room.objects.all().order_by('rating')[:10]
-    return render_to_response( request.mutator + 'index.html', {'cats':cats,'rooms':rooms }, context_instance=RequestContext(request))
+    return render_to_response( 'index.html', {'cats':cats,'rooms':rooms }, context_instance=RequestContext(request))
 
 def context(request):
     if request.user.is_authenticated():
@@ -44,7 +44,7 @@ def call_view(request):
         site = Site.objects.get_current()
     except:
         site = Site(domain='localhost')
-    return render_to_response( request.mutator + 'room/call.html', { 'site':site, 'channel':channel }, context_instance=RequestContext(request))
+    return render_to_response( 'room/call.html', { 'site':site, 'channel':channel }, context_instance=RequestContext(request))
 
 @login_required
 def chat_view(request, id):
@@ -58,7 +58,7 @@ def chat_view(request, id):
         site = Site.objects.get_current()
     except:
         site = Site(domain='localhost')
-    return render_to_response( request.mutator + 'room/chat.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
+    return render_to_response( 'room/chat.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
 
 
 @login_required
@@ -74,7 +74,7 @@ def room_view(request, id):
         site = Site.objects.get_current()
     except:
         site = Site(domain='localhost')
-    return render_to_response( request.mutator + 'room/room.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
+    return render_to_response( 'room/room.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
 
 def update_object(request,instance):
     instance.content_type = "text/plain"
