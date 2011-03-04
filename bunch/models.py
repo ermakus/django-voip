@@ -7,6 +7,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 from mptt.models import MPTTModel
+from mptt.managers import TreeManager
+
 import random
 
 class Bunch(MPTTModel):
@@ -16,14 +18,14 @@ class Bunch(MPTTModel):
         related_name="children", 
         help_text="Parent", 
         verbose_name='Parent')
-    uid = models.CharField(max_length=128)
+    uid = models.CharField(max_length=128,blank=True,unique=True)
     kind = models.CharField(max_length=128)
     content = models.TextField(blank=True, null=True)
 
     def html( self, level=2 ):
         if level > 0:
             children = ''.join( child.html(level-1) for child in self.get_children())
-            return "<li id='%s' class='%s'><p>%s</p><ul id='%s-children'>%s</ul></li>" % ( self.uid, self.kind, self.content, self.uid, children )
+            return "<li id='%s' class='%s'><a href='%s'>%s</a><ul id='%s-children'>%s</ul></li>" % ( self.uid, self.kind, self.path(), self.content, self.uid, children )
         else:
             return ""
 
@@ -43,19 +45,14 @@ class Bunch(MPTTModel):
             return Bunch.objects.get( uid="root" )
 
         path_items = path.strip('/').split('/')
-
-        if len(path_items) >= 2:
-            bunch = Bunch.objects.filter(uid__iexact = path_items[-1],level = len(path_items)-1,parent__uid__iexact=path_items[-2])
-        else:
-            bunch = Bunch.objects.filter(uid__iexact = path_items[-1],level = len(path_items)-1)
-
+        bunch = Bunch.objects.filter(uid = path_items[-1],level = len(path_items))
         if len(bunch) != 1: raise Bunch.DoesNotExist()
         return bunch[0]
     
     def path(self):
         """Return a path"""
         ancestors = list(self.get_ancestors()) + [self,]
-        return  '/' + '/'.join([force_unicode(i.uid) for i in ancestors])
+        return  '/' + '/'.join([force_unicode(i.uid) for i in ancestors[1:]])
         
     class MPTTMeta:
         verbose_name_plural = 'Bunches'

@@ -25,8 +25,6 @@ def handle_send(msg, username, channel_id):
     except Bunch.DoesNotExist:
         bunch = Bunch( uid=Bunch.uidme( msg["uid"], msg["content"] ), content=msg["content"], kind=msg["kind"] )
 
-    msg["uid"] = bunch.uid
-
     try:
         parent = Bunch.resolve( msg["parent"] )
     except Bunch.DoesNotExist:
@@ -37,6 +35,9 @@ def handle_send(msg, username, channel_id):
     else:
         bunch.insert_at( parent )
         bunch.save()
+
+    msg["uid"]  = bunch.uid
+    msg["path"] = bunch.path()
 
     return msg
 

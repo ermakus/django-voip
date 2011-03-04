@@ -1,5 +1,6 @@
 import re
 from models import Bunch
+from django.contrib.sites.models import Site
 
 MOBILE_AGENT_RE=re.compile(r".*(iphone|mobile|androidtouch)",re.IGNORECASE)
 IPAD_AGENT_RE=re.compile(r".*(ipad)",re.IGNORECASE)
@@ -31,6 +32,11 @@ class BunchMiddleware(object):
         else:
             request.kind = 'html'
             request.urlstate =  ''
+
+        try:
+            request.domain = Site.objects.get_current().domain
+        except Site.DoesNotExists:
+            request.domain = "localhost"
 
         return None
 

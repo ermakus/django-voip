@@ -122,9 +122,10 @@
 	border-radius:10px;
 }
 
-.message p {
+.message a {
 	text-align: left;
         font-size: 200%;
+	display: block;
 }
 
 .new {
