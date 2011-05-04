@@ -1,14 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% block content %}
-<h1>Categories</h1>
-<ul>{% for category in object_list %}<li><a href="{{ category.get_absolute_url }}">{{ category }}</a></li>{% endfor %}</ul>
+<h1>{% trans "Most popular content" %}</h1>
 {% endblock %}
 {% block sidebar %}
-<h1>Sort by</h1>
-<ul>
- <li><a href="{% url category request.category %}?sort=rating&page={{ request.page }}" id="rating">{% trans "Rating" %}</a></li>
- <li><a href="{% url caregory request.category %}?sort=views&page={{ request.page }}" id="views">{% trans "Popularity" %}</a></li>
- <li><a href="{% url category request.category %}?sort=publish&page={{ request.page }}" id="publish">{% trans "Date" %}</a></li>
-</ul>
 {% endblock%}

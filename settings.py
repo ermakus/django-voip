@@ -58,7 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'openid_consumer.middleware.OpenIDMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'bunch.middleware.BunchMiddleware',
+    'room.middleware.SiteMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -73,7 +73,7 @@ ROOT_URLCONF = 'urls'
 
 
 MEDIA_URL = '/site_media/'
-MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), 'media'))
+MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), 'media')) + '/'
 
 EDITOR_MEDIA_PATH = MEDIA_URL + 'editor/'
 CATEGORIES_ALLOW_SLUG_CHANGE = True
@@ -100,7 +100,7 @@ INSTALLED_APPS = (
     'userprofile',
     'asterisk',
     'room',
-    'bunch',
+    'videostream',
     'schedule',
 )
 

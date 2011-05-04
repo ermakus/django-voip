@@ -17,9 +17,14 @@ import django.forms as forms
 from asterisk.models import Channel
 
 def index(request):
-    cats = Category.objects.all().filter( level=1 )
-    rooms = Room.objects.all().order_by('rating')[:10]
-    return render_to_response( 'index.html', {'cats':cats,'rooms':rooms }, context_instance=RequestContext(request))
+
+    channel = Channel()
+
+    try:
+        site = Site.objects.get_current()
+    except Site.DoesNotExist:
+        site = Site(domain='localhost')
+    return render_to_response( 'room/call.html', { 'site':site, 'channel':channel }, context_instance=RequestContext(request))
 
 def context(request):
     if request.user.is_authenticated():

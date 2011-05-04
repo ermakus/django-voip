@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
 <head>
-        <script type="text/javascript"> if (window != top) { top.location.href = location.href;}</script>
+    <script type="text/javascript"> if (window != top) { top.location.href = location.href;}</script>
 	<title>{% block title %}{% trans "Cloud Pub" %}{% endblock %}</title>
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 	<meta name="description" content="" />
@@ -11,83 +11,110 @@
 	<!-- Styles -->
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/theme.css" media="screen" />
-	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/chat.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/schedule.css" media="screen" />
-        <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.fancybox-1.3.1.css"></script>
+    <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.fancybox-1.3.1.css"></script>
 
 	<!-- JQuery -->
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.fancybox-1.3.1.pack.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.fancybox-1.3.1.pack.js"></script>
 
-        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js" type="text/javascript"></script>
-        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.js" type="text/javascript"></script>
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
 
-	<script type="text/javascript">
-   	   var server    = "{{ request.domain }}";
-           var bunch = {'kind':'{{ request.bunch.kind }}','uid':'{{ request.bunch.uid }}','path':'{{ request.bunch.path }}',content:'{{ request.bunch.content }}'};
-   	   var path    = "{{ request.bunch.path }}";
-        </script>
-
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.cookie.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/Orbited.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/stomp.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/JSON.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/live.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/common.js"></script>
-        {% block extra_head %}
-        {% endblock %}
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/common.js"></script>
+    {% block extra_head %}
+    {% endblock %}
 </head>
 <body>
 {% block extra_body %}
 {% endblock %}
+<!--header -->
 <div id="header-wrap" class="header-bg">
 <div id="header">
 <a name="top"></a>
 <h1 class="header-logo">
-<a href="/" title="Logo" class="color-1">
 Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
 </a>
 </h1>
 <div id="nav">
 <ul>
-  <li><a href="/">{% trans "Root" %}</a></li>
-  <li class="authorized" style="display: none;"><a href="/home/{{ request.user.username }}">{% trans 'Home' %} (<u id="username"></u>)</a></li>
-  <li class="authorized" style="display: none;"><a class="act" href="{% url call_view %}">{% trans "Invite" %}</a></li>
+  <li><a href="/">{% trans "Home" %}</a></li>
+  <li><a href="{% url category 'root' %}">{% trans 'Catalog' %}</a></li>
+  <li class="authorized" style="display: none;"><a href="{% url call_view %}">{% trans "Contact" %}</a></li>
+  <li class="authorized" style="display: none;"><a href="{% url profile_overview %}">{% trans 'Profile' %} (<u id="username"></u>)</a></li>
   <li class="authorized" style="display: none;"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
   <li class="unauthorized" style="display: none;"><a class="act" href="{% url socialauth.views.login_page %}">{% trans "Sign in" %}</a></li>
 </ul>
-</div>
-   <form id="quick-search" action="{% url bunch path='{{ request.bunch.path }}'%}">
-      <fieldset class="search">
-         <label for="qsearch">Search:</label>
-         <input class="tbox" id="search" name="search" value="Search..." title="Start typing and hit ENTER" type="text">
-         <button type="submit" class="btn" title="Submit Search">Search</button>
-      </fieldset>
-   </form>
-</div>
-</div>
-
 <div id="drawer">
     <iframe id="drawer_iframe"></iframe>
     <div class="drawer_button" id="drawer_off" style="display: none;"><img src="{{ MEDIA_URL }}img/collapse.png" alt="collapse" /> <a href="#">Close</a></div>
 </div>
-
-   <div id="commands" class="commands" style="display: none;">
-    <textarea id="input_content"></textarea>
-    <input id="button_bunch" type="image" src="{{ MEDIA_URL }}img/bunch.png" value="Bunch!"/> 
-    <input id="button_delete" type="image" src="{{ MEDIA_URL }}img/delete.png" value="Delete"/>
+</div>
+   <!-- <p id="rss"><a href="#">Grab the RSS feed</a></p> -->
+   <form id="quick-search" action="{% url category request.category %}">
+      <fieldset class="search">
+         <label for="qsearch">Search:</label>
+         <input class="tbox" id="search" name="search" value="{% trans "Search..."%}" title="{% trans "Start typing and hit ENTER" %}" type="text">
+         <button type="submit" class="btn" title="{% trans "Submit Search" %}">{% trans "Search" %}</button>
+      </fieldset>
+   </form>
+<!--/header-->
+</div>
+</div>
+<!-- content-outer -->
+<div id="content-wrap" class="clear">
+   <div id="content">
+     <div id="main">
+	<!-- Main content start -->
+	{% block content %}{% endblock %}
+	<!-- Main content end -->
+     </div>
+     <!-- sidebar -->
+     <div id="sidebar" class="sidemenu">
+	{% block sidebar %}{% endblock %}
+     </div>
    </div>
- 
- <div id="content" class="clear">
-  <ul id="pwd">
-   {{ request.bunch.html|safe }}
-   <li id="status" class="status"></li>
-  </ul>
- </div>
+</div>
 
+<!-- footer-outer -->
+<div id="footer-outer" class="clear">
+  <div id="footer-wrap">
+    <div class="col-a">
+      <h3>{% trans "Contact Info" %}</h3>
+      <p><strong>E-mail: </strong>consulting@ermak.us</p>
+    </div>
+    <div class="col-b">
+      <h3>{% trans "Updates" %}</h3>
+      <ul class="subscribe-stuff">
+<!--
+        <li><a title="Facebook" href="http://www.ermak.us/index.html" rel="nofollow">
+                                <img alt="Facebook" title="Facebook" src="{{ MEDIA_URL }}img/social_facebook.png"></a>
+                        </li>
+-->
+                        <li><a title="Twitter" href="http://twitter.com/ermakus" rel="nofollow">
+                                <img alt="Twitter" title="Twitter" src="{{ MEDIA_URL }}img/social_twitter.png"></a>
+                        </li>
+      </ul>
+      <p>{% trans "Stay up to date. Subscribe via" %}
+<!--                <a href="http:///index">Facebook</a>,-->
+                <a href="http://twitter.com/ermakus">Twitter</a>
+      </p>
+   </div>
+<!-- /footer-outer -->
+</div></div>
+<!-- footer-bottom -->
+<div id="footer-bottom">
+        <p class="bottom-left">
+           © 2010 <strong>{% trans "Ermak Consulting"%}</strong>&nbsp; &nbsp; &nbsp;
+        </p>
+        <p class="bottom-right">
+           <a href="/">{% trans "Home" %}</a> |
+           <strong><a href="#top">{% trans "Back to Top" %}</a></strong>
+        </p>
+<!-- /footer-bottom-->
+</div>
 <script type="text/javascript">
 {% block initscript %}{% endblock %}
 </script>
 </body>
 </html>
-

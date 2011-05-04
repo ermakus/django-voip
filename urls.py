@@ -4,15 +4,14 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', 'bunch.views.bunch',{'path':'/'}),
-    (r'^room/', include('room.urls')), 
-    (r'^bunch/', include('bunch.urls')), 
+    (r'^$', 'categories.views.catalog'),
     (r'^social/', include('socialauth.urls')),
+    (r'^room/', include('room.urls')), 
+    (r'^videostream/', include('videostream.urls')), 
     (r'^accounts/', include('userprofile.urls')),
     (r'^admin/', admin.site.urls), 
     (r'^categories/', include('categories.urls')),
     (r'^schedule/', include('schedule.urls')),
-    url(r'^(?P<path>.+)$', 'bunch.views.bunch', name="bunch"),
 )
 
 from django.conf import settings

@@ -82,9 +82,9 @@ td {
 
 /* form elements */
 form {
-	margin: 10px 25px 10px 25px;
-	padding: 10px 25px 25px 25px;
+    margin-left: 45px;
 }
+
 form p {
 	padding: 12px 0 5px 0;	margin: 0;	
 	color: #2C76A6;
@@ -300,23 +300,37 @@ fieldset.search {
    width: 100%;
    float: left;
 }
+
+/* content */
+#content-wrap {
+	clear: both;
+  	margin: 0; padding: 0;
+   background: #fff;
+   width: 100%;
+   float: left;
+}
 #content {
    min-height: 300px;
-   width: 100%;
+   width: 1000px;
    margin: 0 auto;
    padding: 0;
-   background-color: #FFF;
+   background: #FFF url(../img/content.gif) repeat-y center top;
    overflow: hidden;
 }
 
 /* columns */
 #main {
- 	margin: 0 auto;
+	float: left;
+ 	margin: 0;
    	padding: 0;
-	width: 1000px;
+	width: 740px;
 }
-
 #sidebar {
+	width: 245px;
+	float: right;
+   	margin: 0;
+   	padding: 0;
+   	font-size: .95em;
 }
 
 #main h2 {
@@ -946,10 +960,10 @@ ul#years {
 	position: absolute;
 	height: 0;
 	margin-right: 0;
-        margin-left: -300px;
-        left: 50%;
+    margin-left: -300px;
+    left: 50%;
 	width: 580px;
-	top: 59px;
+	top: 25px;
 	z-index: 10;
 	overflow: hidden;
 	text-align: left;

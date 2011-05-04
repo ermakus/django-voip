@@ -12,17 +12,18 @@ class SiteMiddleware(object):
         if 'HTTP_USER_AGENT' is request.META:
             browser = request.META['HTTP_USER_AGENT']
 
-        if MOBILE_AGENT_RE.match(browser):
-            request.mutator='mobile/'
-
-        if IPAD_AGENT_RE.match(browser):
-            request.mutator=''
-
-        if 'embed' in request.GET:
-            request.template = 'embed.html'
-            request.urlstate +=  'embed=yes&'
+        if not IPAD_AGENT_RE.match(browser) and MOBILE_AGENT_RE.match(browser):
+            request.template = 'mobile/site.html'
         else:
             request.template = 'site.html'
+
+        if 'embed' in request.REQUEST:
+            request.kind  = request.REQUEST['embed']
+            request.urlstate =  '?embed=' + request.kind
+            request.template = 'embed.html'
+        else:
+            request.kind = 'html'
+            request.urlstate =  '?'
 
         if 'page' in request.GET:
             request.page = request.GET['page']

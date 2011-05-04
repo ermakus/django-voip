@@ -6,29 +6,34 @@ from django.template.loader import select_template
 from categories.models import Category
 from django.core.paginator import Paginator
 from django.db.models import Q
-from room.models import *
+from videostream.models import VideoStream
+
 import operator
 import settings
 
-def catalog(request):
-    render_to_response('categories/catalog.html')
 
-#@cache_page(settings.CACHE_VIEW_LENGTH)
-def category(request, path):
-
+def get_category( path ):
     path_items = path.strip('/').split('/')
 
     if len(path_items) >= 2:
-        category = get_object_or_404(Category,
+        return get_object_or_404(Category,
             slug__iexact = path_items[-1],
             level = len(path_items)-1,
             parent__slug__iexact=path_items[-2])
     else:
-        category = get_object_or_404(Category,
+        return get_object_or_404(Category,
             slug__iexact = path_items[-1],
             level = len(path_items)-1)
 
-    rooms = Room.objects.all().order_by( '-'+ request.sort )
+
+def catalog(request):
+    category = get_category( "/root" )
+    return render_to_response('categories/catalog.html', {'category':category }, context_instance=RequestContext(request))
+
+#@cache_page(settings.CACHE_VIEW_LENGTH)
+def category(request, path):
+    category = get_category( path )
+    videos = VideoStream.objects.all()
     search = kwds = None
     if 'search' in request.GET:
         search = kwds = request.GET['search']
@@ -38,4 +43,6 @@ def category(request, path):
         final_q = reduce(operator.or_, list_title_qs + list_more_qs)
         rooms = rooms.filter( final_q )
 
-    return render_to_response('categories/category.html', {'category':category, 'rooms':rooms, 'search':search }, context_instance=RequestContext(request) )
+    return render_to_response('categories/category.html', {'category':category, 'videos':videos, 'search':search }, context_instance=RequestContext(request) )
+
+                                                                        
