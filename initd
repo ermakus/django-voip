@@ -3,7 +3,7 @@ HOME=/srv/cloudpub
 DAEMON=cloudpub
 USER=cloudpub
 GROUP=cloudpub
-TWISTD=$(which twistd)
+PYTHON=$(which python)
 
 case "$1" in
   start)
@@ -18,7 +18,7 @@ case "$1" in
         --user  $USER \
         --group $GROUP \
         --chuid $USER \
-        --exec $TWISTD -- --logfile=/var/log/cloudpub/twistd.log --pidfile=/tmp/$DAEMON.pid -ny $HOME/$DAEMON 
+        --exec $PYTHON -- $HOME/manage.py runfcgi host=127.0.0.1 port=8801 pidfile=/tmp/$DAEMON.pid outlog=/var/log/cloudpub/fcgi.log maxspare=4 --settings=settings
     ;;
   stop)
     echo "Stopping $DAEMON"
