@@ -9,6 +9,7 @@ from django.contrib import admin
 from videostream.models import VideoStream
 
 class VideoStreamAdmin(admin.ModelAdmin):
+    filter_horizontal = ['categories',]
     prepopulated_fields = {
             'slug': ('title',),
             } 
@@ -17,6 +18,7 @@ class VideoStreamAdmin(admin.ModelAdmin):
             ('Publication', {'fields': ['pub_date', 'tags', 'is_public', 'featured', 'enable_comments']}),
             ('Video Files', {'fields': ['videoupload', 'flvfile', 'thumbnail']}),
             ('Encoding Options', {'fields': ['encode']}),
+            ('Categories',{'fields': ['categories']}),
             ]
     date_hierarchy = 'pub_date'
     list_display = ['title', 'flvfile', 'pub_date', 'is_public', 'featured', 'enable_comments', 'encode']

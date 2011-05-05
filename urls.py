@@ -4,7 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', 'categories.views.catalog'),
+    (r'^$', 'categories.views.category', {'path':'/root'}),
     (r'^social/', include('socialauth.urls')),
     (r'^room/', include('room.urls')), 
     (r'^videostream/', include('videostream.urls')), 

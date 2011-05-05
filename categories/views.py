@@ -33,7 +33,7 @@ def catalog(request):
 #@cache_page(settings.CACHE_VIEW_LENGTH)
 def category(request, path):
     category = get_category( path )
-    videos = VideoStream.objects.all()
+    videos = VideoStream.objects.filter(categories__id = category.pk)
     search = kwds = None
     if 'search' in request.GET:
         search = kwds = request.GET['search']

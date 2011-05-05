@@ -187,7 +187,7 @@ input.button, #comments input[type=button], #div-feedback input[type=submit] {
 #header {
   position: relative;
   margin: 0 auto;
-  width: 1000px;
+  width: 95%;
 }
 
 #header h1#logo-text { margin: 0; padding: 0; }
@@ -263,7 +263,7 @@ fieldset.search {
 	position: absolute;
 	left: 15px;	top: 25px;
 	margin: 0; padding: 0;
-	width: 750px;
+	width: 100%;
 }
 #header #nav ul {
 	float: left;	
@@ -303,34 +303,61 @@ fieldset.search {
 
 /* content */
 #content-wrap {
-	clear: both;
-  	margin: 0; padding: 0;
+   clear: both;
+   margin: 0; padding: 0;
    background: #fff;
    width: 100%;
    float: left;
 }
 #content {
-   min-height: 300px;
-   width: 1000px;
+   width: 100%;
    margin: 0 auto;
    padding: 0;
-   background: #FFF url(../img/content.gif) repeat-y center top;
+   background: #FFF;
    overflow: hidden;
 }
 
 /* columns */
 #main {
 	float: left;
- 	margin: 0;
+   	margin-left: 5%;
    	padding: 0;
-	width: 740px;
+    width: 75%;
 }
+
 #sidebar {
-	width: 245px;
+	width: 20%;
 	float: right;
    	margin: 0;
    	padding: 0;
    	font-size: .95em;
+}
+
+ul.grid {
+}
+
+li.grid {
+    width: 340px;
+    min-height: 250px;
+    border: 1px solid #A0A0A0;
+    background-color: #F0F0F0;
+    display: inline-block;
+    margin: 5px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    zoom: 1;
+    *display: inline;
+    _height: 250px;
+}
+
+img.grid {
+    display: block;
+    margin: 0 auto;
+}
+
+h1.grid {
+	font: bold 2.2em/1em 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
 }
 
 #main h2 {
@@ -432,7 +459,7 @@ fieldset.search {
 	border-top: #1a5d8a;
 }
 #footer-wrap {
-	width: 1000px;
+	width: 90%;
 	margin: 0 auto;
 }
 #footer-wrap a:link,
@@ -545,7 +572,7 @@ ul.subscribe-stuff li img {
 /* footer-bottom */
 #footer-bottom {
 	clear: both;
-   width: 1000px;
+   width: 90%;
    font-size: .9em;
 	margin: 0 auto;
    padding-top: 10px;
@@ -559,20 +586,20 @@ ul.subscribe-stuff li img {
 #footer-bottom a:hover { color: #99CCFF; }
 
 #footer-bottom p.bottom-left {
-	float: left;
+   float: left;
    display: inline;
-	margin: 0 0 30px 20px;
-	padding: 0;
-   width: 600px;
+   margin: 0 0 30px 20px;
+   padding: 0;
+   width: 60%;
    text-align: left;
 }
 #footer-bottom p.bottom-right {
 	float: right;
-   display: inline;
+    display: inline;
 	margin: 0 30px 30px 0;
 	padding: 0;
-   width: 320px;
-   text-align: right;
+    width: 320px;
+    text-align: right;
 }
 
 /* ------------------------------------------------------------------------------

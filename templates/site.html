@@ -39,7 +39,6 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
 <div id="nav">
 <ul>
   <li><a href="/">{% trans "Home" %}</a></li>
-  <li><a href="{% url category 'root' %}">{% trans 'Catalog' %}</a></li>
   <li class="authorized" style="display: none;"><a href="{% url call_view %}">{% trans "Contact" %}</a></li>
   <li class="authorized" style="display: none;"><a href="{% url profile_overview %}">{% trans 'Profile' %} (<u id="username"></u>)</a></li>
   <li class="authorized" style="display: none;"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
@@ -77,7 +76,7 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
 </div>
 
 <!-- footer-outer -->
-<div id="footer-outer" class="clear">
+<div id="footer-outer">
   <div id="footer-wrap">
     <div class="col-a">
       <h3>{% trans "Contact Info" %}</h3>

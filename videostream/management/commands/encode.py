@@ -36,10 +36,9 @@ class Command(NoArgsCommand):
             if not(os.access("%svideos/thumbnails/" % MEDIA_ROOT, os.F_OK)):
                 os.mkdir("%svideos/thumbnails" % MEDIA_ROOT)
 
-            # ffmpeg command to create flv video
             #ffmpeg = "ffmpeg -y -i %s -acodec libmp3lame -ar 22050 -ab 32000 -f flv -s %s %s" % (infile, VIDEOSTREAM_SIZE, outfile)
-            ffmpeg="ffmpeg -y -vpre libx264-default -i %s -s %s -r 30000/1001 -b 200k -bt 240k -vcodec libx264 -coder 0 -bf 0 -refs 1 -flags2 -wpred-dct8x8 -level 30 -maxrate 10M -bufsize 10M -acodec libfaac -ac 2 -ar 48000 -ab 192k %s" % (infile, VIDEOSTREAM_SIZE, outfile)
-            #ffmpeg = "ffmpeg -y -i %s -s %s -b 384k -vcodec libx264 -r 23.976 -acodec libfaac -ac 2 -ar 44100 -ab 64k -vpre baseline -crf 22 -deinterlace %s" % (infile, VIDEOSTREAM_SIZE, outfile)
+            ffmpeg="ffmpeg -threads 4 -i %s -r 29.97 -vcodec libx264 -s %s -flags +loop -cmp +chroma -deblockalpha 0 -deblockbeta 0 -crf 24 -bt 256k -refs 1 -coder 0 -subq 5 -partitions +parti4x4+parti8x8+partp8x8 -g 250 -keyint_min 25 -level 30 -qmin 10 -qmax 51 -trellis 2 -sc_threshold 40 -i_qfactor 0.71 -acodec libfaac -ab 128k -ar 48000 -ac 2 %s" % (infile, VIDEOSTREAM_SIZE, outfile)
+
 
             # ffmpeg command to create the video thumbnail
             getThumb = "ffmpeg -y -i %s -vframes 1 -ss 00:00:02 -an -vcodec png -f rawvideo -s %s %s" % (infile, VIDEOSTREAM_THUMBNAIL_SIZE, thumbnailfilename)

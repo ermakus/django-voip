@@ -74,3 +74,7 @@ class VideoStream(models.Model):
         """
         size = getattr(settings, 'VIDEOSTREAM_SIZE', '320x240').split('x')
         return "width: %spx; height: %spx;" % (size[0], size[1])
+
+
+import categories
+categories.register_m2m(VideoStream, 'categories', )
