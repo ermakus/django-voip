@@ -977,13 +977,19 @@ ul#years {
 .profiles li {
    margin: 5px;
    padding: 5px;
-   background-color: #F0F0F0;
    color: black;
    height: 64px;
 }
 
+.online {
+   background-color: #88EE88;
+}
+
+.offline {
+   background-color: #EE8888;
+}
+
 .profiles li:hover {
-   background-color: #F68618;
 }
 
 .profiles b {

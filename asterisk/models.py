@@ -39,5 +39,9 @@ class Channel(models.Model):
     subscribecontext = models.CharField(max_length=80, blank=True)
     canreinvite = models.CharField(max_length=3, help_text="yes or no", default="no")
 
+
+    def is_online(self):
+		return self.fullcontact != ""
+
     class Meta:
         db_table = u"asterisk_channel"
