@@ -7,24 +7,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.db.models import Q
 from django.views.decorators.cache import cache_page
-from categories.models import Category
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
-from django.contrib.sites.models import Site
-from django import forms
-from django.template.loader import render_to_string
-import django.forms as forms
 from asterisk.models import Channel
+from socialauth.models import Profile 
 
-def index(request):
-
-    channel = Channel()
-
-    try:
-        site = Site.objects.get_current()
-    except Site.DoesNotExist:
-        site = Site(domain='localhost')
-    return render_to_response( 'room/call.html', { 'site':site, 'channel':channel }, context_instance=RequestContext(request))
 
 def context(request):
     if request.user.is_authenticated():
@@ -37,73 +24,7 @@ def context(request):
     else:
         return HttpResponse("false", mimetype="text/json" )
 
-@login_required
-def rooms_view(request):
-    rooms = Room.objects.filter( moderator = request.user )
-    return render_to_response('room/rooms.html', { 'rooms':rooms }, context_instance=RequestContext(request))
+def profiles(request,category):
+    profiles = Profile.objects.filter(categories__id = category)
+    return render_to_response('profiles.html', { 'profiles':profiles }, context_instance=RequestContext(request))
 
-@login_required
-def call_view(request):
-    channel = get_object_or_404(Channel,user=request.user)
-    try:
-        site = Site.objects.get_current()
-    except:
-        site = Site(domain='localhost')
-    return render_to_response( 'room/call.html', { 'site':site, 'channel':channel }, context_instance=RequestContext(request))
-
-@login_required
-def chat_view(request, id):
-    try:
-        room = Room.objects.get( pk=id )
-    except Room.DoesNotExist:
-        room = Room()
-
-    channel = get_object_or_404(Channel,user=request.user)
-    try:
-        site = Site.objects.get_current()
-    except:
-        site = Site(domain='localhost')
-    return render_to_response( 'room/chat.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
-
-
-@login_required
-def room_view(request, id):
-
-    try:
-        room = Room.objects.get( pk=id )
-    except Room.DoesNotExist:
-        room = Room()
-
-    channel = get_object_or_404(Channel,user=request.user)
-    try:
-        site = Site.objects.get_current()
-    except:
-        site = Site(domain='localhost')
-    return render_to_response( 'room/room.html', { 'site':site, 'room':room, 'channel':channel }, context_instance=RequestContext(request))
-
-def update_object(request,instance):
-    instance.content_type = "text/plain"
-    instance.message = request.POST['message']
-    return
-
-def delete_object(request,instance):
-    instance.content_type = "text/plain"
-    instance.message = request.POST['message']
-    return
-
-
-ACTIONS={ 'update':update_object, 'delete':update_object }
-
-@login_required
-@csrf_exempt
-def snippet(request,id,action):
-    try:
-        instance = Snippet.objects.get( uid=uid )
-    except Stream.DoesNotExist:
-        instance = Snippet()
-        instance.user = request.user
-    if action in ACTIONS:
-        ACTIONS[action]( instance )
-    instance.state=action
-    instance.save()
-    return HttpResponse("true")

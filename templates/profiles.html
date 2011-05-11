@@ -1,0 +1,17 @@
+{% load avatars %}
+{% if profiles %}
+<ul class="profiles"> 
+  {% for profile in profiles %}
+   <li {% if profile.channel.is_online %}class="online"{% else %}class="offline"{% endif %}>
+       <img style="float: left;" src="{% avatar 64 profile.user.username %}" />
+       <img  onclick="javascript:invite('{{ profile.channel.name }}')" class="callbtn" src="{{ MEDIA_URL }}img/call.png"/>
+       <a style="display: block;" href="{{ profile.get_absolute_url }}">
+        <b>{{ profile.display_name }}&nbsp;({% if profile.channel.is_online %}ONLINE{% else %}OFFLINE{% endif %})</b><br/>
+        <span>{{ profile.about }}</span>
+       </a>
+   </li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No users in this category</p>
+{% endif %}
