@@ -36,10 +36,12 @@
 Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
 </a>
 </h1>
+<div>
+    {% include "sip.html" %}
+</div>
 <div id="nav">
 <ul>
   <li><a href="/">{% trans "Home" %}</a></li>
-  <li class="authorized" style="display: none;"><a href="{% url call_view %}">{% trans "Contact" %}</a></li>
   <li class="authorized" style="display: none;"><a href="{% url profile_overview %}">{% trans 'Profile' %} (<u id="username"></u>)</a></li>
   <li class="authorized" style="display: none;"><a href="{% url socialauth.views.social_logout %}">{% trans "Sign out" %}</a></li>
   <li class="unauthorized" style="display: none;"><a class="act" href="{% url socialauth.views.login_page %}">{% trans "Sign in" %}</a></li>
@@ -106,7 +108,7 @@ Cloudpub<sup style="font-size: 24px; top: -50px; position: relative;">beta</sup>
         <p class="bottom-left">
            © 2010 <strong>{% trans "Ermak Consulting"%}</strong>&nbsp; &nbsp; &nbsp;
         </p>
-        <p class="bottom-right">
+         <p class="bottom-right">
            <a href="/">{% trans "Home" %}</a> |
            <strong><a href="#top">{% trans "Back to Top" %}</a></strong>
         </p>

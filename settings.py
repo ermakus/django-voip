@@ -76,7 +76,6 @@ MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), 'media')) +
 
 EDITOR_MEDIA_PATH = MEDIA_URL + 'editor/'
 CATEGORIES_ALLOW_SLUG_CHANGE = True
-#CATEGORIES_RELATION_MODELS = ['videostream.videostream']
 CACHE_VIEW_LENGTH=10
 
 SITE_NAME = 'cloudpub'
@@ -91,14 +90,14 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
-    'socialauth',
-    'openid_consumer',
-    'videostream',
-    'categories',
-    'editor',
     'mptt',
-    'userprofile',
+    'openid_consumer',
+    'socialauth',
     'asterisk',
+    'videostream',
+    'editor',
+    'categories',
+    'userprofile',
     'room',
     'schedule',
 )

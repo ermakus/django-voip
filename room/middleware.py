@@ -1,4 +1,6 @@
 import re
+from django.contrib.sites.models import Site
+from asterisk.models import Channel
 
 MOBILE_AGENT_RE=re.compile(r".*(iphone|mobile|androidtouch)",re.IGNORECASE)
 IPAD_AGENT_RE=re.compile(r".*(ipad)",re.IGNORECASE)
@@ -44,5 +46,13 @@ class SiteMiddleware(object):
         else:
             request.category = 'root'
 
-        return None
+        if not 'site' in request.session:
+            request.session.site = Site.objects.get_current()
 
+        if not 'channel' in request.session:
+            try:
+                request.session["channel"] = Channel.objects.get(user__username="anonymous")
+            except Channel.DoesNotExist:
+                request.session["channel"] = Channel()
+
+        return None

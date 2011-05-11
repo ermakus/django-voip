@@ -6,11 +6,10 @@ from django.template.loader import select_template
 from categories.models import Category
 from django.core.paginator import Paginator
 from django.db.models import Q
-from videostream.models import VideoStream
+from socialauth.models import Profile
 
 import operator
 import settings
-
 
 def get_category( path ):
     path_items = path.strip('/').split('/')
@@ -33,16 +32,16 @@ def catalog(request):
 #@cache_page(settings.CACHE_VIEW_LENGTH)
 def category(request, path):
     category = get_category( path )
-    videos = VideoStream.objects.filter(categories__id = category.pk)
+    profiles = Profile.objects.filter(categories__id = category.pk)
     search = kwds = None
     if 'search' in request.GET:
         search = kwds = request.GET['search']
         keywords = kwds.split(' ')
-        list_title_qs = [Q(title__icontains=x) for x in keywords]
-        list_more_qs = [Q(more__icontains=x) for x in keywords]
-        final_q = reduce(operator.or_, list_title_qs + list_more_qs)
-        rooms = rooms.filter( final_q )
+        list_fn_qs = [Q(first_name__icontains=x) for x in keywords]
+        list_ln_qs = [Q(last_name__icontains=x) for x in keywords]
+        final_q = reduce(operator.or_, list_fn_qs + list_ln_qs)
+        profiles = profiles.filter( final_q )
 
-    return render_to_response('categories/category.html', {'category':category, 'videos':videos, 'search':search }, context_instance=RequestContext(request) )
+    return render_to_response('categories/category.html', {'category':category, 'profiles':profiles, 'search':search }, context_instance=RequestContext(request) )
 
                                                                         

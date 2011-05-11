@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n avatars %}
 {% block sidebar %}
 <ul class="sidemenu">
 <li>Sort by</li>
@@ -15,7 +15,7 @@
 {% block content %}
 <p>
     <h1 class="title">{{ category.get_title }}</h1>
-    <h2 class="description">{{ category.description }}</h2>
+    <b class="description">{{ category.description }}</b>
 </p>
 {% if search %}
     <h1>Search results for: {{ search }}</h1>
@@ -26,19 +26,20 @@
 <li><h1><a href="{{ child.get_absolute_url }}{{ request.urlstate }}">{{ child.get_title }}</h1></a></li>
 {% endfor %}
 </ul>
-{% if videos %}
-<ul class="grid">
-  {% for video in videos %}
-   <li class="grid">
-   <a href="{{ video.get_absolute_url }}">
-       <h1 class="grid">{{ video.title }}</h1>
-       <img class="grid" src="{{ video.thumbnail.url }}" />
-       <p class="grid">{{ video.description }}</p>
-   </a>
+{% if profiles %}
+<ul class="profiles"> 
+  {% for profile in profiles %}
+   <li>
+       <img style="float: left;" src="{% avatar 64 profile.user.username %}" />
+       <img  onclick="javascript:invite('{{ profile.channel.name }}')" class="callbtn" src="{{ MEDIA_URL }}img/call.png"/>
+       <a style="display: block;" href="{{ profile.get_absolute_url }}">
+        <b>{{ profile.display_name }}</b><br/>
+        <span>{{ profile.about }}</span>
+       </a>
    </li>
 {% endfor %}
 </ul>
 {% else %}
-<p>No content in this category</p>
+<p>No users in this category</p>
 {% endif %}
 {% endblock %}

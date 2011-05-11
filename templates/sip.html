@@ -1,14 +1,11 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% block extra_head %}
 <script type="text/javascript">
-   	var server    = "{{ site.domain }}";
+   	var server    = "{{ request.session.site.domain }}";
 	var media_url = 'rtmp://' + server + '/sip';
-	var stream    = "{{ channel.name }}";
-	var user      = "{{ channel.name }}";
-	var authname  = "{{ channel.name }}";
-	var authpass  = "{{ channel.secret }}";
-	var displayname = "{{ channel.callerid }}";
+	var stream    = "{{ request.session.channel.name }}";
+	var user      = "{{ request.session.channel.name }}";
+	var authname  = "{{ request.session.channel.name }}";
+	var authpass  = "{{ request.session.channel.secret }}";
+	var displayname = "{{ request.session.channel.callerid }}";
     var sipnumber   = user + "@" + server;
 	var rate        = 8;
 	var rate_name   = "narrowband";
@@ -25,7 +22,7 @@
 		if (event.objectID == "flash_phone") {
 			phone = getFlashMovie("flash_phone");
 			phone.setProperty("src", url);
-			phone.setProperty("poster", "{{ MEDIA_URL }}img/poster.jpg" );
+			phone.setProperty("poster", "{{ MEDIA_URL }}img/phone.png" );
 			status("Ready");
 			init();
 		}
@@ -112,30 +109,26 @@
 		$('#statusmsg').html( msg );
 	}
 
-	</script>	
-{% endblock %}
-{% block content %}
-<div style="width: 500px;">
-<h1>Call user by phone</h1>
-<div style="text-align: left; width: 520px; margin: 0 auto;">
-<div style="width: 400px; text-align: center;">
-Phone number: <input type="text" name="callnumber" id="callnumber"/>
+</script>	
+<div style="position: absolute; top: 73px; left: 500px;">
+Web Call: <input type="text" name="callnumber" id="callnumber"/>
 <input type="button" name="call" id="call" value="Call"/>
 <input type="button" name="hungup" id="hungup" value="Hung"/>
+<div>Your number: <a href="javascript:invite(sipnumber);">{{ request.session.channel.name }}</a></div>
+<div id="statusmsg"></div>
 </div>
-
-<div style="float: left;">
-	<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-			id="flash_phone" width="320" height="240"
+<div style="position: absolute; top: 53px; left: 850px;">
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			id="flash_phone" width="215" height="138"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
 			<param name="movie" value="{{ MEDIA_URL }}VideoIO.swf" />
 			<param name="quality" value="high" />
-			<param name="bgcolor" value="#FFFFFF" />
+			<param name="wmode" value="transparent" />
 			<param name="allowFullScreen" value="true" />
 			<param name="flashVars" value="controls=true&cameraQuality=80" />
 			<param name="allowScriptAccess" value="always" />
-			<embed src="{{ MEDIA_URL }}VideoIO.swf" quality="high" bgcolor="#FFFFFF"
-				width="320" height="240" name="flash_phone" align="middle"
+			<embed src="{{ MEDIA_URL }}VideoIO.swf" quality="high" wmode="transparent"
+				width="215" height="138" name="flash_phone" align="middle"
 				play="true" loop="false" quality="high"
 				allowFullScreen="true"
 				flashVars="controls=true&cameraQuality=80"
@@ -143,50 +136,5 @@ Phone number: <input type="text" name="callnumber" id="callnumber"/>
 				type="application/x-shockwave-flash"
 				pluginspage="http://www.adobe.com/go/getflashplayer">
 			</embed>
-	</object>
+</object>
 </div>
-
-<table style="float: left; margin: 0px; padding: 0px;">
-    <tbody><tr><td>
-    <input value="1" onclick="dial('1')" type="button">
-    </td><td>
-    <input value="2" onclick="dial('2')" type="button">
-    </td><td>
-    <input value="3" onclick="dial('3')" type="button">
-    </td></tr><tr><td>
-    <input value="4" onclick="dial('4')" type="button">
-    </td><td>
-    <input value="5" onclick="dial('5')" type="button">
-    </td><td>
-    <input value="6" onclick="dial('6')" type="button">
-    </td></tr><tr><td>
-    <input value="7" onclick="dial('7')" type="button">
-    </td><td>
-    <input value="8" onclick="dial('8')" type="button">
-    </td><td>
-    <input value="9" onclick="dial('9')" type="button">
-    </td></tr><tr><td>
-    <input value="*" onclick="dial('*')" type="button">
-    </td><td>
-    <input value="0" onclick="dial('0')" type="button">
-    </td><td>
-    <input value="#" onclick="dial('#')" type="button">
-    </td></tr>
-</tbody>
-</table>
-
-<div style="clear: both;">Your number: <a href="javascript:invite(sipnumber);">{{ channel.name }}</a></div>
-<div><span id="statusmsg"></span></div>
-</div>
-
-</div>
-
-{% endblock %}
-{% block sidebar %}
-<div class="box">
-Video chat and phone calls
-</div>
-{% endblock %}
-{% block initscript %}
-{% endblock %}
-

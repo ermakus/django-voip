@@ -118,6 +118,8 @@ def update_profile(request,provider,uid,data):
         channel.callerid = fullname
         channel.save()
 
+    request.session["channel"] = channel
+
     return profile
  
 class OpenIdBackend:

@@ -959,6 +959,54 @@ ul#years {
    height: 55px;
 }
 
+.profiles {
+   list-style: none;
+   font-family:"Verdana";
+   text-decoration:none;
+   word-spacing:normal;
+   text-align:left;
+   letter-spacing:0;
+   line-height:10px;
+   font-size:7px;
+}
+
+.profiles a {
+    color: black;
+}
+
+.profiles li {
+   margin: 5px;
+   padding: 5px;
+   background-color: #F0F0F0;
+   color: black;
+   height: 64px;
+}
+
+.profiles li:hover {
+   background-color: #F68618;
+}
+
+.profiles b {
+  margin-left: 70px;
+  display: block;
+  font-size: 20px;
+}
+
+.profiles span {
+  margin-left: 70px;
+  display: block;
+  font-size: 10px;
+  height: 40px;
+  overflow: hidden;
+}
+
+.callbtn {
+    float: right;
+    position: relative;
+    top: 5px;
+    cursor: pointer;
+}
+
 .list li:hover {
    background-color: #F686F8;
 }

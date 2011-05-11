@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from userprofile.models import BaseProfile
 from django.utils.translation import ugettext as _
 from django.conf import settings
+from asterisk.models import Channel
 import datetime
 
 GENDER_CHOICES = ( ('F', _('Female')), ('M', _('Male')),)
@@ -18,3 +19,19 @@ class Profile(BaseProfile):
     birthdate = models.DateField(default=datetime.date.today(), blank=True)
     site = models.URLField(blank=True)
     about = models.TextField(blank=True)
+
+
+    def channel(self):
+        return Channel.objects.get(user=self.user)
+
+    def display_name(self):
+        name = (' '.join([ self.first_name, self.last_name ])).strip()
+        if not name: name = self.user.username
+        return name
+
+    def __unicode__(self):
+        return self.display_name()
+
+
+import categories
+categories.register_m2m(Profile, 'categories', )
